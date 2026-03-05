@@ -1,0 +1,3108 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="VintedPro">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1B6EF3">
+<meta name="description" content="Ton assistant Vinted intelligent">
+<title>VintedPro</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+:root{
+--bg:#F0F2F8;--bg2:#E4E7F0;--sf:#fff;--sf2:#F6F7FB;--sf3:#ECEEF5;
+--bd:rgba(0,0,0,.07);--bd2:rgba(0,0,0,.04);
+--tx:#0A0C14;--tx2:#5A5F72;--tx3:#9499AB;--tx4:#BFC3D0;
+--ac:#1B6EF3;--ac2:#0E56D4;--acl:#EBF1FD;--acg:linear-gradient(135deg,#1B6EF3,#0E56D4);
+--gn:#00C97B;--gnl:#E4F9F0;--gnd:#00A362;
+--rd:#FF3B5C;--rdl:#FFF0F3;
+--or:#FF8C00;--orl:#FFF4E5;
+--yw:#F5A900;--ywl:#FFF8E7;
+--pu:#7C5CFC;--pul:#F1EEFF;
+--font:'Plus Jakarta Sans',system-ui,sans-serif;
+--mono:'JetBrains Mono',monospace;
+--r:22px;--r2:15px;--r3:10px;
+--st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px);
+--sh:0 2px 20px rgba(0,0,0,.08),0 1px 4px rgba(0,0,0,.04);
+--sh2:0 8px 32px rgba(0,0,0,.12),0 2px 8px rgba(0,0,0,.06);
+--sh-ac:0 6px 24px rgba(27,110,243,.32);--sh-gn:0 6px 20px rgba(0,201,123,.28);
+}
+@media(prefers-color-scheme:dark){:root{
+--bg:#0E1017;--bg2:#181B26;--sf:#1C1F2E;--sf2:#222536;--sf3:#272A3D;
+--bd:rgba(255,255,255,.07);--bd2:rgba(255,255,255,.04);
+--tx:#F2F4FF;--tx2:#8E93AD;--tx3:#5A5F7A;--tx4:#383C54;
+--acl:rgba(27,110,243,.18);--gnl:rgba(0,201,123,.15);--rdl:rgba(255,59,92,.15);
+--orl:rgba(255,140,0,.15);--ywl:rgba(245,169,0,.15);--pul:rgba(124,92,252,.18);
+}}
+html,body{width:100%;height:100%;overflow:hidden;font-family:var(--font);background:var(--bg);color:var(--tx);-webkit-overflow-scrolling:touch}
+
+/* SPLASH */
+#splash{position:fixed;inset:0;z-index:9999;background:linear-gradient(160deg,#0A1628,#1B3A6B 50%,#0E2247);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.sp-name{font-size:30px;font-weight:900;letter-spacing:-.06em;margin-top:24px;color:#fff;animation:spUp .4s ease .3s both}
+.sp-sub{font-size:13px;color:rgba(255,255,255,.5);margin-top:6px;font-weight:500;animation:spUp .4s ease .4s both}
+.sp-pills{display:flex;gap:8px;margin-top:18px;animation:spUp .4s ease .5s both}
+.sp-pill{padding:5px 13px;border-radius:20px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);font-size:11px;color:rgba(255,255,255,.75);font-weight:600}
+.sp-bar{width:56px;height:3px;border-radius:2px;background:rgba(255,255,255,.12);margin-top:28px;overflow:hidden;animation:spUp .3s ease .55s both}
+.sp-fill{height:100%;width:0;border-radius:2px;background:linear-gradient(90deg,#1B6EF3,#60A5FA);animation:spFill 2s ease .6s forwards}
+@keyframes spFill{to{width:100%}}
+@keyframes spUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+/* APP */
+#app{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;opacity:0;transition:opacity .5s}
+#app.ready{opacity:1}
+
+/* HEADER */
+.hdr{flex-shrink:0;height:calc(60px + var(–st));padding:var(–st) 18px 0;display:flex;align-items:flex-end;padding-bottom:12px;background:rgba(255,255,255,.88);backdrop-filter:blur(32px) saturate(1.8);-webkit-backdrop-filter:blur(32px) saturate(1.8);border-bottom:1px solid var(–bd);z-index:100}
+@media(prefers-color-scheme:dark){.hdr{background:rgba(14,16,23,.9)}}
+.hdr-logo{display:flex;align-items:center;gap:10px;flex:1}
+.hdr-ic{width:34px;height:34px;border-radius:10px;overflow:hidden;position:relative;flex-shrink:0;cursor:grab;background:var(–ac);display:flex;align-items:center;justify-content:center;font-size:18px}
+.hdr-name{font-size:18px;font-weight:900;letter-spacing:-.05em}
+.hdr-name sup{font-size:9px;font-weight:700;color:var(–ac);text-transform:uppercase;margin-left:2px;vertical-align:super}
+.hdr-right{display:flex;align-items:center;gap:8px}
+.bal-pill{padding:7px 16px;border-radius:30px;background:var(–acg);cursor:pointer;box-shadow:var(–sh-ac);transition:all .15s;position:relative;overflow:hidden}
+.bal-pill::after{content:’’;position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.2),transparent 60%)}
+.bal-pill:active{transform:scale(.92);box-shadow:none}
+.bal-num{font-size:13px;font-weight:800;color:#fff;font-family:var(–mono);position:relative;z-index:1}
+.hdr-notif{width:34px;height:34px;border-radius:10px;background:var(–sf2);border:1px solid var(–bd);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;font-size:16px;position:relative}
+.hdr-notif:active{transform:scale(.9)}
+.notif-dot{position:absolute;top:5px;right:5px;width:8px;height:8px;border-radius:4px;background:var(–rd);border:2px solid var(–sf);animation:pulse 2s infinite;display:none}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+
+/* VIEWPORT */
+#vp{flex:1;overflow:hidden;position:relative}
+#track{display:flex;height:100%;will-change:transform;transition:transform .38s cubic-bezier(.25,1,.5,1)}
+.page{min-width:100vw;height:100%;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;background:var(–bg);padding:14px 14px calc(128px + var(–sb))}
+.page::-webkit-scrollbar{display:none}
+.pi{max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:11px}
+
+/* NAV */
+.modesec{flex-shrink:0;padding:10px 14px;padding-bottom:calc(10px + var(–sb));background:rgba(255,255,255,.95);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border-top:1px solid var(–bd);display:flex;flex-direction:column;gap:8px}
+@media(prefers-color-scheme:dark){.modesec{background:rgba(14,16,23,.95)}}
+.modebars{display:flex;gap:8px}
+.modebar{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;border-radius:17px;border:2px solid transparent;background:var(–bg2);cursor:pointer;transition:all .22s cubic-bezier(.22,1,.36,1);user-select:none;-webkit-user-select:none;position:relative;overflow:hidden}
+.modebar::before{content:’’;position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.15),transparent 60%);opacity:0;transition:opacity .2s}
+.modebar.on::before{opacity:1}
+.modebar:active{transform:scale(.91)}
+.modebar.on{background:var(–acg);box-shadow:var(–sh-ac)}
+.mb-icon{font-size:20px;transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
+.modebar.on .mb-icon{transform:scale(1.2)}
+.mb-label{font-size:10px;font-weight:800;color:var(–tx3);letter-spacing:.03em;text-transform:uppercase;transition:color .2s}
+.modebar.on .mb-label{color:rgba(255,255,255,.9)}
+.subnav{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.subnav::-webkit-scrollbar{display:none}
+.snitem{flex-shrink:0;padding:6px 14px;border-radius:22px;font-size:11px;font-weight:700;cursor:pointer;background:var(–sf2);color:var(–tx2);transition:all .15s;white-space:nowrap;border:1.5px solid var(–bd)}
+.snitem:active{transform:scale(.93)}
+.snitem.on{background:var(–ac);color:#fff;border-color:transparent;box-shadow:0 2px 10px rgba(27,110,243,.28)}
+
+/* CARDS */
+.card{background:var(–sf);border-radius:var(–r);padding:18px;box-shadow:var(–sh);border:1px solid var(–bd2);animation:cIn .3s cubic-bezier(.22,1,.36,1) both;position:relative;overflow:hidden}
+@keyframes cIn{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
+.card-ai{background:linear-gradient(145deg,#F7F4FF,#EDF2FF);border:1.5px solid rgba(124,92,252,.15)}
+.card-yw{background:var(–ywl);border:1.5px solid rgba(245,169,0,.2)}
+.card-rd{background:var(–rdl);border:1px solid rgba(255,59,92,.15)}
+.card-gn{background:var(–sf);border-left:3.5px solid var(–gn)}
+.card-or{background:var(–orl);border:1px solid rgba(255,140,0,.15)}
+@media(prefers-color-scheme:dark){.card-ai{background:linear-gradient(145deg,rgba(124,92,252,.12),rgba(27,110,243,.1));border-color:rgba(124,92,252,.2)}}
+
+/* SECTION HEADER */
+.sh{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.sh-ic{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.ic-ac{background:var(–acl)}.ic-gn{background:var(–gnl)}.ic-rd{background:var(–rdl)}.ic-pu{background:var(–pul)}.ic-yw{background:var(–ywl)}.ic-or{background:var(–orl)}
+.sh-t{font-size:15px;font-weight:800;letter-spacing:-.04em;flex:1}
+.badge{font-size:10px;font-weight:700;color:var(–tx3);padding:2px 9px;border-radius:20px;background:var(–bg2)}
+.badge-ac{background:var(–ac);color:#fff}.badge-gn{background:var(–gn);color:#fff}.badge-rd{background:var(–rd);color:#fff}
+
+/* INPUTS */
+.inp{width:100%;padding:12px 14px;border-radius:var(–r2);background:var(–sf2);border:1.5px solid var(–bd);color:var(–tx);font-family:var(–font);font-size:13px;font-weight:600;outline:none;-webkit-appearance:none;transition:all .18s}
+.inp:focus{border-color:var(–ac);background:var(–sf);box-shadow:0 0 0 3px rgba(27,110,243,.1)}
+.inp::placeholder{color:var(–tx3);font-weight:500}
+select.inp{cursor:pointer;background-image:url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ width=‘12’ height=‘12’ viewBox=‘0 0 12 12’%3E%3Cpath d=‘M2 4l4 4 4-4’ stroke=’%239499AB’ stroke-width=‘1.5’ fill=‘none’ stroke-linecap=‘round’/%3E%3C/svg%3E”);background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+textarea.inp{resize:none;line-height:1.65}
+.lbl{font-size:11px;font-weight:700;color:var(–tx2);margin-bottom:5px;letter-spacing:.03em;display:block}
+
+/* LAYOUTS */
+.fs{display:flex;flex-direction:column;gap:9px}
+.r2{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end}
+.r3{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.g4{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+/* BUTTONS */
+.btn{padding:13px 16px;border-radius:var(–r2);border:none;cursor:pointer;font-family:var(–font);font-size:13px;font-weight:700;transition:all .15s cubic-bezier(.22,1,.36,1);width:100%;display:flex;align-items:center;justify-content:center;gap:7px;letter-spacing:-.025em;position:relative;overflow:hidden;-webkit-user-select:none;user-select:none}
+.btn:active{transform:scale(.92)}
+.btn-p{background:var(–acg);color:#fff;box-shadow:var(–sh-ac)}.btn-p:active{box-shadow:none}
+.btn-g{background:var(–bg2);color:var(–tx2);font-size:12px;border:1px solid var(–bd)}
+.btn-d{background:var(–rdl);color:var(–rd);font-size:12px;font-weight:700}
+.btn-gn{background:linear-gradient(135deg,var(–gn),var(–gnd));color:#fff;box-shadow:var(–sh-gn)}
+.btn-ai{background:linear-gradient(135deg,var(–pu),#5B3FE0);color:#fff;box-shadow:0 4px 16px rgba(124,92,252,.36)}
+.btn-yw{background:var(–ywl);color:#7A5000;font-size:12px;font-weight:700}
+.btn-sm{font-size:12px;padding:10px 14px;width:auto}
+.btn-xs{font-size:11px;padding:7px 11px;width:auto;border-radius:var(–r3)}
+.btn-ico{width:36px;height:36px;padding:0;border-radius:var(–r3);flex-shrink:0}
+
+/* STATS */
+.sc{background:var(–sf2);border-radius:var(–r2);padding:13px 14px;border:1px solid var(–bd2);transition:all .15s}
+.sv{font-size:18px;font-weight:900;font-family:var(–mono);letter-spacing:-.04em;line-height:1}
+.sl{font-size:10px;color:var(–tx3);font-weight:600;margin-top:3px}
+
+/* STATUS BADGES */
+.ps{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700}
+.ps::before{content:’’;width:5px;height:5px;border-radius:3px;background:currentColor;flex-shrink:0;opacity:.7}
+.ps-pending{background:var(–ywl);color:#8B6000}.ps-sold{background:var(–acl);color:var(–ac)}
+.ps-locker{background:var(–pul);color:var(–pu)}.ps-shipped{background:var(–orl);color:var(–or)}
+.ps-done{background:var(–gnl);color:var(–gnd)}.ps-problem{background:var(–rdl);color:var(–rd)}
+
+/* DOT */
+.dot{width:8px;height:8px;border-radius:4px;flex-shrink:0}
+.dot-done{background:var(–gn)}.dot-pending{background:var(–yw)}.dot-shipped{background:var(–or)}.dot-problem{background:var(–rd)}.dot-off{background:var(–bg2)}
+
+/* PARCEL CARD */
+.pc{background:var(–sf);border-radius:var(–r2);padding:14px;border:1px solid var(–bd);transition:all .15s;position:relative;overflow:hidden;cursor:pointer}
+.pc:active{transform:scale(.98)}
+.pc-accent{position:absolute;left:0;top:0;bottom:0;width:3.5px;border-radius:var(–r2) 0 0 var(–r2)}
+
+/* CHIPS */
+.chip-row{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.chip-row::-webkit-scrollbar{display:none}
+.chip{padding:7px 14px;border-radius:30px;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;border:1.5px solid var(–bd);background:var(–sf2);color:var(–tx2);white-space:nowrap;flex-shrink:0}
+.chip:active{transform:scale(.92)}
+.chip.on{background:var(–ac);color:#fff;border-color:transparent;box-shadow:0 2px 10px rgba(27,110,243,.25)}
+
+/* SEARCH */
+.srch{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:var(–r2);background:var(–sf2);border:1.5px solid var(–bd);margin-bottom:10px;transition:all .15s}
+.srch:focus-within{border-color:var(–ac);box-shadow:0 0 0 3px rgba(27,110,243,.1)}
+.srch input{flex:1;background:none;border:none;outline:none;font-family:var(–font);font-size:13px;font-weight:600;color:var(–tx)}
+.srch input::placeholder{color:var(–tx3)}
+
+/* ROW */
+.row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(–bd2)}
+.row:last-child{border:none;padding-bottom:0}
+.row-l{font-size:12px;color:var(–tx2);flex:1;font-weight:500}
+.row-v{font-size:13px;font-weight:700;font-family:var(–mono)}
+
+/* BUBBLE */
+.bbl{padding:12px 15px;border-radius:16px;font-size:13px;line-height:1.65;margin-bottom:8px;word-break:break-word;position:relative}
+.bbl-o{background:var(–acg);color:#fff;border-radius:16px 16px 5px 16px;margin-left:40px}
+.bbl-i{background:var(–sf2);color:var(–tx);border-radius:16px 16px 16px 5px;border:1px solid var(–bd);margin-right:40px}
+
+/* CHECKLIST */
+.chk{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(–bd2);cursor:pointer}
+.chk:last-child{border:none}
+.chk-b{width:22px;height:22px;border-radius:7px;border:2px solid var(–bd);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;background:var(–sf2)}
+.chk-b.on{background:var(–acg);border-color:transparent;box-shadow:0 2px 8px rgba(27,110,243,.3)}
+.chk-t{font-size:13px;font-weight:600;flex:1;transition:color .2s}
+.chk-t.on{color:var(–tx3);text-decoration:line-through}
+
+/* PROGRESS */
+.pbar{height:6px;border-radius:4px;background:var(–bg2);overflow:hidden;margin:8px 0}
+.pbar-f{height:100%;border-radius:4px;background:var(–acg);transition:width .9s cubic-bezier(.25,0,0,1)}
+.pbar-gn{background:linear-gradient(90deg,var(–gn),var(–gnd))}
+
+/* AI LOAD */
+.ai-load{display:flex;align-items:center;gap:11px;padding:13px 15px;background:var(–pul);border-radius:var(–r2);margin-top:8px;border:1px solid rgba(124,92,252,.15)}
+.ai-dots{display:flex;gap:5px}
+.ai-dot{width:6px;height:6px;border-radius:3px;background:var(–pu);animation:aiD 1.2s ease-in-out infinite}
+.ai-dot:nth-child(2){animation-delay:.2s}.ai-dot:nth-child(3){animation-delay:.4s}
+@keyframes aiD{0%,80%,100%{transform:scale(.5);opacity:.3}40%{transform:scale(1) translateY(-2px);opacity:1}}
+
+/* NOTE */
+.note-c{background:var(–ywl);border-radius:var(–r2);padding:12px;margin-bottom:7px;border-left:3px solid var(–yw)}
+.note-d{font-size:10px;color:var(–tx3);font-weight:600;margin-bottom:4px}
+.note-x{font-size:13px;line-height:1.6;font-weight:500}
+
+/* HERO */
+.hero{background:var(–acg);border-radius:var(–r);padding:22px;color:#fff;box-shadow:var(–sh-ac);position:relative;overflow:hidden}
+.hero::before{content:’’;position:absolute;right:-50px;top:-50px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.06)}
+.hero::after{content:’’;position:absolute;left:-20px;bottom:-30px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.04)}
+.hero-lbl{font-size:11px;font-weight:600;opacity:.75;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;position:relative;z-index:1}
+.hero-amt{font-size:40px;font-weight:900;font-family:var(–mono);letter-spacing:-.05em;line-height:1;position:relative;z-index:1}
+.hero-sub{font-size:12px;font-weight:600;opacity:.75;margin-top:8px;position:relative;z-index:1}
+.hero-change{position:absolute;top:20px;right:22px;z-index:1;font-size:12px;font-weight:800;font-family:var(–mono);background:rgba(255,255,255,.18);padding:4px 10px;border-radius:20px}
+
+/* TRANSPORT */
+.trans{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(–sf2);border-radius:var(–r2);border:1px solid var(–bd);margin-bottom:7px;cursor:pointer;transition:all .15s}
+.trans:active{transform:scale(.98)}.trans:last-child{margin-bottom:0}
+.trans-n{font-size:13px;font-weight:700}.trans-d{font-size:10px;color:var(–tx3);margin-top:2px}
+.trans-p{font-size:16px;font-weight:900;color:var(–ac);font-family:var(–mono)}
+
+/* TOGGLE */
+.tog-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(–bd2)}
+.tog-row:last-child{border:none}
+.tog{width:46px;height:27px;border-radius:14px;background:var(–bg2);flex-shrink:0;position:relative;cursor:pointer;transition:background .25s;border:1.5px solid var(–bd)}
+.tog.on{background:var(–acg);border-color:transparent}
+.tog::after{content:’’;position:absolute;top:2px;left:2px;width:19px;height:19px;border-radius:10px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:transform .25s cubic-bezier(.22,1,.36,1)}
+.tog.on::after{transform:translateX(20px)}
+.tog-inf{flex:1}.tog-lbl{font-size:13px;font-weight:700}.tog-sub{font-size:11px;color:var(–tx3);margin-top:2px}
+
+/* CHART */
+.chart{height:80px;display:flex;align-items:flex-end;gap:5px;margin-top:10px}
+.bi{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.bs{width:100%;border-radius:5px 5px 0 0;min-height:4px;background:var(–acg);opacity:.85}
+.bl{font-size:8px;color:var(–tx3);font-weight:600}
+
+/* QR PILLS */
+.qrg{display:flex;flex-wrap:wrap;gap:6px}
+.qrp{padding:8px 14px;border-radius:22px;background:var(–sf2);border:1.5px solid var(–bd);font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;color:var(–tx2)}
+.qrp:active{transform:scale(.91)}
+.qrp.sent{background:var(–acl);border-color:var(–ac);color:var(–ac)}
+
+/* AD RESULT */
+.adb{background:var(–sf2);border-radius:var(–r2);padding:13px;margin-bottom:8px;border:1px solid var(–bd2)}
+.adl{font-size:9px;font-weight:800;color:var(–ac);text-transform:uppercase;letter-spacing:.12em;margin-bottom:5px}
+.adt{font-size:13px;line-height:1.75}
+.adtags{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.adtag{font-size:11px;padding:3px 9px;border-radius:20px;background:var(–acl);color:var(–ac);font-weight:700}
+.adtip{background:var(–pul);border-radius:var(–r3);padding:10px 12px;font-size:12px;color:var(–pu);font-weight:600;line-height:1.55;margin-top:6px;border:1px solid rgba(124,92,252,.15)}
+
+/* EMPTY */
+.empty{text-align:center;padding:32px 18px}
+.emi{font-size:42px;display:block;margin-bottom:10px;animation:flt 4s ease-in-out infinite}
+@keyframes flt{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.emt{font-size:13px;font-weight:700;color:var(–tx3)}
+.ems{font-size:11px;color:var(–tx4);margin-top:4px;font-weight:500}
+
+/* MODAL */
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9990;display:flex;align-items:flex-end;justify-content:center;animation:moF .22s ease;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+@keyframes moF{from{opacity:0}}
+.ms{background:var(–sf);border-radius:26px 26px 0 0;width:100%;max-width:540px;max-height:92vh;overflow-y:auto;padding:22px 20px;padding-bottom:calc(24px + var(–sb));animation:moP .32s cubic-bezier(.22,1,.36,1);border-top:1px solid var(–bd)}
+@keyframes moP{from{transform:translateY(90px)}}
+.mo-h{width:40px;height:4px;border-radius:2px;background:var(–bg2);margin:0 auto 20px}
+.mo-t{font-size:19px;font-weight:900;letter-spacing:-.05em;margin-bottom:16px}
+
+/* TOAST */
+#toast{position:fixed;bottom:calc(130px + var(–sb));left:50%;transform:translateX(-50%) translateY(24px) scale(.84);z-index:99999;padding:10px 20px;border-radius:30px;font-family:var(–font);font-size:13px;font-weight:700;opacity:0;transition:all .3s cubic-bezier(.22,1,.36,1);pointer-events:none;white-space:nowrap;max-width:calc(100vw - 36px);background:#0A0C14;color:#fff;box-shadow:0 8px 32px rgba(0,0,0,.3);letter-spacing:-.02em}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}
+#toast.err{background:var(–rd);}
+#toast.ok{background:var(–gn);}
+
+/* CONFETTI */
+#cnfc{position:fixed;inset:0;pointer-events:none;z-index:9997}
+
+/* MISC */
+.sec-lbl{font-size:10px;font-weight:800;color:var(–tx3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.txt-ac{color:var(–ac)}.txt-gn{color:var(–gn)}.txt-rd{color:var(–rd)}.txt-or{color:var(–or)}.txt-yw{color:var(–yw)}.txt-pu{color:var(–pu)}
+.fw7{font-weight:700}.fw8{font-weight:800}.fw9{font-weight:900}.mono{font-family:var(–mono)}
+.f10{font-size:10px}.f11{font-size:11px}.f12{font-size:12px}.f13{font-size:13px}.f14{font-size:14px}.f15{font-size:15px}.f17{font-size:17px}.f18{font-size:18px}.f20{font-size:20px}.f22{font-size:22px}.f26{font-size:26px}
+.mt4{margin-top:4px}.mt6{margin-top:6px}.mt8{margin-top:8px}.mt10{margin-top:10px}.mb8{margin-bottom:8px}
+
+/* RELAY */
+.relay-list{margin-top:10px;display:flex;flex-direction:column;gap:7px}
+.relay-item{display:flex;align-items:flex-start;gap:10px;padding:11px 13px;background:var(–sf2);border-radius:var(–r2);border:1px solid var(–bd);cursor:pointer;transition:all .15s}
+.relay-item:active{transform:scale(.98)}
+.relay-icon{font-size:22px;flex-shrink:0;line-height:1}
+.relay-name{font-size:12px;font-weight:700}
+.relay-addr{font-size:10px;color:var(–tx3);margin-top:2px}
+.relay-dist{font-size:11px;font-weight:800;color:var(–ac);margin-top:3px}
+
+/* FRAIS */
+.frais-res{background:var(–acl);border-radius:var(–r2);padding:14px;margin-top:8px;border:1px solid rgba(27,110,243,.15)}
+.frais-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(27,110,243,.1)}
+.frais-row:last-child{border:none;padding-top:8px;margin-top:4px}
+
+/* CHAT */
+.chat-wrap{display:flex;flex-direction:column;gap:0;min-height:100px;max-height:300px;overflow-y:auto;padding:4px 0 12px;scrollbar-width:none}
+.chat-wrap::-webkit-scrollbar{display:none}
+
+/* REMINDER */
+.rem-item{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(–bd2)}
+.rem-item:last-child{border:none}
+.rem-dot{width:10px;height:10px;border-radius:5px;flex-shrink:0}
+.rem-title{font-size:12px;font-weight:700}
+.rem-when{font-size:10px;color:var(–tx3);margin-top:2px}
+
+/* WISH */
+.wish{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(–bd2)}
+.wish:last-child{border:none}
+
+.acc-card{display:flex;align-items:center;gap:12px;padding:13px;background:var(–sf2);border-radius:var(–r2);border:1.5px solid var(–bd);cursor:pointer;transition:all .15s;position:relative}
+.acc-card:active{transform:scale(.98)}
+.acc-card.active-acc{border-color:var(–ac);background:var(–acl)}
+.acc-avatar{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#fff;flex-shrink:0}
+</style>
+
+  <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjEwMCIgZmlsbD0iIzFCNkVGMyIvPjx0ZXh0IHg9IjI1NiIgeT0iMzQwIiBmb250LXNpemU9IjI4MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9InN5c3RlbS11aSIgZmlsbD0id2hpdGUiPvCfk6Y8L3RleHQ+PC9zdmc+">
+
+  <!-- PWA Manifest inline -->
+
+  <script>
+  (function(){
+    var m={ "name": "VintedPro", "short_name": "VintedPro", "description": "Gestionnaire de colis Vinted", "start_url": ".", "display": "standalone", "background_color": "#0a0c14", "theme_color": "#1B6EF3", "orientation": "portrait-primary", "icons": [  {   "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%231B6EF3'/%3E%3Ctext x='256' y='340' font-size='280' text-anchor='middle' font-family='system-ui' fill='white'%3E📦%3C/text%3E%3C/svg%3E",   "sizes": "192x192",   "type": "image/svg+xml",   "purpose": "any maskable"  },  {   "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%231B6EF3'/%3E%3Ctext x='256' y='340' font-size='280' text-anchor='middle' font-family='system-ui' fill='white'%3E📦%3C/text%3E%3C/svg%3E",   "sizes": "512x512",   "type": "image/svg+xml",   "purpose": "any maskable"  } ], "categories": ["productivity", "finance"], "lang": "fr"};
+    var b=new Blob([JSON.stringify(m)],{type:'application/manifest+json'});
+    var u=URL.createObjectURL(b);
+    var l=document.createElement('link');
+    l.rel='manifest';l.href=u;
+    document.head.appendChild(l);
+  })();
+  </script>
+
+  <!-- Service Worker -->
+
+  <script>
+  if('serviceWorker' in navigator){
+    window.addEventListener('load',function(){
+      var swCode="\nconst CACHE='vp-v3';\nconst ASSETS=['/'];\nself.addEventListener('install',e=>{\n  e.waitUntil(\n    caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())\n  );\n});\nself.addEventListener('activate',e=>{\n  e.waitUntil(\n    caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k))))\n    .then(()=>self.clients.claim())\n  );\n});\nself.addEventListener('fetch',e=>{\n  if(e.request.method!=='GET')return;\n  e.respondWith(\n    caches.match(e.request).then(cached=>{\n      var net=fetch(e.request).then(res=>{\n        if(res&&res.status===200&&res.type==='basic'){\n          var clone=res.clone();\n          caches.open(CACHE).then(c=>c.put(e.request,clone));\n        }\n        return res;\n      }).catch(()=>cached);\n      return cached||net;\n    })\n  );\n});\n";
+      var blob=new Blob([swCode],{type:'text/javascript'});
+      var url=URL.createObjectURL(blob);
+      navigator.serviceWorker.register(url,{scope:'./'})
+        .then(function(r){console.log('SW registered');})
+        .catch(function(e){console.log('SW error:',e);});
+    });
+  }
+  </script>
+
+</head>
+<body>
+<canvas id="cnfc"></canvas>
+
+<div id="splash">
+  <div style="font-size:52px;animation:spUp .3s ease both">📦</div>
+  <div class="sp-name">VintedPro</div>
+  <div class="sp-sub">Ton assistant Vinted intelligent</div>
+  <div class="sp-pills">
+    <span class="sp-pill">📦 Colis</span>
+    <span class="sp-pill">🤖 IA</span>
+    <span class="sp-pill">📊 Stats</span>
+  </div>
+  <div class="sp-bar"><div class="sp-fill"></div></div>
+</div>
+
+<div id="app">
+  <header class="hdr">
+    <div class="hdr-logo">
+      <div class="hdr-ic">📦</div>
+      <span class="hdr-name">VintedPro<sup>Pro</sup></span>
+    </div>
+    <div class="hdr-right">
+      <div class="hdr-notif" onclick="showNotifs()">🔔<span class="notif-dot" id="notif-dot"></span></div>
+      <div class="bal-pill" onclick="showBalDetail()"><span class="bal-num" id="hdr-bal">0,00 €</span></div>
+    </div>
+  </header>
+
+  <div id="vp">
+    <div id="track">
+      <div class="page" id="p0"><div class="pi" id="pi0"></div></div>
+      <div class="page" id="p1"><div class="pi" id="pi1"></div></div>
+      <div class="page" id="p2"><div class="pi" id="pi2"></div></div>
+      <div class="page" id="p3"><div class="pi" id="pi3"></div></div>
+      <div class="page" id="p4"><div class="pi" id="pi4"></div></div>
+      <div class="page" id="p5"><div class="pi" id="pi5"></div></div>
+      <div class="page" id="p6"><div class="pi" id="pi6"></div></div>
+      <div class="page" id="p7"><div class="pi" id="pi7"></div></div>
+      <div class="page" id="p8"><div class="pi" id="pi8"></div></div>
+      <div class="page" id="p9"><div class="pi" id="pi9"></div></div>
+      <div class="page" id="p10"><div class="pi" id="pi10"></div></div>
+      <div class="page" id="p11"><div class="pi" id="pi11"></div></div>
+      <div class="page" id="p12"><div class="pi" id="pi12"></div></div>
+      <div class="page" id="p13"><div class="pi" id="pi13"></div></div>
+      <div class="page" id="p14"><div class="pi" id="pi14"></div></div>
+      <div class="page" id="p15"><div class="pi" id="pi15"></div></div>
+      <div class="page" id="p16"><div class="pi" id="pi16"></div></div>
+      <div class="page" id="p17"><div class="pi" id="pi17"></div></div>
+      <div class="page" id="p18"><div class="pi" id="pi18"></div></div>
+      <div class="page" id="p19"><div class="pi" id="pi19"></div></div>
+      <div class="page" id="p20"><div class="pi" id="pi20"></div></div>
+      <div class="page" id="p21"><div class="pi" id="pi21"></div></div>
+      <div class="page" id="p22"><div class="pi" id="pi22"></div></div>
+      <div class="page" id="p23"><div class="pi" id="pi23"></div></div>
+      <div class="page" id="p24"><div class="pi" id="pi24"></div></div>
+      <div class="page" id="p25"><div class="pi" id="pi25"></div></div>
+      <div class="page" id="p26"><div class="pi" id="pi26"></div></div>
+      <div class="page" id="p27"><div class="pi" id="pi27"></div></div>
+      <div class="page" id="p28"><div class="pi" id="pi28"></div></div>
+    </div>
+  </div>
+
+  <div class="modesec">
+    <div class="modebars">
+      <div class="modebar on" id="mb0" onclick="setMode(0)"><span class="mb-icon">📦</span><span class="mb-label">Gestion</span></div>
+      <div class="modebar" id="mb1" onclick="setMode(1)"><span class="mb-icon">🤖</span><span class="mb-label">IA Tools</span></div>
+      <div class="modebar" id="mb2" onclick="setMode(2)"><span class="mb-icon">📊</span><span class="mb-label">Analyse</span></div>
+    </div>
+    <div class="subnav" id="subnav"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ================================================================
+   UTILS
+================================================================ */
+const gel=id=>document.getElementById(id);
+const esc=s=>{const d=document.createElement('div');d.textContent=String(s!==null&&s!==undefined?s:'');return d.innerHTML};
+const fmt=n=>parseFloat(n||0).toFixed(2).replace('.',',');
+const fmtE=n=>fmt(n)+' €';
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const fullDate=()=>{const d=new Date();return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'2-digit'})+' '+d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})};
+let _toastT;
+function toast(txt,type=''){
+  const el=gel('toast');if(!el)return;
+  el.textContent=txt;el.className='show'+(type?' '+type:'');
+  clearTimeout(_toastT);_toastT=setTimeout(()=>el.className='',2800);
+}
+function copyText(text){
+  if(navigator.clipboard)navigator.clipboard.writeText(text).then(()=>toast('Copié ✓','ok')).catch(()=>_fc(text));
+  else _fc(text);
+}
+function _fc(t){
+  const a=document.createElement('textarea');a.value=t;
+  a.style.cssText='position:fixed;top:-999px';document.body.appendChild(a);
+  a.select();try{document.execCommand('copy');toast('Copié ✓','ok')}catch(e){}
+  document.body.removeChild(a);
+}
+function closeModal(){document.querySelectorAll('.mo').forEach(m=>m.remove());}
+
+/* ================================================================
+   CONFETTI
+================================================================ */
+function confetti(){
+  const c=gel('cnfc');if(!c)return;
+  const ctx=c.getContext('2d');
+  c.width=window.innerWidth;c.height=window.innerHeight;
+  const cols=['#1B6EF3','#FFB800','#00C97B','#FF3B5C','#7C5CFC'];
+  const p=Array.from({length:180},()=>({
+    x:Math.random()*c.width,y:-30-Math.random()*80,
+    vx:Math.random()*8-4,vy:Math.random()*6+4,
+    sz:Math.random()*11+4,col:cols[Math.floor(Math.random()*cols.length)],
+    rot:Math.random()*360,rs:Math.random()*14-7
+  }));
+  let f=0;
+  (function loop(){
+    ctx.clearRect(0,0,c.width,c.height);
+    p.forEach(pp=>{
+      pp.x+=pp.vx;pp.y+=pp.vy;pp.vy+=0.18;pp.rot+=pp.rs;
+      ctx.save();ctx.translate(pp.x,pp.y);ctx.rotate(pp.rot*Math.PI/180);
+      ctx.globalAlpha=Math.max(0,1-f/150);ctx.fillStyle=pp.col;
+      ctx.fillRect(-pp.sz/2,-pp.sz/2,pp.sz,pp.sz*0.6);ctx.restore();
+    });
+    f++;if(f<160)requestAnimationFrame(loop);else ctx.clearRect(0,0,c.width,c.height);
+  })();
+}
+
+/* ================================================================
+   STATE
+================================================================ */
+const CATS=['Vêtements','Chaussures','Accessoires','Électronique','Téléphones','Gaming','Livres','Sport','Maison','Jouets','Bijoux','Sacs','Montres','Cosmétiques','Autre'];
+const ETAT=['Neuf avec étiquettes','Neuf sans étiquettes','Très bon état','Bon état','Satisfaisant'];
+const SL={pending:'En attente',sold:'Vendu',locker:'En casier',shipped:'Expédié',done:'Reçu ✓',problem:'Problème'};
+const SBG={pending:'ps-pending',sold:'ps-sold',locker:'ps-locker',shipped:'ps-shipped',done:'ps-done',problem:'ps-problem'};
+const SN={pending:'sold',sold:'locker',locker:'shipped',shipped:'done',done:'done',problem:'done'};
+const SDOT={pending:'dot-pending',sold:'dot-pending',locker:'dot-pending',shipped:'dot-shipped',done:'dot-done',problem:'dot-problem'};
+const ACC_COLORS=['#1B6EF3','#00C97B','#FF8C00','#7C5CFC','#FF3B5C','#F5A900'];
+
+function sbadge(st){return`<span class="ps ${esc(SBG[st]||'')}">${esc(SL[st]||st)}</span>`;}
+
+let S={
+  accounts:[],parcels:[],packStock:[],goal:0,activeAcc:null,
+  notes:[],wishlist:[],settings:{notifBas:true,notifBloque:true},
+  ratings:[],budget:[],goals:[],reminders:[],chatHistory:[],
+  history:[]
+};
+
+function loadState(){
+  try{
+    const r=localStorage.getItem('vp12');
+    if(r){const d=JSON.parse(r);Object.keys(S).forEach(k=>{if(d[k]!==undefined)S[k]=d[k];});}
+  }catch(e){}
+  syncHdr();checkAlerts();
+}
+function saveState(){
+  try{localStorage.setItem('vp12',JSON.stringify(S));}catch(e){}
+  syncHdr();
+}
+function syncHdr(){
+  const h=gel('hdr-bal');if(h)h.textContent=fmtE(calcTotal(null));
+}
+function checkAlerts(){
+  const now=Date.now();let has=false;
+  const blocked=S.parcels.filter(p=>{
+    if(p.status==='done'||p.status==='pending')return false;
+    try{
+      const pts=p.dateAdded.split(' ')[0].split('/');
+      const d=new Date(2000+parseInt(pts[2]),parseInt(pts[1])-1,parseInt(pts[0]));
+      return(now-d.getTime())>5*864e5;
+    }catch(e){return false;}
+  });
+  if(blocked.length)has=true;
+  const low=S.packStock.filter(pk=>pk.threshold>0&&pk.qty<=pk.threshold);
+  if(low.length)has=true;
+  if((S.reminders||[]).some(r=>!r.done&&new Date(r.datetime).getTime()<=now))has=true;
+  const dot=gel('notif-dot');if(dot)dot.style.display=has?'block':'none';
+}
+function calcNet(p){return(parseFloat(p.price)||0)-(parseFloat(p.fees)||0)-(parseFloat(p.packCost)||0);}
+function calcTotal(accId){
+  return S.parcels.reduce((t,p)=>{
+    if(p.status!=='done')return t;
+    if(accId&&p.accId!==accId)return t;
+    return t+calcNet(p);
+  },0);
+}
+function calcPending(accId){
+  return S.parcels.reduce((t,p)=>{
+    if(p.status==='done')return t;
+    if(accId&&p.accId!==accId)return t;
+    return t+(parseFloat(p.price)||0);
+  },0);
+}
+function getAccName(id){return (S.accounts.find(function(x){return x.id===id;})||{name:'?'}).name;}
+function getAccColor(id){return (S.accounts.find(function(x){return x.id===id;})||{color:'#1B6EF3'}).color;}
+function filteredParcels(){return S.activeAcc?S.parcels.filter(p=>p.accId===S.activeAcc):S.parcels;}
+
+/* ================================================================
+   NAVIGATION
+================================================================ */
+const MODES=[
+  {pages:['🏠 Accueil','📦 Colis','💬 Messages','🚚 Expédier','🗃️ Stock','👤 Comptes','🗺️ Relais','🔖 Wishlist','⏱️ Timer','🏷️ Étiquette','📦 Entrepôt 3D'],start:0},
+  {pages:['✨ Annonce','🎯 Prix','🤝 Négo','🌍 Traducteur','🤖 Chatbot','🔍 Analyse','📸 Photos','💬 Templates'],start:7},
+  {pages:['📊 Stats','🧮 Flipper','💰 Budget','🏆 Objectifs','⏰ Rappels','⏱️ Historique','📋 Rapport','🎰 Spin Prix','⚙️ Réglages','🏅 Badges'],start:12}
+];
+const NPAGES=29;
+let curMode=0,curPage=0;
+const rendered={};
+let swX=0,swY=0,swDrag=false,swBlock=false,swVel=0,swLX=0,swLT=0;
+
+function setMode(m){
+  curMode=m;
+  document.querySelectorAll('.modebar').forEach((b,i)=>b.classList.toggle('on',i===m));
+  _updateSubnav(MODES[m].start);
+  goPage(MODES[m].start);
+}
+function _updateSubnav(activePage){
+  const sn=gel('subnav');if(!sn)return;
+  sn.innerHTML=MODES[curMode].pages.map((lbl,i)=>{
+    const idx=MODES[curMode].start+i;
+    return`<div class="snitem${activePage===idx?' on':''}" onclick="goPage(${idx})">${esc(lbl)}</div>`;
+  }).join('');
+}
+function goPage(n){
+  const track=gel('track');const vp=gel('vp');
+  if(!track||!vp)return;
+  n=Math.max(0,Math.min(NPAGES-1,n));curPage=n;
+  const w=vp.offsetWidth||window.innerWidth;
+  track.style.transition='transform .38s cubic-bezier(.25,1,.5,1)';
+  track.style.transform='translateX('+(-n*w)+'px)';
+  _updateSubnav(n);
+  setTimeout(function(){
+    renderPage(n);
+    setTimeout(function(){
+      if(document.getElementById('chart3d')&&window._chart3dData){
+        initChart3D(window._chart3dData.months,window._chart3dData.maxM);
+      }
+    },80);
+  },60);
+  const pg=gel('p'+n);if(pg)pg.scrollTop=0;
+}
+function renderPage(idx){
+  if(rendered[idx])return;
+  rendered[idx]=true;
+  const pi=gel('pi'+idx);if(!pi)return;
+  const fns=[rHome,rColis,rMessages,rExpedier,rStock,rComptes,rRelais,rAnnonce,rPrixIA,rNego,rTraducteur,rChatbot,rStats,rFlipper,rBudget,rObjectifs,rRappels,rHistorique,rWishlist,rTimer,rEtiquette,rAnalyse,rPhotos,rTemplates,rRapport,rSpinPrix,rReglages,rBadges,rColis3D];
+  if(fns[idx])fns[idx](pi);
+}
+function rerender(idx){
+  delete rendered[idx];
+  const pi=gel('pi'+idx);if(pi)pi.innerHTML='';
+  if(curPage===idx)renderPage(idx);
+  syncHdr();
+}
+function rerenderAll(){for(let i=0;i<NPAGES;i++)rerender(i);}
+
+// Touch swipe — init after DOM ready
+function initSwipe(){
+  const vpEl=gel('vp');
+  if(!vpEl)return;
+  vpEl.addEventListener('touchstart',e=>{
+    swX=e.touches[0].clientX;swY=e.touches[0].clientY;
+    swDrag=true;swBlock=false;swVel=0;swLX=swX;swLT=Date.now();
+    const track=gel('track');if(track)track.style.transition='none';
+  },{passive:true});
+  vpEl.addEventListener('touchmove',e=>{
+    if(!swDrag)return;
+    const dx=e.touches[0].clientX-swX,dy=e.touches[0].clientY-swY;
+    const dt=Date.now()-swLT||1;swVel=(e.touches[0].clientX-swLX)/dt*16;
+    swLX=e.touches[0].clientX;swLT=Date.now();
+    if(!swBlock&&Math.abs(dy)>Math.abs(dx)&&Math.abs(dy)>10){swDrag=false;return;}
+    if(Math.abs(dx)>8)swBlock=true;
+    if(!swBlock)return;
+    const vp=gel('vp');const track=gel('track');
+    if(!vp||!track)return;
+    const mn=-(NPAGES-1)*vp.offsetWidth;
+    let tx=-curPage*vp.offsetWidth+dx;
+    if(tx>0)tx*=.14;else if(tx<mn)tx=mn+(tx-mn)*.14;
+    track.style.transform=`translateX(${tx}px)`;
+  },{passive:true});
+  vpEl.addEventListener('touchend',e=>{
+    if(!swDrag&&!swBlock)return;swDrag=false;
+    const dx=e.changedTouches[0].clientX-swX;
+    const thr=Math.abs(swVel)>12?24:54;
+    if(Math.abs(dx)>thr)goPage(dx<0?curPage+1:curPage-1);
+    else goPage(curPage);swBlock=false;
+  },{passive:true});
+}
+window.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight')goPage(curPage+1);
+  if(e.key==='ArrowLeft')goPage(curPage-1);
+});
+window.addEventListener('resize',()=>{
+  const track=gel('track');const vp=gel('vp');
+  if(track&&vp)track.style.transform=`translateX(${-curPage*vp.offsetWidth}px)`;
+});
+
+/* ================================================================
+   MODALS
+================================================================ */
+function showBalDetail(){
+  const parcels=filteredParcels();
+  const done=parcels.filter(p=>p.status==='done');
+  const pending=parcels.filter(p=>p.status!=='done');
+  const html=`
+    <div class="mo" onclick="if(event.target===this)closeModal()">
+    <div class="ms">
+      <div class="mo-h"></div>
+      <div class="mo-t">💰 Solde & revenus</div>
+      <div class="hero" style="margin-bottom:14px">
+        <div class="hero-lbl">Revenus nets totaux</div>
+        <div class="hero-amt">${fmtE(calcTotal(null))}</div>
+        <div class="hero-sub">${done.length} ventes finalisées</div>
+      </div>
+      <div class="g4" style="margin-bottom:14px">
+        <div class="sc"><div class="sv txt-yw">${fmtE(calcPending(null))}</div><div class="sl">En attente</div></div>
+        <div class="sc"><div class="sv txt-gn">${done.length}</div><div class="sl">Ventes</div></div>
+      </div>
+      ${S.accounts.length>1?`<div class="sec-lbl">Par compte</div>`+S.accounts.map(a=>`
+        <div class="row">
+          <div class="row-l">${esc(a.name)}</div>
+          <div class="row-v txt-gn">${fmtE(calcTotal(a.id))}</div>
+        </div>`).join(''):''}
+      <button class="btn btn-g" style="margin-top:10px" onclick="closeModal()">Fermer</button>
+    </div></div>`;
+  document.body.insertAdjacentHTML('beforeend',html);
+}
+
+function showNotifs(){
+  const now=Date.now();
+  const blocked=S.parcels.filter(p=>{
+    if(p.status==='done'||p.status==='pending')return false;
+    try{
+      const pts=p.dateAdded.split(' ')[0].split('/');
+      const d=new Date(2000+parseInt(pts[2]),parseInt(pts[1])-1,parseInt(pts[0]));
+      return(now-d.getTime())>5*864e5;
+    }catch(e){return false;}
+  });
+  const low=S.packStock.filter(pk=>pk.threshold>0&&pk.qty<=pk.threshold);
+  const dueRem=(S.reminders||[]).filter(r=>!r.done&&new Date(r.datetime).getTime()<=now);
+  let body='';
+  if(!blocked.length&&!low.length&&!dueRem.length){
+    body=`<div class="empty"><span class="emi">🔕</span><div class="emt">Aucune alerte</div></div>`;
+  } else {
+    if(blocked.length)body+=`<div class="card-rd card" style="margin-bottom:8px"><div class="fw8 f13 txt-rd mb8">⚠️ Colis bloqués</div>`+blocked.map(p=>`<div class="row"><div class="row-l">${esc(p.title)}</div>${sbadge(p.status)}</div>`).join('')+'</div>';
+    if(low.length)body+=`<div class="card-yw card" style="margin-bottom:8px"><div class="fw8 f13 txt-yw mb8">📦 Stock bas</div>`+low.map(pk=>`<div class="row"><div class="row-l">${esc(pk.name)}</div><div class="row-v">${pk.qty}</div></div>`).join('')+'</div>';
+    if(dueRem.length)body+=`<div class="card card-ai" style="margin-bottom:8px"><div class="fw8 f13 txt-pu mb8">⏰ Rappels</div>`+dueRem.map(r=>`<div class="row"><div class="row-l">${esc(r.title)}</div><span class="ps ps-problem">À faire</span></div>`).join('')+'</div>';
+  }
+  document.body.insertAdjacentHTML('beforeend',`
+    <div class="mo" onclick="if(event.target===this)closeModal()">
+    <div class="ms">
+      <div class="mo-h"></div>
+      <div class="mo-t">🔔 Alertes</div>
+      ${body}
+      <button class="btn btn-g" style="margin-top:10px" onclick="closeModal()">Fermer</button>
+    </div></div>`);
+}
+
+/* ================================================================
+   PAGE 0 — ACCUEIL
+================================================================ */
+function rHome(pi){
+  const parcels=filteredParcels();
+  const done=parcels.filter(p=>p.status==='done');
+  const active=parcels.filter(p=>p.status!=='done'&&p.status!=='pending');
+  const total=calcTotal(null);
+  const pending=calcPending(null);
+  const accSel=S.accounts.length>0?`
+    <div class="chip-row" style="margin-bottom:2px">
+      <div class="chip${!S.activeAcc?' on':''}" onclick="S.activeAcc=null;saveState();rerenderAll()">Tous</div>
+      ${S.accounts.map(a=>`<div class="chip${S.activeAcc===a.id?' on':''}" onclick="S.activeAcc='${a.id}';saveState();rerenderAll()">${esc(a.name)}</div>`).join('')}
+    </div>`:'';
+
+  pi.innerHTML=`
+    ${accSel}
+    <div class="hero">
+      <div class="hero-lbl">Revenus nets</div>
+      <div class="hero-amt">${fmtE(total)}</div>
+      <div class="hero-sub">${done.length} ventes · ${fmtE(pending)} en attente</div>
+      <div class="hero-change">+${done.length} ventes</div>
+    </div>
+    <div class="g4">
+      <div class="sc"><div class="sv">${parcels.length}</div><div class="sl">Colis total</div></div>
+      <div class="sc"><div class="sv txt-gn">${done.length}</div><div class="sl">Finalisés</div></div>
+      <div class="sc"><div class="sv txt-or">${active.length}</div><div class="sl">En cours</div></div>
+      <div class="sc"><div class="sv txt-yw">${parcels.filter(p=>p.status==='pending').length}</div><div class="sl">En attente</div></div>
+    </div>
+    <div class="card">
+      <div class="sh"><div class="sh-ic ic-ac">📦</div><div class="sh-t">Derniers colis</div><span class="badge">${parcels.length}</span></div>
+      ${parcels.length===0?`<div class="empty"><span class="emi">📭</span><div class="emt">Aucun colis</div><div class="ems">Ajoute ton premier colis dans Gestion</div></div>`
+      :parcels.slice(-4).reverse().map(p=>`
+        <div class="pc" onclick="openParcelDetail('${p.id}')">
+          <div class="pc-accent" style="background:${getAccColor(p.accId)}"></div>
+          <div style="display:flex;align-items:center;gap:10px;padding-left:8px">
+            <div style="flex:1">
+              <div class="f13 fw8">${esc(p.title)}</div>
+              <div class="f11 txt-tx3 mt4">${esc(p.dateAdded)} · ${esc(getAccName(p.accId))}</div>
+            </div>
+            <div style="text-align:right">
+              ${sbadge(p.status)}
+              <div class="f14 fw9 mono txt-gn mt4">${fmtE(p.price)}</div>
+            </div>
+          </div>
+        </div>`).join('')}
+      <button class="btn btn-g" style="margin-top:8px" onclick="goPage(1)">Voir tous les colis →</button>
+    </div>
+    ${S.packStock.length>0?`
+    <div class="card">
+      <div class="sh"><div class="sh-ic ic-or">🗃️</div><div class="sh-t">Stock emballages</div></div>
+      ${S.packStock.filter(pk=>pk.threshold>0&&pk.qty<=pk.threshold).map(pk=>`
+        <div class="row">
+          <div class="row-l">⚠️ ${esc(pk.name)}</div>
+          <div class="row-v txt-rd">${pk.qty} restant(s)</div>
+        </div>`).join('')||`<div class="f12 txt-tx3">Tout est bien approvisionné ✓</div>`}
+    </div>`:''}
+    <div class="card card-ai">
+      <div class="sh"><div class="sh-ic ic-pu">🤖</div><div class="sh-t">IA Tools</div></div>
+      <div class="g4">
+        <button class="btn btn-ai btn-sm" onclick="goPage(7)">✨ Annonce</button>
+        <button class="btn btn-ai btn-sm" onclick="goPage(8)">🎯 Prix IA</button>
+        <button class="btn btn-ai btn-sm" onclick="goPage(9)">🤝 Négo</button>
+        <button class="btn btn-ai btn-sm" onclick="goPage(11)">🤖 Chat</button>
+      </div>
+    </div>`;
+}
+
+/* ================================================================
+   PAGE 1 — COLIS
+================================================================ */
+function rColis(pi){
+  let filter='all';
+  function render(){
+    const parcels=filteredParcels();
+    const filtered=filter==='all'?parcels:parcels.filter(p=>p.status===filter);
+    pi.innerHTML=`
+      <div class="srch"><span>🔍</span><input id="srch-colis" placeholder="Rechercher un colis…" oninput="filterColisSearch()" value="${(gel('srch-colis')||{value:''}).value||''}"></div>
+      <div class="chip-row">
+        <div class="chip${filter==='all'?' on':''}" onclick="colisFilter('all')">Tous (${parcels.length})</div>
+        <div class="chip${filter==='pending'?' on':''}" onclick="colisFilter('pending')">En attente</div>
+        <div class="chip${filter==='sold'?' on':''}" onclick="colisFilter('sold')">Vendus</div>
+        <div class="chip${filter==='shipped'?' on':''}" onclick="colisFilter('shipped')">Expédiés</div>
+        <div class="chip${filter==='done'?' on':''}" onclick="colisFilter('done')">Reçus</div>
+        <div class="chip${filter==='problem'?' on':''}" onclick="colisFilter('problem')">Problèmes</div>
+      </div>
+      <button class="btn btn-p" onclick="openAddParcel()">+ Ajouter un colis</button>
+      ${filtered.length===0?`<div class="empty"><span class="emi">📭</span><div class="emt">Aucun colis</div></div>`
+      :filtered.slice().reverse().map(p=>`
+        <div class="pc" id="pc-${p.id}" onclick="openParcelDetail('${p.id}')">
+          <div class="pc-accent" style="background:${getAccColor(p.accId)}"></div>
+          <div style="padding-left:10px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+              <div class="f14 fw8" style="flex:1">${esc(p.title)}</div>
+              ${sbadge(p.status)}
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <div class="f11 txt-tx3" style="flex:1">${esc(p.dateAdded)} · ${esc(getAccName(p.accId))}${p.category?' · '+esc(p.category):''}</div>
+              <div class="f16 fw9 mono txt-gn">${fmtE(p.price)}</div>
+            </div>
+            ${p.trackNum?`<div class="f10 txt-ac mt4 mono"># ${esc(p.trackNum)}</div>`:''}
+          </div>
+        </div>`).join('')}`;
+    window._colisFilter=v=>{filter=v;render();};
+    window.colisFilter=v=>{filter=v;render();};
+    window.filterColisSearch=()=>{
+      const q=((gel('srch-colis')||{value:''}).value||'').toLowerCase();
+      document.querySelectorAll('[id^="pc-"]').forEach(el=>{
+        const id=el.id.replace('pc-','');
+        const p=S.parcels.find(x=>x.id===id);
+        if(!p)return;
+        el.style.display=(p.title+p.trackNum+getAccName(p.accId)).toLowerCase().includes(q)?'':'none';
+      });
+    };
+  }
+  render();
+}
+
+function openAddParcel(){
+  const accOpts=S.accounts.length?S.accounts.map(a=>`<option value="${a.id}">${esc(a.name)}</option>`).join(''):`<option value="">Aucun compte</option>`;
+  document.body.insertAdjacentHTML('beforeend',`
+    <div class="mo" onclick="if(event.target===this)closeModal()">
+    <div class="ms">
+      <div class="mo-h"></div>
+      <div class="mo-t">📦 Nouveau colis</div>
+      <div class="fs">
+        <div><label class="lbl">Article</label><input id="np-title" class="inp" placeholder="Ex: Veste Zara M bleue"></div>
+        <div><label class="lbl">Compte</label><select id="np-acc" class="inp">${accOpts}</select></div>
+        <div class="r3">
+          <div><label class="lbl">Prix vendu (€)</label><input id="np-price" class="inp" type="number" step="0.01" placeholder="0.00"></div>
+          <div><label class="lbl">Frais Vinted (€)</label><input id="np-fees" class="inp" type="number" step="0.01" placeholder="0.00"></div>
+        </div>
+        <div class="r3">
+          <div><label class="lbl">Frais emballage (€)</label><input id="np-pack" class="inp" type="number" step="0.01" placeholder="0.00"></div>
+          <div><label class="lbl">Catégorie</label><select id="np-cat" class="inp"><option value="">--</option>${CATS.map(c=>`<option>${esc(c)}</option>`).join('')}</select></div>
+        </div>
+        <div><label class="lbl">N° suivi (optionnel)</label><input id="np-track" class="inp" placeholder="Ex: 6C12345678901"></div>
+        <div><label class="lbl">Notes</label><textarea id="np-notes" class="inp" rows="2" placeholder="Commentaire…"></textarea></div>
+
+```
+    <button class="btn btn-p" onclick="addParcel()">✓ Enregistrer le colis</button>
+    <button class="btn btn-g" onclick="closeModal()">Annuler</button>
+  </div>
+</div></div>`);
+```
+
+}
+
+function addParcel(){
+const title=((gel(‘np-title’)||{value:’’}).value||’’).trim();
+if(!title){toast(‘Titre requis’,‘err’);return;}
+const p={
+id:uid(),title,
+accId:(gel(‘np-acc’)||{value:’’}).value||’’,
+price:parseFloat((gel(‘np-price’)||{value:’’}).value)||0,
+fees:parseFloat((gel(‘np-fees’)||{value:’’}).value)||0,
+packCost:parseFloat((gel(‘np-pack’)||{value:’’}).value)||0,
+category:(gel(‘np-cat’)||{value:’’}).value||’’,
+trackNum:((gel(‘np-track’)||{value:’’}).value||’’).trim(),
+notes:((gel(‘np-notes’)||{value:’’}).value||’’).trim(),
+status:‘pending’,
+dateAdded:fullDate()
+};
+S.parcels.push(p);
+saveState();
+closeModal();
+rerender(0);rerender(1);rerender(12);rerender(17);
+toast(‘Colis ajouté ✓’,‘ok’);
+}
+
+function openParcelDetail(id){
+const p=S.parcels.find(x=>x.id===id);
+if(!p)return;
+const net=calcNet(p);
+document.body.insertAdjacentHTML(‘beforeend’,` <div class="mo" onclick="if(event.target===this)closeModal()"> <div class="ms"> <div class="mo-h"></div> <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"> <div style="flex:1"><div class="f17 fw9">${esc(p.title)}</div><div class="f11 txt-tx3 mt4">${esc(p.dateAdded)}</div></div> ${sbadge(p.status)} </div> <div class="g4" style="margin-bottom:14px"> <div class="sc"><div class="sv txt-ac">${fmtE(p.price)}</div><div class="sl">Prix vente</div></div> <div class="sc"><div class="sv txt-gn">${fmtE(net)}</div><div class="sl">Net</div></div> <div class="sc"><div class="sv txt-rd">-${fmtE(p.fees)}</div><div class="sl">Frais Vinted</div></div> <div class="sc"><div class="sv txt-or">-${fmtE(p.packCost)}</div><div class="sl">Emballage</div></div> </div> ${p.trackNum?`<div class="row"><div class="row-l">N° suivi</div><div class="row-v txt-ac" onclick="copyText('${esc(p.trackNum)}')">${esc(p.trackNum)} 📋</div></div>`:''} ${p.category?`<div class="row"><div class="row-l">Catégorie</div><div class="row-v">${esc(p.category)}</div></div>`:''} ${p.notes?`<div style="background:var(--ywl);border-radius:var(--r2);padding:12px;margin:8px 0;border-left:3px solid var(--yw)"><div class="f11 fw7 txt-tx3 mb8">Notes</div><div class="f13">${esc(p.notes)}</div></div>`:''} <div class="sec-lbl" style="margin-top:10px">Changer le statut</div> <div class="chip-row"> ${Object.entries(SL).map(([k,v])=>`<div class="chip${p.status===k?' on':''}" onclick="changeStatus('${id}','${k}')">${v}</div>`).join('')} </div> <div style="display:flex;gap:8px;margin-top:14px"> <button class="btn btn-d" onclick="deleteParcel('${id}')">🗑️ Supprimer</button> <button class="btn btn-g" onclick="closeModal()">Fermer</button> </div> </div></div>`);
+}
+
+function changeStatus(id,st){
+const p=S.parcels.find(x=>x.id===id);if(!p)return;
+p.status=st;
+saveState();
+closeModal();
+rerender(0);rerender(1);rerender(12);rerender(17);
+if(st===‘done’){confetti();toast(‘Vente finalisée 🎉’,‘ok’);}
+else toast(‘Statut mis à jour’,‘ok’);
+}
+
+function deleteParcel(id){
+S.parcels=S.parcels.filter(x=>x.id!==id);
+saveState();closeModal();rerender(0);rerender(1);rerender(12);rerender(17);
+toast(‘Colis supprimé’);
+}
+
+/* ================================================================
+PAGE 2 — MESSAGES
+================================================================ */
+function rMessages(pi){
+const msgs=S.parcels.filter(p=>p.status!==‘pending’&&p.status!==‘done’);
+const qr=[
+{txt:‘Bonjour, merci pour votre achat ! Votre colis est bien préparé et sera expédié aujourd'hui ou demain. 😊’},
+{txt:‘Votre colis a été expédié ! Vous recevrez un numéro de suivi sous peu. Bonne réception ! 📦’},
+{txt:‘Bonjour, je suis désolé pour ce délai. Votre colis est en cours de traitement, il partira très prochainement.’},
+{txt:‘Colis bien reçu et emballé soigneusement. Expédition prévue dans 24h. Merci de votre confiance ! ⭐’},
+{txt:‘Bonjour ! Je confirme que l'article correspond bien à la description. N'hésitez pas si vous avez des questions.’},
+{txt:‘Merci pour votre évaluation ! C'était un plaisir de vendre avec vous. Bonne continuation ! 😊’},
+];
+pi.innerHTML=` <div class="card"> <div class="sh"><div class="sh-ic ic-ac">💬</div><div class="sh-t">Messages rapides</div></div> <div class="qrg"> ${qr.map((m,i)=>`<div class="qrp" id="qrp-${i}" onclick="sendQR(${i})">${[‘📦’,‘🚚’,‘⏳’,‘📬’,‘✅’,‘⭐’][i]} Message ${i+1}</div>`).join('')} </div> </div> <div class="card"> <div class="sh"><div class="sh-ic ic-pu">✉️</div><div class="sh-t">Modèles de messages</div></div> ${qr.map((m,i)=>`
+<div class="adb">
+<div class="adl">Message ${i+1}</div>
+<div class="adt">${esc(m.txt)}</div>
+<button class="btn btn-g btn-xs" style="margin-top:8px;width:auto" onclick="copyText('${esc(m.txt)}')">📋 Copier</button>
+</div>`).join('')} </div> <div class="card"> <div class="sh"><div class="sh-ic ic-gn">✏️</div><div class="sh-t">Message personnalisé</div></div> <textarea id="custom-msg" class="inp" rows="3" placeholder="Rédigez votre message…"></textarea> <div style="display:flex;gap:8px;margin-top:8px"> <button class="btn btn-p" onclick="copyText(gel('custom-msg').value)">📋 Copier</button> <button class="btn btn-g" onclick="gel('custom-msg').value=''">Effacer</button> </div> </div>`;
+window.sendQR=i=>{
+const el=gel(‘qrp-’+i);if(!el)return;
+copyText(qr[i].txt);
+el.classList.add(‘sent’);
+setTimeout(()=>el.classList.remove(‘sent’),2000);
+};
+}
+
+/* ================================================================
+PAGE 3 — EXPÉDIER
+================================================================ */
+function rExpedier(pi){
+const transporteurs=[
+{nom:‘Mondial Relay’,icon:‘📫’,desc:‘Point Relais — recommandé’,prix:[{l:‘0–1kg’,p:‘2,99’},{l:‘1–3kg’,p:‘4,99’},{l:‘3–5kg’,p:‘6,99’}]},
+{nom:‘Colissimo’,icon:‘📮’,desc:‘Domicile ou boîte aux lettres’,prix:[{l:‘0–500g’,p:‘4,05’},{l:‘0–1kg’,p:‘5,10’},{l:‘1–2kg’,p:‘7,20’}]},
+{nom:‘Chronopost’,icon:‘⚡’,desc:‘Express 24h’,prix:[{l:‘0–500g’,p:‘8,50’},{l:‘0–2kg’,p:‘11,00’},{l:‘2–5kg’,p:‘14,50’}]},
+{nom:‘DPD’,icon:‘🏎️’,desc:‘Relais DPD’,prix:[{l:‘0–1kg’,p:‘3,50’},{l:‘1–3kg’,p:‘5,50’},{l:‘3–5kg’,p:‘7,50’}]},
+];
+pi.innerHTML=` <div class="card"> <div class="sh"><div class="sh-ic ic-ac">🧮</div><div class="sh-t">Calculateur de frais</div></div> <div class="fs"> <div class="r3"> <div><label class="lbl">Prix vente (€)</label><input id="calc-price" class="inp" type="number" step="0.01" placeholder="0.00" oninput="calcFrais()"></div> <div><label class="lbl">Poids (g)</label><input id="calc-weight" class="inp" type="number" placeholder="500" oninput="calcFrais()"></div> </div> <div id="frais-result"></div> </div> </div> <div class="card"> <div class="sh"><div class="sh-ic ic-or">🚚</div><div class="sh-t">Transporteurs</div></div> ${transporteurs.map(t=>`
+<div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--bd2)">
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+<span style="font-size:22px">${t.icon}</span>
+<div><div class="f14 fw8">${esc(t.nom)}</div><div class="f11 txt-tx3">${esc(t.desc)}</div></div>
+</div>
+<div class="g4">
+${t.prix.map(p=>`<div class="sc"><div class="sv txt-ac">${p.p} €</div><div class="sl">${esc(p.l)}</div></div>`).join(’’)}
+</div>
+</div>`).join('')} </div> <div class="card"> <div class="sh"><div class="sh-ic ic-yw">📏</div><div class="sh-t">Conseils emballage</div></div> ${['Utilise une boîte rigide ou une enveloppe bulle adaptée.','Protège les objets fragiles avec du papier kraft ou bulle.','Poids réel vs volumétrique : max(réel, L×l×h / 5000).','Imprime l\'étiquette en qualité correcte et colle-la bien.','Garde toujours une photo du colis avant expédition.'].map(c=>`
+<div class="chk" onclick="this.querySelector('.chk-b').classList.toggle('on');this.querySelector('.chk-t').classList.toggle('on')">
+<div class="chk-b"></div>
+<div class="chk-t">${esc(c)}</div>
+</div>`).join('')} </div>`;
+window.calcFrais=()=>{
+const price=parseFloat((gel(‘calc-price’)||{value:’’}).value)||0;
+const poids=parseFloat((gel(‘calc-weight’)||{value:’’}).value)||0;
+const el=gel(‘frais-result’);if(!el)return;
+if(!price){el.innerHTML=’’;return;}
+const commission=price*0.05;
+const protection=price<=6?0.70:price<=10?0.80:price<=20?1.00:price<=50?1.80:price<=100?2.80:3.80;
+const fraisTotal=commission+protection;
+const net=price-fraisTotal;
+el.innerHTML=` <div class="frais-res"> <div class="frais-row"><span class="f12">Prix de vente</span><span class="f13 fw8 mono">${fmtE(price)}</span></div> <div class="frais-row"><span class="f12">Commission (5%)</span><span class="f13 fw8 mono txt-rd">-${fmtE(commission)}</span></div> <div class="frais-row"><span class="f12">Protection acheteur</span><span class="f13 fw8 mono txt-rd">-${fmtE(protection)}</span></div> <div class="frais-row"><span class="f13 fw8">Net pour toi</span><span class="f15 fw9 mono txt-gn">${fmtE(net)}</span></div> </div>`;
+};
+}
+
+/* ================================================================
+PAGE 4 — STOCK  (Garage Isométrique)
+================================================================ */
+function rStock(pi){
+function render(){
+var low=S.packStock.filter(function(p){return p.threshold>0&&p.qty<=p.threshold;});
+pi.innerHTML=` <div style="border-radius:20px;overflow:hidden;background:#1a1008;box-shadow:0 16px 48px rgba(0,0,0,.6)"> <div style="background:linear-gradient(90deg,#2a1a08,#1a1008);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,200,80,.1)"> <div style="display:flex;align-items:center;gap:8px"> <span style="font-size:16px">🏭</span> <span style="font-size:13px;font-weight:800;color:#f0d080;letter-spacing:-.03em">Mon Entrepôt</span> </div> <span style="font-size:10px;font-weight:700;color:rgba(240,208,128,.5)">${S.packStock.length} article${S.packStock.length>1?'s':''}</span> </div> <canvas id="garage3d" width="800" height="500" style="width:100%;height:280px;display:block;touch-action:none;cursor:grab"></canvas> <div style="background:#120e06;padding:5px 14px;display:flex;align-items:center;justify-content:space-between"> <span style="font-size:9px;color:rgba(240,208,128,.3);font-weight:600">Glisse pour pivoter · Pince pour zoomer</span> <button onclick="resetGarageView()" style="background:none;border:1px solid rgba(240,208,128,.2);color:rgba(240,208,128,.5);font-size:9px;font-weight:700;cursor:pointer;padding:3px 10px;border-radius:20px">↺</button> </div> </div> ${low.length?`<div style="background:rgba(255,59,92,.1);border-radius:14px;padding:10px 14px;border:1px solid rgba(255,59,92,.25);display:flex;align-items:center;gap:8px"><span style="font-size:18px">🚨</span><div><div class="f12 fw8 txt-rd">Stock bas !</div><div class="f11 txt-tx2 mt4">${low.map(function(p){return esc(p.name)+’ — ‘+p.qty+’ restant’+(p.qty>1?‘s’:’’);}).join(’  ·  ’)}</div></div></div>`:''} <div class="card"> <div class="sh"><div class="sh-ic ic-or">🗃️</div><div class="sh-t">Mes emballages</div><span class="badge">${S.packStock.length}</span></div> <button class="btn btn-p" onclick="openAddStock()" style="margin-bottom:10px">+ Ajouter un emballage</button> ${S.packStock.length===0 ?`<div class="empty"><span class="emi">📦</span><div class="emt">Entrepôt vide !</div><div class="ems">Ajoute tes emballages pour les voir apparaître dans le garage</div></div>` :S.packStock.map(function(pk){ var isLow=pk.threshold>0&&pk.qty<=pk.threshold; return`<div class="row" id="stk-${pk.id}">
+<div style="flex:1">
+<div class="f13 fw8">${esc(pk.name)}</div>
+<div class="f11 txt-tx3 mt4">${pk.threshold>0?‘Alerte à ‘+pk.threshold+’ unités’:‘Pas d'alerte’}</div>
+</div>
+<div style="display:flex;align-items:center;gap:8px">
+<button class="btn btn-g btn-ico" onclick="adjustStock('${pk.id}',-1)">−</button>
+<span class="f16 fw9 mono ${isLow?'txt-rd':'txt-gn'}" style="${isLow?'animation:pulse 1.5s infinite':''}">${pk.qty}</span>
+<button class="btn btn-p btn-ico" onclick="adjustStock('${pk.id}',1)">+</button>
+<button class="btn btn-d btn-ico" onclick="deleteStock('${pk.id}')">🗑</button>
+</div>
+</div>`; }).join('')} </div>`;
+setTimeout(function(){initGarage3D(S.packStock);},60);
+}
+render();
+
+window.openAddStock=function(){
+document.body.insertAdjacentHTML(‘beforeend’,` <div class="mo" onclick="if(event.target===this)closeModal()"> <div class="ms"> <div class="mo-h"></div> <div class="mo-t">📦 Nouvel emballage</div> <div class="fs"> <div><label class="lbl">Nom</label><input id="ns-name" class="inp" placeholder="Ex: Enveloppe bulle A5"></div> <div class="r3"> <div><label class="lbl">Quantité initiale</label><input id="ns-qty" class="inp" type="number" value="10" min="0"></div> <div><label class="lbl">Seuil d'alerte</label><input id="ns-thr" class="inp" type="number" value="5" min="0"></div> </div> <button class="btn btn-p" onclick="addStock()">✓ Ajouter</button> <button class="btn btn-g" onclick="closeModal()">Annuler</button> </div> </div></div>`);
+};
+window.addStock=function(){
+var name=((gel(‘ns-name’)||{value:’’}).value||’’).trim();
+if(!name){toast(‘Nom requis’,‘err’);return;}
+S.packStock.push({id:uid(),name:name,qty:parseInt((gel(‘ns-qty’)||{value:’’}).value)||0,threshold:parseInt((gel(‘ns-thr’)||{value:’’}).value)||5});
+saveState();closeModal();render();toast(‘Emballage ajouté ✓’,‘ok’);
+};
+window.adjustStock=function(id,delta){
+var pk=S.packStock.find(function(x){return x.id===id;});
+if(!pk)return;
+pk.qty=Math.max(0,pk.qty+delta);
+saveState();render();
+if(pk.threshold>0&&pk.qty<=pk.threshold)toast(’🚨 Stock bas : ’+pk.name,‘err’);
+checkAlerts();
+};
+window.deleteStock=function(id){
+S.packStock=S.packStock.filter(function(x){return x.id!==id;});
+saveState();render();
+};
+}
+
+/* ================================================================
+PAGE 5 — COMPTES
+================================================================ */
+function rComptes(pi){
+function render(){
+pi.innerHTML=` <div class="card"> <div class="sh"><div class="sh-ic ic-ac">👤</div><div class="sh-t">Mes comptes Vinted</div><span class="badge">${S.accounts.length}</span></div> <button class="btn btn-p" onclick="openAddAcc()" style="margin-bottom:10px">+ Ajouter un compte</button> ${S.accounts.length===0?`<div class="empty"><span class="emi">👤</span><div class="emt">Aucun compte</div><div class="ems">Crée un compte pour suivre tes ventes</div></div>` :S.accounts.map(a=>{ const net=calcTotal(a.id); const count=S.parcels.filter(p=>p.accId===a.id&&p.status==='done').length; return`
+<div class="acc-card${S.activeAcc===a.id?' active-acc':''}" onclick="S.activeAcc=(S.activeAcc===a.id?null:a.id);saveState();rerenderAll()">
+<div class="acc-avatar" style="background:${a.color}">${esc((a.name[0]||’’).toUpperCase()||’?’)}</div>
+<div style="flex:1">
+<div class="f14 fw8">${esc(a.name)}</div>
+<div class="f11 txt-tx3 mt4">${count} ventes · ${fmtE(net)}</div>
+</div>
+<button class="btn btn-d btn-xs" onclick="event.stopPropagation();deleteAcc('${a.id}')">🗑</button>
+</div>`; }).join('')} </div> <div class="card"> <div class="sh"><div class="sh-ic ic-gn">⭐</div><div class="sh-t">Évaluations</div></div> <button class="btn btn-g" onclick="openAddRating()" style="margin-bottom:10px">+ Ajouter évaluation</button> ${(S.ratings||[]).length===0?`<div class="f12 txt-tx3">Aucune évaluation enregistrée</div>` :(S.ratings||[]).slice(-5).reverse().map(r=>`
+<div class="row">
+<div class="row-l">${‘⭐’.repeat(r.stars)} — ${esc(r.note||’’)}</div>
+<div class="f10 txt-tx3">${esc(r.date)}</div>
+</div>`).join('')} </div>`;
+}
+render();
+window.openAddAcc=()=>{
+document.body.insertAdjacentHTML(‘beforeend’,` <div class="mo" onclick="if(event.target===this)closeModal()"> <div class="ms"> <div class="mo-h"></div> <div class="mo-t">👤 Nouveau compte</div> <div class="fs"> <div><label class="lbl">Nom du compte</label><input id="na-name" class="inp" placeholder="Ex: MonCompte_Vinted"></div> <div><label class="lbl">Couleur</label> <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px"> ${ACC_COLORS.map(c=>`<div onclick="selAccColor('${c}')" id="ac-c-${c.replace('#','')}" style="width:32px;height:32px;border-radius:10px;background:${c};cursor:pointer;border:3px solid transparent;transition:all .15s"></div>`).join('')} </div> </div> <button class="btn btn-p" onclick="addAcc()">✓ Créer</button> <button class="btn btn-g" onclick="closeModal()">Annuler</button> </div> </div></div>`);
+selAccColor(ACC_COLORS[0]);
+};
+window._accColor=ACC_COLORS[0];
+window.selAccColor=c=>{
+window._accColor=c;
+document.querySelectorAll(’[id^=“ac-c-”]’).forEach(el=>el.style.borderColor=‘transparent’);
+const el=document.getElementById(‘ac-c-’+c.replace(’#’,’’));
+if(el)el.style.borderColor=c;
+};
+window.addAcc=()=>{
+const name=((gel(‘na-name’)||{value:’’}).value||’’).trim();
+if(!name){toast(‘Nom requis’,‘err’);return;}
+S.accounts.push({id:uid(),name,color:window._accColor||’#1B6EF3’});
+saveState();closeModal();render();rerender(0);
+toast(‘Compte créé ✓’,‘ok’);
+};
+window.deleteAcc=(id)=>{
+S.accounts=S.accounts.filter(x=>x.id!==id);
+if(S.activeAcc===id)S.activeAcc=null;
+saveState();render();rerender(0);
+toast(‘Compte supprimé’);
+};
+window.openAddRating=()=>{
+document.body.insertAdjacentHTML(‘beforeend’,` <div class="mo" onclick="if(event.target===this)closeModal()"> <div class="ms"> <div class="mo-h"></div> <div class="mo-t">⭐ Évaluation</div> <div class="fs"> <div><label class="lbl">Note</label> <div class="chip-row" id="star-row"> ${[1,2,3,4,5].map(n=>`<div class="chip" onclick="selStars(${n})">${‘⭐’.repeat(n)}</div>`).join('')} </div> </div> <div><label class="lbl">Commentaire</label><input id="rat-note" class="inp" placeholder="Parfait vendeur…"></div> <button class="btn btn-p" onclick="addRating()">✓ Ajouter</button> <button class="btn btn-g" onclick="closeModal()">Annuler</button> </div> </div></div>`);
+window._stars=5;selStars(5);
+};
+window.selStars=n=>{
+window._stars=n;
+document.querySelectorAll(’#star-row .chip’).forEach((el,i)=>el.classList.toggle(‘on’,i<n));
+};
+window.addRating=()=>{
+if(!S.ratings)S.ratings=[];
+S.ratings.push({id:uid(),stars:window._stars||5,note:((gel(‘rat-note’)||{value:’’}).value||’’).trim(),date:fullDate()});
+saveState();closeModal();render();
+toast(‘Évaluation ajoutée ✓’,‘ok’);
+};
+}
+
+/* ================================================================
+PAGE 6 — RELAIS
+================================================================ */
+function rRelais(pi){
+const relais=[
+{name:‘Mondial Relay - Tabac du Centre’,icon:‘📫’,addr:‘12 rue de la Paix, 75001 Paris’,dist:‘0.3 km’,hours:‘Lun-Sam 8h-20h’},
+{name:‘Chronopost Point’,icon:‘📮’,addr:‘45 bd Haussmann, 75009 Paris’,dist:‘0.7 km’,hours:‘Lun-Ven 9h-18h30’},
+{name:‘Colissimo La Poste’,icon:‘🏣’,addr:‘23 rue Rivoli, 75004 Paris’,dist:‘1.1 km’,hours:‘Lun-Ven 8h30-19h’},
+{name:‘DPD Relais Presse’,icon:‘📰’,addr:‘8 av. de l'Opéra, 75001 Paris’,dist:‘1.4 km’,hours:‘Lun-Dim 7h-22h’},
+{name:‘UPS Store’,icon:‘🟤’,addr:‘55 rue St-Honoré, 75001 Paris’,dist:‘1.8 km’,hours:‘Lun-Ven 9h-19h’},
+];
+pi.innerHTML=` <div class="card"> <div class="sh"><div class="sh-ic ic-ac">🗺️</div><div class="sh-t">Points relais proches</div></div> <div class="srch"><span>🔍</span><input id="srch-relay" placeholder="Ville, code postal…" oninput="filterRelais()"></div> <div class="chip-row" style="margin-bottom:10px"> <div class="chip on">Tous</div> <div class="chip">Mondial Relay</div> <div class="chip">Colissimo</div> <div class="chip">DPD</div> <div class="chip">Chronopost</div> </div> <div class="relay-list" id="relay-list"> ${relais.map((r,i)=>`
+<div class="relay-item" id="rl-${i}">
+<div class="relay-icon">${r.icon}</div>
+<div style="flex:1">
+<div class="relay-name">${esc(r.name)}</div>
+<div class="relay-addr">${esc(r.addr)}</div>
+<div class="f10 txt-tx3 mt4">${esc(r.hours)}</div>
+</div>
+<div class="relay-dist">${r.dist}</div>
+</div>`).join('')} </div> </div> <div class="card"> <div class="sh"><div class="sh-ic ic-yw">💡</div><div class="sh-t">Astuces relais</div></div> ${['Prends une photo du dépôt avec le bordereau visible.','Vérifie les horaires avant de te déplacer.','Mondial Relay est souvent le moins cher pour Vinted.','Garde ton SMS/e-mail de confirmation jusqu\'à livraison.'].map(t=>`<div class="row"><div class="row-l">${esc(t)}</div></div>`).join('')} </div>`;
+window.filterRelais=()=>{
+const q=((gel(‘srch-relay’)||{value:’’}).value||’’).toLowerCase();
+relais.forEach((r,i)=>{
+const el=gel(‘rl-’+i);
+if(el)el.style.display=(r.name+r.addr).toLowerCase().includes(q)||!q?’’:‘none’;
+});
+};
+}
+
+/* ================================================================
+PAGE 7 — ANNONCE IA
+================================================================ */
+function rAnnonce(pi){
+pi.innerHTML=` <div class="card card-ai"> <div class="sh"><div class="sh-ic ic-pu">✨</div><div class="sh-t">Générateur d'annonce IA</div></div> <div class="fs"> <div><label class="lbl">Article</label><input id="ai-art" class="inp" placeholder="Ex: Veste Zara bleue taille M"></div> <div class="r3"> <div><label class="lbl">Catégorie</label><select id="ai-cat" class="inp"><option value="">--</option>${CATS.map(c=>`<option>${esc(c)}</option>`).join('')}</select></div> <div><label class="lbl">État</label><select id="ai-etat" class="inp"><option value="">--</option>${ETAT.map(e=>`<option>${esc(e)}</option>`).join('')}</select></div> </div> <div><label class="lbl">Infos complémentaires</label><textarea id="ai-info" class="inp" rows="2" placeholder="Couleur, taille, marque, défauts…"></textarea></div> <button class="btn btn-ai" onclick="genAnnonce()">🤖 Générer l'annonce</button> </div> </div> <div id="annonce-res"></div>`;
+
+window.genAnnonce=async()=>{
+const art=((gel(‘ai-art’)||{value:’’}).value||’’).trim();
+if(!art){toast(‘Décris l'article’,‘err’);return;}
+const cat=(gel(‘ai-cat’)||{value:’’}).value||’’;
+const etat=(gel(‘ai-etat’)||{value:’’}).value||’’;
+const info=(gel(‘ai-info’)||{value:’’}).value||’’;
+const el=gel(‘annonce-res’);
+el.innerHTML=`<div class="ai-load"><div class="ai-dots"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div><span style="font-size:12px;color:var(--pu);font-weight:600">Génération en cours…</span></div>`;
+try{
+const resp=await fetch(‘https://api.anthropic.com/v1/messages’,{
+method:‘POST’,headers:{‘Content-Type’:‘application/json’},
+body:JSON.stringify({
+model:‘claude-sonnet-4-20250514’,max_tokens:600,
+messages:[{role:‘user’,content:`Tu es un expert en vente sur Vinted. Génère une annonce accrocheuse et complète pour cet article :
+Article : ${art}
+Catégorie : ${cat||‘Non précisée’}
+État : ${etat||‘Non précisé’}
+Infos : ${info||‘Aucune’}
+
+Format souhaité :
+TITRE (max 60 car) : [titre]
+DESCRIPTION : [description naturelle, 3-5 phrases avec mots-clés Vinted]
+HASHTAGS : [5-8 hashtags pertinents]
+CONSEIL PRIX : [fourchette de prix conseillée]`}] }) }); const data=await resp.json(); const txt=(data.content||[]).map(b=>b.text||'').join('')||''; el.innerHTML=`
+<div class="card card-ai">
+<div class="sh"><div class="sh-ic ic-pu">✨</div><div class="sh-t">Annonce générée</div></div>
+<div class="adb"><div class="adl">Résultat</div><div class="adt" style="white-space:pre-wrap">${esc(txt)}</div></div>
+<button class="btn btn-ai" onclick="copyText(${JSON.stringify(txt)})">📋 Copier</button>
+</div>`; }catch(e){el.innerHTML=`<div class="card-rd card"><div class="f12 fw8 txt-rd">Erreur IA</div><div class="f11 mt4">${esc(e.message)}</div></div>`;}
+};
+}
+
+/* ================================================================
+PAGE 8 — PRIX IA
+================================================================ */
+function rPrixIA(pi){
+pi.innerHTML=` <div class="card card-ai"> <div class="sh"><div class="sh-ic ic-pu">🎯</div><div class="sh-t">Estimation de prix IA</div></div> <div class="fs"> <div><label class="lbl">Article</label><input id="px-art" class="inp" placeholder="Ex: Nike Air Max 90 taille 42"></div> <div class="r3"> <div><label class="lbl">Catégorie</label><select id="px-cat" class="inp"><option value="">--</option>${CATS.map(c=>`<option>${esc(c)}</option>`).join('')}</select></div> <div><label class="lbl">État</label><select id="px-etat" class="inp"><option value="">--</option>${ETAT.map(e=>`<option>${esc(e)}</option>`).join('')}</select></div> </div> <button class="btn btn-ai" onclick="estPrix()">🎯 Estimer le prix</button> </div> </div> <div id="prix-res"></div>`;
+
+window.estPrix=async()=>{
+const art=((gel(‘px-art’)||{value:’’}).value||’’).trim();
+if(!art){toast(‘Décris l'article’,‘err’);return;}
+const el=gel(‘prix-res’);
+el.innerHTML=`<div class="ai-load"><div class="ai-dots"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div><span style="font-size:12px;color:var(--pu);font-weight:600">Analyse en cours…</span></div>`;
+try{
+const resp=await fetch(‘https://api.anthropic.com/v1/messages’,{
+method:‘POST’,headers:{‘Content-Type’:‘application/json’},
+body:JSON.stringify({
+model:‘claude-sonnet-4-20250514’,max_tokens:400,
+messages:[{role:‘user’,content:`Expert Vinted. Donne une estimation de prix réaliste pour :
+Article : ${art}
+État : ${(gel(‘px-etat’)||{value:’’}).value||‘Non précisé’}
+Catégorie : ${(gel(‘px-cat’)||{value:’’}).value||‘Non précisée’}
+
+Réponds avec :
+PRIX MIN : [X]€
+PRIX OPTIMAL : [X]€
+PRIX MAX : [X]€
+CONSEIL : [1-2 phrases sur la stratégie de prix]
+POPULARITÉ : [Faible/Moyenne/Forte sur Vinted]`}] }) }); const data=await resp.json(); const txt=(data.content||[]).map(b=>b.text||'').join('')||''; el.innerHTML=`
+<div class="card card-ai">
+<div class="sh"><div class="sh-ic ic-pu">🎯</div><div class="sh-t">Estimation</div></div>
+<div class="adb"><div class="adt" style="white-space:pre-wrap">${esc(txt)}</div></div>
+</div>`; }catch(e){el.innerHTML=`<div class="card-rd card"><div class="f12 fw8 txt-rd">Erreur IA</div></div>`;}
+};
+}
+
+/* ================================================================
+PAGE 9 — NÉGO IA
+================================================================ */
+function rNego(pi){
+pi.innerHTML=` <div class="card card-ai"> <div class="sh"><div class="sh-ic ic-pu">🤝</div><div class="sh-t">Assistant négociation</div></div> <div class="fs"> <div><label class="lbl">Message de l'acheteur</label><textarea id="nego-msg" class="inp" rows="3" placeholder="Ex: Bonjour, vous pouvez faire 15€ ?"></textarea></div> <div class="r3"> <div><label class="lbl">Ton prix</label><input id="nego-price" class="inp" type="number" step="0.01" placeholder="25.00"></div> <div><label class="lbl">Prix minimum</label><input id="nego-min" class="inp" type="number" step="0.01" placeholder="18.00"></div> </div> <button class="btn btn-ai" onclick="genNego()">🤝 Générer réponse</button> </div> </div> <div id="nego-res"></div>`;
+
+window.genNego=async()=>{
+const msg=((gel(‘nego-msg’)||{value:’’}).value||’’).trim();
+if(!msg){toast(‘Colle le message’,‘err’);return;}
+const el=gel(‘nego-res’);
+el.innerHTML=`<div class="ai-load"><div class="ai-dots"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div><span style="font-size:12px;color:var(--pu);font-weight:600">Rédaction…</span></div>`;
+try{
+const resp=await fetch(‘https://api.anthropic.com/v1/messages’,{
+method:‘POST’,headers:{‘Content-Type’:‘application/json’},
+body:JSON.stringify({
+model:‘claude-sonnet-4-20250514’,max_tokens:500,
+messages:[{role:‘user’,content:`Tu vends sur Vinted. Un acheteur t’envoie ce message :
+“${msg}”
+
+Mon prix actuel : ${(gel(‘nego-price’)||{value:’’}).value||‘non précisé’}€
+Mon prix minimum acceptable : ${(gel(‘nego-min’)||{value:’’}).value||‘non précisé’}€
+
+Génère 3 réponses courtes et polies (ferme, modérée, flexible) pour négocier intelligemment. Format :
+FERME : [réponse]
+MODÉRÉE : [réponse]
+FLEXIBLE : [réponse]`}] }) }); const data=await resp.json(); const txt=(data.content||[]).map(b=>b.text||'').join('')||''; const parts=txt.split(/\n/).filter(l=>l.trim()); el.innerHTML=`
+<div class="card card-ai">
+<div class="sh"><div class="sh-ic ic-pu">🤝</div><div class="sh-t">Réponses suggérées</div></div>
+${parts.map(p=>` <div class="adb"> <div class="adt">${esc(p)}</div> <button class="btn btn-g btn-xs" style="margin-top:6px;width:auto" onclick="copyText(${JSON.stringify(p)})">📋</button> </div>`).join(’’)}
+</div>`; }catch(e){el.innerHTML=`<div class="card-rd card"><div class="f12 fw8 txt-rd">Erreur IA</div></div>`;}
+};
+}
+
+/* ================================================================
+PAGE 10 — TRADUCTEUR
+================================================================ */
+function rTraducteur(pi){
+const langs=[
+{code:‘en’,flag:‘🇬🇧’,name:‘Anglais’},{code:‘de’,flag:‘🇩🇪’,name:‘Allemand’},
+{code:‘es’,flag:‘🇪🇸’,name:‘Espagnol’},{code:‘it’,flag:‘🇮🇹’,name:‘Italien’},
+{code:‘nl’,flag:‘🇳🇱’,name:‘Néerlandais’},{code:‘pt’,flag:‘🇵🇹’,name:‘Portugais’},
+{code:‘pl’,flag:‘🇵🇱’,name:‘Polonais’},{code:‘ro’,flag:‘🇷🇴’,name:‘Roumain’},
+];
+let targetLang=‘en’;
+pi.innerHTML=` <div class="card"> <div class="sh"><div class="sh-ic ic-ac">🌍</div><div class="sh-t">Traducteur Vinted</div></div> <div class="chip-row" id="lang-chips" style="margin-bottom:10px"> ${langs.map(l=>`<div class="chip${l.code===targetLang?' on':''}" onclick="selLang('${l.code}')">${l.flag} ${esc(l.name)}</div>`).join('')} </div> <div class="fs"> <div><label class="lbl">Message à traduire</label><textarea id="trad-in" class="inp" rows="3" placeholder="Colle ici le message de l'acheteur…"></textarea></div> <button class="btn btn-p" onclick="traduire()">🌍 Traduire</button> </div> <div id="trad-res"></div> </div> <div class="card"> <div class="sh"><div class="sh-ic ic-or">💬</div><div class="sh-t">Réponse traduite</div></div> <div class="fs"> <div><label class="lbl">Ta réponse en français</label><textarea id="trad-rep" class="inp" rows="3" placeholder="Écris ta réponse en français…"></textarea></div> <button class="btn btn-ai" onclick="traduireRep()">🤖 Traduire ma réponse</button> </div> <div id="trad-rep-res"></div> </div>`;
+
+window.selLang=code=>{
+targetLang=code;
+document.querySelectorAll(’#lang-chips .chip’).forEach((el,i)=>el.classList.toggle(‘on’,langs[i].code===code));
+};
+window.traduire=async()=>{
+const txt=((gel(‘trad-in’)||{value:’’}).value||’’).trim();
+if(!txt){toast(‘Entre un message’,‘err’);return;}
+const lang=langs.find(l=>l.code===targetLang);
+const el=gel(‘trad-res’);
+el.innerHTML=`<div class="ai-load"><div class="ai-dots"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div><span style="font-size:12px;color:var(--pu);font-weight:600">Traduction…</span></div>`;
+try{
+const resp=await fetch(‘https://api.anthropic.com/v1/messages’,{
+method:‘POST’,headers:{‘Content-Type’:‘application/json’},
+body:JSON.stringify({
+model:‘claude-sonnet-4-20250514’,max_tokens:300,
+messages:[{role:‘user’,content:`Traduis ce message en français. Message en ${lang.name} :\n"${txt}"\n\nRéponds uniquement avec la traduction, sans explication.`}]
+})
+});
+const data=await resp.json();
+const res=(data.content||[]).map(b=>b.text||’’).join(’’)||’’;
+el.innerHTML=`<div class="adb" style="margin-top:10px"><div class="adl">Traduction FR</div><div class="adt">${esc(res)}</div><button class="btn btn-g btn-xs" style="margin-top:8px;width:auto" onclick="copyText(${JSON.stringify(res)})">📋 Copier</button></div>`;
+}catch(e){el.innerHTML=`<div class="card-rd card f12 fw8 txt-rd">Erreur</div>`;}
+};
+window.traduireRep=async()=>{
+const txt=((gel(‘trad-rep’)||{value:’’}).value||’’).trim();
+if(!txt){toast(‘Écris ta réponse’,‘err’);return;}
+const lang=langs.find(l=>l.code===targetLang);
+const el=gel(‘trad-rep-res’);
+el.innerHTML=`<div class="ai-load"><div class="ai-dots"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div><span style="font-size:12px;color:var(--pu);font-weight:600">Traduction…</span></div>`;
+try{
+const resp=await fetch(‘https://api.anthropic.com/v1/messages’,{
+method:‘POST’,headers:{‘Content-Type’:‘application/json’},
+body:JSON.stringify({
+model:‘claude-sonnet-4-20250514’,max_tokens:300,
+messages:[{role:‘user’,content:`Traduis ce texte du français vers le ${lang.name}. Contexte : vente sur Vinted.\n"${txt}"\n\nRéponds uniquement avec la traduction.`}]
+})
+});
+const data=await resp.json();
+const res=(data.content||[]).map(b=>b.text||’’).join(’’)||’’;
+el.innerHTML=`<div class="adb" style="margin-top:10px"><div class="adl">Réponse en ${lang.name}</div><div class="adt">${esc(res)}</div><button class="btn btn-g btn-xs" style="margin-top:8px;width:auto" onclick="copyText(${JSON.stringify(res)})">📋 Copier</button></div>`;
+}catch(e){el.innerHTML=`<div class="card-rd card f12 fw8 txt-rd">Erreur</div>`;}
+};
+}
+
+/* ================================================================
+PAGE 11 — CHATBOT
+================================================================ */
+function rChatbot(pi){
+if(!S.chatHistory)S.chatHistory=[];
+pi.innerHTML=` <div class="card" style="height:auto"> <div class="sh"><div class="sh-ic ic-pu">🤖</div><div class="sh-t">Assistant Vinted</div> <button class="btn btn-g btn-xs" onclick="S.chatHistory=[];saveState();rerender(11)">Effacer</button> </div> <div class="chat-wrap" id="chat-msgs"> <div class="bbl bbl-i">👋 Salut ! Je suis ton assistant Vinted. Demande-moi n'importe quoi : annonces, prix, litiges, conseils…</div> ${S.chatHistory.map(m=>`<div class="bbl ${m.role==='user'?'bbl-o':'bbl-i'}">${esc(m.content)}</div>`).join('')} </div> <div style="display:flex;gap:8px;margin-top:8px"> <input id="chat-in" class="inp" style="flex:1" placeholder="Pose ta question…" onkeydown="if(event.key==='Enter')sendChat()"> <button class="btn btn-ai btn-sm btn-ico" onclick="sendChat()">↑</button> </div> </div> <div class="card"> <div class="sh"><div class="sh-ic ic-ac">💡</div><div class="sh-t">Questions rapides</div></div> <div class="qrg"> ${['Comment gérer un litige ?','Meilleur prix pour une veste ?','Comment augmenter mes ventes ?','Que faire si le colis est perdu ?','Conseils photos Vinted ?'].map(q=>`
+<div class="qrp" onclick="quickChat(${JSON.stringify(q)})">${esc(q)}</div>`).join('')} </div> </div>`;
+
+const scrollChat=()=>{const el=gel(‘chat-msgs’);if(el)el.scrollTop=el.scrollHeight;};
+scrollChat();
+
+window.quickChat=q=>{const inp=gel(‘chat-in’);if(inp)inp.value=q;sendChat();};
+window.sendChat=async()=>{
+const inp=gel(‘chat-in’);
+const msg=(inp.value||’’).trim();
+if(!msg)return;
+inp.value=’’;
+S.chatHistory.push({role:‘user’,content:msg});
+saveState();
+const wrap=gel(‘chat-msgs’);
+if(wrap){wrap.innerHTML+=`<div class="bbl bbl-o">${esc(msg)}</div><div class="bbl bbl-i" id="chat-loading"><div class="ai-dots"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div></div>`;scrollChat();}
+try{
+const resp=await fetch(‘https://api.anthropic.com/v1/messages’,{
+method:‘POST’,headers:{‘Content-Type’:‘application/json’},
+body:JSON.stringify({
+model:‘claude-sonnet-4-20250514’,max_tokens:500,
+system:‘Tu es un expert en vente sur Vinted (plateforme française). Tu aides les vendeurs avec leurs questions sur la vente, les litiges, les prix, les expéditions. Réponses courtes et pratiques en français.’,
+messages:S.chatHistory.map(m=>({role:m.role,content:m.content}))
+})
+});
+const data=await resp.json();
+const res=(data.content||[]).map(b=>b.text||’’).join(’’)||‘Désolé, erreur.’;
+S.chatHistory.push({role:‘assistant’,content:res});
+saveState();
+const loading=gel(‘chat-loading’);
+if(loading)loading.outerHTML=`<div class="bbl bbl-i">${esc(res)}</div>`;
+scrollChat();
+}catch(e){
+const loading=gel(‘chat-loading’);
+if(loading)loading.outerHTML=`<div class="bbl bbl-i txt-rd">Erreur de connexion.</div>`;
+}
+};
+}
+
+/* ================================================================
+PAGE 12 — STATS
+================================================================ */
+function rStats(pi){
+const parcels=filteredParcels();
+const done=parcels.filter(p=>p.status===‘done’);
+const total=calcTotal(null);
+const avgNet=done.length?total/done.length:0;
+const byCat={};done.forEach(p=>{const c=p.category||‘Autre’;byCat[c]=(byCat[c]||0)+1;});
+const topCats=Object.entries(byCat).sort((a,b)=>b[1]-a[1]).slice(0,5);
+const byMonth={};done.forEach(p=>{
+try{const pts=p.dateAdded.split(’ ‘)[0].split(’/’);const k=pts[1]+’/’+pts[2];byMonth[k]=(byMonth[k]||0)+calcNet(p);}catch(e){}
+});
+const months=Object.entries(byMonth).slice(-6);
+const maxM=Math.max(…months.map(function(m){return m[1];}),1);
+window._chart3dData={months:months,maxM:maxM};
+
+pi.innerHTML=` <div class="hero"> <div class="hero-lbl">Revenus totaux nets</div> <div class="hero-amt">${fmtE(total)}</div> <div class="hero-sub">${done.length} ventes · moy. ${fmtE(avgNet)}/vente</div> </div> <div class="g4"> <div class="sc"><div class="sv">${parcels.length}</div><div class="sl">Colis total</div></div> <div class="sc"><div class="sv txt-gn">${done.length}</div><div class="sl">Finalisés</div></div> <div class="sc"><div class="sv txt-or">${parcels.filter(p=>p.status==='shipped').length}</div><div class="sl">Expédiés</div></div> <div class="sc"><div class="sv txt-rd">${parcels.filter(p=>p.status==='problem').length}</div><div class="sl">Problèmes</div></div> </div> ${months.length>0?`
+<div class="card" style="overflow:hidden">
+<div class="sh"><div class="sh-ic ic-ac">📈</div><div class="sh-t">Revenus par mois</div><span class="badge badge-ac">3D</span></div>
+<canvas id="chart3d" width="600" height="280" style="width:100%;height:170px;display:block;cursor:pointer;margin-top:4px" onclick="spinChart3d()"></canvas>
+<div style="text-align:center;font-size:10px;color:var(--tx3);margin-top:2px">Tape pour faire tourner ↺</div>
+</div>`:''} ${topCats.length>0?`
+<div class="card">
+<div class="sh"><div class="sh-ic ic-gn">🏷️</div><div class="sh-t">Top catégories</div></div>
+${topCats.map(([c,n])=>` <div class="row"> <div class="row-l">${esc(c)}</div> <div style="flex:1;margin:0 12px"> <div class="pbar"><div class="pbar-f pbar-gn" style="width:${Math.round(n/done.length*100)}%"></div></div> </div> <div class="f12 fw8">${n}</div> </div>`).join(’’)}
+</div>`:''} ${S.accounts.length>1?`
+<div class="card">
+<div class="sh"><div class="sh-ic ic-or">👤</div><div class="sh-t">Par compte</div></div>
+${S.accounts.map(a=>{
+const an=calcTotal(a.id);
+const ac=S.parcels.filter(p=>p.accId===a.id&&p.status===‘done’).length;
+return`<div class="row"><div style="display:flex;align-items:center;gap:8px;flex:1"><div style="width:10px;height:10px;border-radius:5px;background:${a.color};flex-shrink:0"></div><div class="row-l">${esc(a.name)}</div></div><div class="row-v txt-gn">${fmtE(an)}</div><div class="f11 txt-tx3 mono" style="margin-left:8px">${ac} ventes</div></div>`;
+}).join(’’)}
+</div>`:''}`;
+}
+
+/* ================================================================
+PAGE 13 — FLIPPER (calculateur achat-revente)
+================================================================ */
+function rFlipper(pi){
+pi.innerHTML=` <div class="card"> <div class="sh"><div class="sh-ic ic-yw">🧮</div><div class="sh-t">Calculateur Flipper</div></div> <div class="fs"> <div class="r3"> <div><label class="lbl">Prix d'achat (€)</label><input id="fl-buy" class="inp" type="number" step="0.01" placeholder="0.00" oninput="calcFlipper()"></div> <div><label class="lbl">Prix de vente (€)</label><input id="fl-sell" class="inp" type="number" step="0.01" placeholder="0.00" oninput="calcFlipper()"></div> </div> <div class="r3"> <div><label class="lbl">Frais envoi (€)</label><input id="fl-ship" class="inp" type="number" step="0.01" value="0" oninput="calcFlipper()"></div> <div><label class="lbl">Autres frais (€)</label><input id="fl-misc" class="inp" type="number" step="0.01" value="0" oninput="calcFlipper()"></div> </div> </div> <div id="flip-res"></div> </div> <div class="card"> <div class="sh"><div class="sh-ic ic-gn">📋</div><div class="sh-t">Historique flips</div></div> <button class="btn btn-g btn-xs" style="width:auto;margin-bottom:10px" onclick="saveFlipper()">+ Enregistrer ce flip</button> <div id="flip-hist"> ${(S.history||[]).length===0?`<div class="f12 txt-tx3">Aucun flip enregistré</div>` :(S.history||[]).slice(-5).reverse().map(h=>`
+<div class="row">
+<div class="row-l">${esc(h.label||‘Flip’)} — Achat ${fmtE(h.buy)} / Vente ${fmtE(h.sell)}</div>
+<div class="row-v ${h.net>=0?'txt-gn':'txt-rd'}">${fmtE(h.net)}</div>
+</div>`).join('')} </div> </div>`;
+
+window.calcFlipper=()=>{
+const buy=parseFloat((gel(‘fl-buy’)||{value:’’}).value)||0;
+const sell=parseFloat((gel(‘fl-sell’)||{value:’’}).value)||0;
+const ship=parseFloat((gel(‘fl-ship’)||{value:’’}).value)||0;
+const misc=parseFloat((gel(‘fl-misc’)||{value:’’}).value)||0;
+const el=gel(‘flip-res’);if(!el)return;
+if(!sell&&!buy){el.innerHTML=’’;return;}
+const commission=sell*0.05;
+const protection=sell<=6?0.70:sell<=10?0.80:sell<=20?1.00:sell<=50?1.80:sell<=100?2.80:3.80;
+const totalCosts=buy+ship+misc+commission+protection;
+const net=sell-totalCosts;
+const roi=buy>0?((net/buy)*100):0;
+el.innerHTML=` <div class="frais-res" style="margin-top:12px"> <div class="frais-row"><span class="f12">Prix d'achat</span><span class="f13 fw8 mono txt-rd">-${fmtE(buy)}</span></div> <div class="frais-row"><span class="f12">Frais Vinted (5%+prot.)</span><span class="f13 fw8 mono txt-rd">-${fmtE(commission+protection)}</span></div> <div class="frais-row"><span class="f12">Frais d'envoi</span><span class="f13 fw8 mono txt-rd">-${fmtE(ship)}</span></div> <div class="frais-row"><span class="f12">Autres frais</span><span class="f13 fw8 mono txt-rd">-${fmtE(misc)}</span></div> <div class="frais-row"><span class="f14 fw9">Bénéfice net</span><span class="f18 fw9 mono ${net>=0?'txt-gn':'txt-rd'}">${fmtE(net)}</span></div> <div class="frais-row"><span class="f12">ROI</span><span class="f14 fw8 mono ${roi>=0?'txt-gn':'txt-rd'}">${roi.toFixed(1)}%</span></div> </div>`;
+};
+window.saveFlipper=()=>{
+const buy=parseFloat((gel(‘fl-buy’)||{value:’’}).value)||0;
+const sell=parseFloat((gel(‘fl-sell’)||{value:’’}).value)||0;
+const ship=parseFloat((gel(‘fl-ship’)||{value:’’}).value)||0;
+const misc=parseFloat((gel(‘fl-misc’)||{value:’’}).value)||0;
+const commission=sell*0.05;
+const protection=sell<=20?1.00:sell<=50?1.80:2.80;
+const net=sell-buy-ship-misc-commission-protection;
+if(!S.history)S.history=[];
+S.history.push({id:uid(),buy,sell,ship,misc,net,label:‘Flip du ‘+fullDate().split(’ ‘)[0]});
+saveState();
+const el=gel(‘flip-hist’);
+if(el)el.innerHTML=(S.history||[]).slice(-5).reverse().map(h=>` <div class="row"> <div class="row-l">${esc(h.label||'Flip')} — Achat ${fmtE(h.buy)} / Vente ${fmtE(h.sell)}</div> <div class="row-v ${h.net>=0?'txt-gn':'txt-rd'}">${fmtE(h.net)}</div> </div>`).join(’’);
+toast(‘Flip enregistré ✓’,‘ok’);
+};
+}
+
+/* ================================================================
+PAGE 14 — BUDGET
+================================================================ */
+function rBudget(pi){
+if(!S.budget)S.budget=[];
+function render(){
+const total=S.budget.reduce((t,b)=>t+(b.type===‘in’?b.amt:-b.amt),0);
+const ins=S.budget.filter(b=>b.type===‘in’).reduce((t,b)=>t+b.amt,0);
+const outs=S.budget.filter(b=>b.type===‘out’).reduce((t,b)=>t+b.amt,0);
+pi.innerHTML=` <div class="hero" style="${total<0?'background:linear-gradient(135deg,var(--rd),#C0002A);box-shadow:0 6px 24px rgba(255,59,92,.35)':''}"> <div class="hero-lbl">Solde budget</div> <div class="hero-amt">${fmtE(total)}</div> <div class="hero-sub">Revenus ${fmtE(ins)} · Dépenses ${fmtE(outs)}</div> </div> <div class="card"> <div class="sh"><div class="sh-ic ic-gn">💰</div><div class="sh-t">Ajouter une entrée</div></div> <div class="r3"> <div><label class="lbl">Montant (€)</label><input id="bud-amt" class="inp" type="number" step="0.01" placeholder="0.00"></div> <div><label class="lbl">Type</label> <select id="bud-type" class="inp"> <option value="in">💚 Entrée</option> <option value="out">❤️ Sortie</option> </select> </div> </div> <div><label class="lbl">Description</label><input id="bud-desc" class="inp" placeholder="Ex: Vente Nike, Achat lot…"></div> <button class="btn btn-gn" style="margin-top:8px" onclick="addBudget()">+ Ajouter</button> </div> <div class="card"> <div class="sh"><div class="sh-ic ic-ac">📋</div><div class="sh-t">Transactions</div><span class="badge">${S.budget.length}</span></div> ${S.budget.length===0?`<div class="f12 txt-tx3">Aucune transaction</div>` :S.budget.slice().reverse().map(b=>`
+<div class="row">
+<div style="flex:1"><div class="f13 fw7">${esc(b.desc||’—’)}</div><div class="f10 txt-tx3 mt4">${esc(b.date)}</div></div>
+<div class="f14 fw9 mono ${b.type==='in'?'txt-gn':'txt-rd'}">${b.type===‘in’?’+’:’-’}${fmtE(b.amt)}</div>
+<button class="btn btn-d btn-ico" style="margin-left:6px" onclick="delBudget('${b.id}')">×</button>
+</div>`).join('')} </div>`;
+}
+render();
+window.addBudget=()=>{
+const amt=parseFloat((gel(‘bud-amt’)||{value:’’}).value)||0;
+if(!amt){toast(‘Montant requis’,‘err’);return;}
+S.budget.push({id:uid(),amt,type:(gel(‘bud-type’)||{value:’’}).value||‘in’,desc:((gel(‘bud-desc’)||{value:’’}).value||’’).trim(),date:fullDate()});
+saveState();render();toast(‘Transaction ajoutée ✓’,‘ok’);
+};
+window.delBudget=(id)=>{
+S.budget=S.budget.filter(x=>x.id!==id);saveState();render();
+};
+}
+
+/* ================================================================
+PAGE 15 — OBJECTIFS
+================================================================ */
+function rObjectifs(pi){
+if(!S.goals)S.goals=[];
+const totalNet=calcTotal(null);
+function render(){
+pi.innerHTML=` <div class="card"> <div class="sh"><div class="sh-ic ic-yw">🏆</div><div class="sh-t">Mes objectifs</div></div> <button class="btn btn-p" style="margin-bottom:10px" onclick="openAddGoal()">+ Nouvel objectif</button> ${S.goals.length===0?`<div class="empty"><span class="emi">🎯</span><div class="emt">Aucun objectif</div><div class="ems">Définis un objectif de revenus ou de ventes</div></div>` :S.goals.map(g=>{ const current=g.type==='revenue'?totalNet:S.parcels.filter(p=>p.status==='done').length; const pct=Math.min(100,Math.round(current/g.target*100)); return`
+<div style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--bd2)">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+<div style="font-size:20px">${g.icon||‘🎯’}</div>
+<div style="flex:1"><div class="f13 fw8">${esc(g.title)}</div><div class="f11 txt-tx3 mt4">${g.type===‘revenue’?‘Revenus nets’:‘Nombre de ventes’}</div></div>
+<div class="f12 fw9 mono txt-ac">${pct}%</div>
+<button class="btn btn-d btn-xs" onclick="delGoal('${g.id}')">×</button>
+</div>
+<div class="pbar"><div class="pbar-f ${pct>=100?'pbar-gn':''}" style="width:${pct}%"></div></div>
+<div style="display:flex;justify-content:space-between;margin-top:4px">
+<div class="f11 txt-tx3">${g.type===‘revenue’?fmtE(current):current+’ ventes’}</div>
+<div class="f11 fw8 txt-ac">${g.type===‘revenue’?fmtE(g.target):g.target+’ ventes’}</div>
+</div>
+${pct>=100?`<div class="adtip" style="margin-top:8px">🎉 Objectif atteint ! Félicitations !</div>`:’’}
+</div>`; }).join('')} </div>`;
+}
+render();
+window.openAddGoal=()=>{
+document.body.insertAdjacentHTML(‘beforeend’,` <div class="mo" onclick="if(event.target===this)closeModal()"> <div class="ms"> <div class="mo-h"></div> <div class="mo-t">🎯 Nouvel objectif</div> <div class="fs"> <div><label class="lbl">Titre</label><input id="gl-title" class="inp" placeholder="Ex: 500€ ce mois"></div> <div><label class="lbl">Type</label> <select id="gl-type" class="inp"> <option value="revenue">💰 Revenus (€)</option> <option value="sales">📦 Nombre de ventes</option> </select> </div> <div><label class="lbl">Cible</label><input id="gl-target" class="inp" type="number" step="0.01" placeholder="500"></div> <div><label class="lbl">Icône</label> <div class="chip-row"> ${['🎯','🏆','💰','🚀','⭐','🔥','💎','👑'].map(ic=>`<div class="chip" onclick="selGoalIcon('${ic}')" id="gi-${ic}">${ic}</div>`).join('')} </div> </div> <button class="btn btn-p" onclick="addGoal()">✓ Créer</button> <button class="btn btn-g" onclick="closeModal()">Annuler</button> </div> </div></div>`);
+window._goalIcon=‘🎯’;selGoalIcon(‘🎯’);
+};
+window.selGoalIcon=ic=>{
+window._goalIcon=ic;
+document.querySelectorAll(’[id^=“gi-”]’).forEach(el=>el.classList.remove(‘on’));
+const el=document.getElementById(‘gi-’+ic);if(el)el.classList.add(‘on’);
+};
+window.addGoal=()=>{
+const title=((gel(‘gl-title’)||{value:’’}).value||’’).trim();
+const target=parseFloat((gel(‘gl-target’)||{value:’’}).value)||0;
+if(!title||!target){toast(‘Titre et cible requis’,‘err’);return;}
+S.goals.push({id:uid(),title,type:(gel(‘gl-type’)||{value:’’}).value||‘revenue’,target,icon:window._goalIcon||‘🎯’});
+saveState();closeModal();render();
+toast(‘Objectif créé ✓’,‘ok’);
+};
+window.delGoal=(id)=>{
+S.goals=S.goals.filter(x=>x.id!==id);saveState();render();
+};
+}
+
+/* ================================================================
+PAGE 16 — RAPPELS
+================================================================ */
+function rRappels(pi){
+if(!S.reminders)S.reminders=[];
+function render(){
+const now=Date.now();
+const active=S.reminders.filter(r=>!r.done);
+const done=S.reminders.filter(r=>r.done);
+pi.innerHTML=` <div class="card"> <div class="sh"><div class="sh-ic ic-ac">⏰</div><div class="sh-t">Rappels</div><span class="badge">${active.length}</span></div> <button class="btn btn-p" style="margin-bottom:10px" onclick="openAddRappel()">+ Nouveau rappel</button> ${active.length===0?`<div class="empty"><span class="emi">✅</span><div class="emt">Aucun rappel actif</div></div>` :active.sort((a,b)=>new Date(a.datetime)-new Date(b.datetime)).map(r=>{ const due=new Date(r.datetime).getTime()<=now; return`
+<div class="rem-item">
+<div class="rem-dot" style="background:${due?'var(--rd)':'var(--ac)'}"></div>
+<div style="flex:1">
+<div class="rem-title">${esc(r.title)}</div>
+<div class="rem-when">${new Date(r.datetime).toLocaleString(‘fr-FR’)}</div>
+</div>
+<button class="btn btn-gn btn-xs" onclick="doneRappel('${r.id}')">✓</button>
+<button class="btn btn-d btn-xs" onclick="delRappel('${r.id}')">×</button>
+</div>`; }).join('')} </div> ${done.length>0?`
+<div class="card">
+<div class="sh"><div class="sh-ic ic-gn">✅</div><div class="sh-t">Terminés</div><span class="badge">${done.length}</span></div>
+${done.slice(-5).reverse().map(r=>` <div class="rem-item" style="opacity:.6"> <div class="rem-dot" style="background:var(--gn)"></div> <div style="flex:1"><div class="rem-title" style="text-decoration:line-through">${esc(r.title)}</div></div> <button class="btn btn-d btn-xs" onclick="delRappel('${r.id}')">×</button> </div>`).join(’’)}
+</div>`:''}`;
+}
+render();
+window.openAddRappel=()=>{
+const now=new Date();
+now.setMinutes(now.getMinutes()+30);
+const def=now.toISOString().slice(0,16);
+document.body.insertAdjacentHTML(‘beforeend’,` <div class="mo" onclick="if(event.target===this)closeModal()"> <div class="ms"> <div class="mo-h"></div> <div class="mo-t">⏰ Nouveau rappel</div> <div class="fs"> <div><label class="lbl">Titre</label><input id="rp-title" class="inp" placeholder="Ex: Expédier colis Nike"></div> <div><label class="lbl">Date et heure</label><input id="rp-dt" class="inp" type="datetime-local" value="${def}"></div> <button class="btn btn-p" onclick="addRappel()">✓ Créer</button> <button class="btn btn-g" onclick="closeModal()">Annuler</button> </div> </div></div>`);
+};
+window.addRappel=()=>{
+const title=((gel(‘rp-title’)||{value:’’}).value||’’).trim();
+const dt=(gel(‘rp-dt’)||{value:’’}).value;
+if(!title||!dt){toast(‘Titre et date requis’,‘err’);return;}
+if(!S.reminders)S.reminders=[];
+S.reminders.push({id:uid(),title,datetime:dt,done:false});
+saveState();closeModal();render();checkAlerts();
+toast(‘Rappel créé ✓’,‘ok’);
+if(‘Notification’in window&&Notification.permission===‘default’)Notification.requestPermission();
+};
+window.doneRappel=(id)=>{
+const r=S.reminders.find(x=>x.id===id);if(r)r.done=true;
+saveState();render();checkAlerts();
+};
+window.delRappel=(id)=>{
+S.reminders=S.reminders.filter(x=>x.id!==id);saveState();render();checkAlerts();
+};
+}
+
+/* ================================================================
+PAGE 17 — HISTORIQUE
+================================================================ */
+function rHistorique(pi){
+const done=S.parcels.filter(p=>p.status===‘done’).slice().reverse();
+const totalNet=calcTotal(null);
+pi.innerHTML=` <div class="card"> <div class="sh"><div class="sh-ic ic-gn">⏱️</div><div class="sh-t">Historique des ventes</div><span class="badge">${done.length}</span></div> ${done.length===0?`<div class="empty"><span class="emi">📭</span><div class="emt">Aucune vente finalisée</div></div>`:`
+<div class="row" style="background:var(--gnl);border-radius:var(--r2);padding:12px;margin-bottom:10px;border:none">
+<div class="row-l fw8">Total nets encaissés</div>
+<div class="f18 fw9 mono txt-gn">${fmtE(totalNet)}</div>
+</div>
+${done.map(p=>` <div class="row"> <div style="flex:1"> <div class="f13 fw7">${esc(p.title)}</div> <div class="f10 txt-tx3 mt4">${esc(p.dateAdded)} · ${esc(getAccName(p.accId))}</div> </div> <div style="text-align:right"> <div class="f14 fw9 mono txt-gn">${fmtE(calcNet(p))}</div> <div class="f10 txt-tx3 mt4">Prix: ${fmtE(p.price)}</div> </div> </div>`).join(’’)}
+<button class="btn btn-d" style="margin-top:12px" onclick="clearHistory()">🗑️ Effacer l’historique</button>`} </div>`;
+window.clearHistory=()=>{
+if(!confirm(‘Supprimer toutes les ventes finalisées ?’))return;
+S.parcels=S.parcels.filter(p=>p.status!==‘done’);
+saveState();rerenderAll();
+toast(‘Historique effacé’);
+};
+}
+
+/* ================================================================
+PAGE 18 — WISHLIST
+================================================================ */
+function rWishlist(pi){
+if(!S.wishlist)S.wishlist=[];
+function render(){
+const total=S.wishlist.reduce((t,w)=>t+(parseFloat(w.budget)||0),0);
+pi.innerHTML=` <div class="card"> <div class="sh"><div class="sh-ic ic-rd">🔖</div><div class="sh-t">Wishlist achats</div><span class="badge">${S.wishlist.length}</span></div> <button class="btn btn-p" style="margin-bottom:10px" onclick="openAddWish()">+ Ajouter un article</button> ${S.wishlist.length>0?`<div style="background:var(--rdl);border-radius:var(--r2);padding:10px 14px;margin-bottom:10px;border:1px solid rgba(255,59,92,.15)"><span class="f12 fw8">Budget total wishlist : </span><span class="f14 fw9 mono txt-rd">${fmtE(total)}</span></div>`:''} ${S.wishlist.length===0?`<div class="empty"><span class="emi">🛍️</span><div class="emt">Wishlist vide</div><div class="ems">Ajoute des articles que tu veux acheter pour revendre</div></div>` :S.wishlist.map(w=>`
+<div class="wish" id="wsh-${w.id}">
+<div style="font-size:24px">${w.icon||‘🛍️’}</div>
+<div style="flex:1">
+<div class="f13 fw8">${esc(w.name)}</div>
+<div class="f11 txt-tx3 mt4">${esc(w.source||’’)}${w.budget?` · Budget: ${fmtE(w.budget)}`:’’}</div>
+${w.note?`<div class="f11 txt-tx3 mt4">${esc(w.note)}</div>`:’’}
+</div>
+<div style="display:flex;flex-direction:column;gap:5px;align-items:flex-end">
+${w.budget?`<div class="f14 fw9 mono txt-rd">${fmtE(w.budget)}</div>`:’’}
+<div style="display:flex;gap:5px">
+<button class="btn btn-gn btn-xs" onclick="buyWish('${w.id}')">✓ Acheté</button>
+<button class="btn btn-d btn-xs" onclick="delWish('${w.id}')">×</button>
+</div>
+</div>
+</div>`).join('')} </div>`;
+}
+render();
+window.openAddWish=()=>{
+const icons=[‘🛍️’,‘👟’,‘👔’,‘👗’,‘💻’,‘📱’,‘🎮’,‘📚’,‘🏋️’,‘💎’,‘⌚’,‘🎒’];
+document.body.insertAdjacentHTML(‘beforeend’,` <div class="mo" onclick="if(event.target===this)closeModal()"> <div class="ms"> <div class="mo-h"></div> <div class="mo-t">🔖 Nouveau souhait</div> <div class="fs"> <div><label class="lbl">Article</label><input id="wn-name" class="inp" placeholder="Ex: Air Jordan 1 Retro taille 42"></div> <div class="r3"> <div><label class="lbl">Budget max (€)</label><input id="wn-budget" class="inp" type="number" step="0.01" placeholder="0.00"></div> <div><label class="lbl">Source</label><input id="wn-src" class="inp" placeholder="Vinted, Leboncoin…"></div> </div> <div><label class="lbl">Note</label><input id="wn-note" class="inp" placeholder="Taille, couleur, état…"></div> <div><label class="lbl">Icône</label> <div class="chip-row" id="wish-icons">${icons.map(i=>`<div class="chip" onclick="selWishIcon('${i}')" id="wi-${i}">${i}</div>`).join('')}</div> </div> <button class="btn btn-p" onclick="addWish()">✓ Ajouter</button> <button class="btn btn-g" onclick="closeModal()">Annuler</button> </div> </div></div>`);
+window._wishIcon=‘🛍️’;selWishIcon(‘🛍️’);
+};
+window.selWishIcon=ic=>{window._wishIcon=ic;document.querySelectorAll(’[id^=“wi-”]’).forEach(el=>el.classList.remove(‘on’));const el=document.getElementById(‘wi-’+ic);if(el)el.classList.add(‘on’);};
+window.addWish=()=>{
+const name=((gel(‘wn-name’)||{value:’’}).value||’’).trim();
+if(!name){toast(‘Nom requis’,‘err’);return;}
+if(!S.wishlist)S.wishlist=[];
+S.wishlist.push({id:uid(),name,budget:parseFloat((gel(‘wn-budget’)||{value:’’}).value)||0,source:((gel(‘wn-src’)||{value:’’}).value||’’).trim(),note:((gel(‘wn-note’)||{value:’’}).value||’’).trim(),icon:window._wishIcon||‘🛍️’,date:fullDate()});
+saveState();closeModal();render();toast(‘Ajouté à la wishlist ✓’,‘ok’);
+};
+window.buyWish=(id)=>{
+const w=S.wishlist.find(x=>x.id===id);if(!w)return;
+S.wishlist=S.wishlist.filter(x=>x.id!==id);
+saveState();render();
+toast(‘Marqué comme acheté ✓’,‘ok’);confetti();
+};
+window.delWish=(id)=>{S.wishlist=S.wishlist.filter(x=>x.id!==id);saveState();render();};
+}
+
+/* ================================================================
+PAGE 19 — TIMER EXPÉDITION
+================================================================ */
+function rTimer(pi){
+let timerInt=null,timerSec=0,timerRunning=false;
+const tasks=[
+‘Chercher l'article et vérifier l'état’,
+‘Prendre des photos avant emballage’,
+‘Trouver le bon emballage’,
+‘Emballer soigneusement’,
+‘Coller l'étiquette’,
+‘Photo finale du colis’,
+‘Déposer au point relais’
+];
+let taskCheck=Array(tasks.length).fill(false);
+
+pi.innerHTML=` <div class="card"> <div class="sh"><div class="sh-ic ic-ac">⏱️</div><div class="sh-t">Timer expédition</div></div> <div id="tmr-display" style="font-size:60px;font-weight:900;font-family:var(--mono);text-align:center;color:var(--tx3);padding:20px 0;letter-spacing:-.05em">00:00</div> <div style="display:flex;gap:8px"> <button class="btn btn-gn" id="tmr-btn" onclick="toggleTimer()">▶ Démarrer</button> <button class="btn btn-g btn-sm" onclick="resetTimer()">↺ Reset</button> </div> <div id="tmr-records" style="margin-top:12px"></div> </div> <div class="card"> <div class="sh"><div class="sh-ic ic-yw">✅</div><div class="sh-t">Checklist expédition</div></div> <div id="task-list"> ${tasks.map((t,i)=>`
+<div class="chk" onclick="toggleTask(${i})">
+<div class="chk-b" id="chk-b-${i}"></div>
+<div class="chk-t" id="chk-t-${i}">${esc(t)}</div>
+</div>`).join('')} </div> <div class="pbar" style="margin-top:10px"><div class="pbar-f pbar-gn" id="task-prog" style="width:0%"></div></div> <div class="f11 txt-tx3 mt4" id="task-pct">0 / ${tasks.length} tâches</div> </div> <div class="card"> <div class="sh"><div class="sh-ic ic-or">📊</div><div class="sh-t">Mes records d'expédition</div></div> <div id="timer-history"> ${(S.timerRecords||[]).length===0?'<div class="f12 txt-tx3">Aucun enregistrement</div>' :(S.timerRecords||[]).slice(-5).reverse().map(r=>`<div class="row"><div class="row-l">${esc(r.label)}</div><div class="row-v mono txt-ac">${r.time}</div></div>`).join('')} </div> </div>`;
+
+window.toggleTimer=()=>{
+timerRunning=!timerRunning;
+const btn=gel(‘tmr-btn’);
+if(timerRunning){
+btn.textContent=‘⏸ Pause’;btn.className=‘btn btn-d’;
+timerInt=setInterval(()=>{
+timerSec++;
+const m=Math.floor(timerSec/60).toString().padStart(2,‘0’);
+const s=(timerSec%60).toString().padStart(2,‘0’);
+const disp=gel(‘tmr-display’);
+if(disp){disp.textContent=`${m}:${s}`;disp.style.color=timerSec>300?‘var(–rd)’:timerSec>120?‘var(–or)’:‘var(–gn)’;}
+},1000);
+} else {
+clearInterval(timerInt);
+btn.textContent=‘▶ Reprendre’;btn.className=‘btn btn-gn’;
+const m=Math.floor(timerSec/60).toString().padStart(2,‘0’);
+const s=(timerSec%60).toString().padStart(2,‘0’);
+if(!S.timerRecords)S.timerRecords=[];
+S.timerRecords.push({id:uid(),time:`${m}:${s}`,label:‘Expédition du ‘+fullDate().split(’ ‘)[0]});
+saveState();
+const th=gel(‘timer-history’);
+if(th)th.innerHTML=(S.timerRecords||[]).slice(-5).reverse().map(r=>`<div class="row"><div class="row-l">${esc(r.label)}</div><div class="row-v mono txt-ac">${r.time}</div></div>`).join(’’);
+}
+};
+window.resetTimer=()=>{
+clearInterval(timerInt);timerRunning=false;timerSec=0;
+const disp=gel(‘tmr-display’);if(disp){disp.textContent=‘00:00’;disp.style.color=‘var(–tx3)’;}
+const btn=gel(‘tmr-btn’);if(btn){btn.textContent=‘▶ Démarrer’;btn.className=‘btn btn-gn’;}
+};
+window.toggleTask=(i)=>{
+taskCheck[i]=!taskCheck[i];
+const b=gel(‘chk-b-’+i),t=gel(‘chk-t-’+i);
+if(b)b.classList.toggle(‘on’,taskCheck[i]);
+if(t)t.classList.toggle(‘on’,taskCheck[i]);
+const done=taskCheck.filter(Boolean).length;
+const prog=gel(‘task-prog’),pct=gel(‘task-pct’);
+if(prog)prog.style.width=Math.round(done/tasks.length*100)+’%’;
+if(pct)pct.textContent=`${done} / ${tasks.length} tâches`;
+if(done===tasks.length){toast(‘Toutes les étapes complétées ! 🎉’,‘ok’);confetti();}
+};
+}
+
+/* ================================================================
+PAGE 20 — ÉTIQUETTE / BORDEREAU
+================================================================ */
+function rEtiquette(pi){
+pi.innerHTML=` <div class="card"> <div class="sh"><div class="sh-ic ic-ac">🏷️</div><div class="sh-t">Générateur d'étiquette</div></div> <div class="fs"> <div class="r3"> <div><label class="lbl">Expéditeur</label><input id="et-from" class="inp" placeholder="Ton nom"></div> <div><label class="lbl">Ville expéditeur</label><input id="et-from-city" class="inp" placeholder="Paris"></div> </div> <div class="r3"> <div><label class="lbl">Destinataire</label><input id="et-to" class="inp" placeholder="Nom acheteur"></div> <div><label class="lbl">Ville destinataire</label><input id="et-to-city" class="inp" placeholder="Lyon"></div> </div> <div><label class="lbl">Article</label><input id="et-art" class="inp" placeholder="Ex: Veste Zara M bleue"></div> <div class="r3"> <div><label class="lbl">N° suivi</label><input id="et-track" class="inp" placeholder="6C12345…"></div> <div><label class="lbl">Poids (g)</label><input id="et-weight" class="inp" type="number" placeholder="500"></div> </div> <button class="btn btn-p" onclick="genEtiquette()">🏷️ Générer l'étiquette</button> </div> </div> <div id="etiquette-res"></div>`;
+
+window.genEtiquette=()=>{
+const from=(gel(‘et-from’)||{value:’’}).value||’’;
+const fromCity=(gel(‘et-from-city’)||{value:’’}).value||’’;
+const to=(gel(‘et-to’)||{value:’’}).value||’’;
+const toCity=(gel(‘et-to-city’)||{value:’’}).value||’’;
+const art=(gel(‘et-art’)||{value:’’}).value||’’;
+const track=(gel(‘et-track’)||{value:’’}).value||uid().toUpperCase();
+const weight=(gel(‘et-weight’)||{value:’’}).value||’—’;
+const el=gel(‘etiquette-res’);
+if(!from||!to){toast(‘Remplis expéditeur et destinataire’,‘err’);return;}
+el.innerHTML=` <div class="card" style="border:2px dashed var(--ac)"> <div style="background:var(--acg);color:#fff;border-radius:12px;padding:14px;margin-bottom:12px;text-align:center"> <div style="font-size:11px;font-weight:700;opacity:.8;letter-spacing:.1em;text-transform:uppercase">Étiquette d'expédition</div> <div style="font-size:22px;font-weight:900;font-family:var(--mono);margin-top:4px;letter-spacing:.06em">${esc(track)}</div> </div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px"> <div style="background:var(--sf2);border-radius:10px;padding:10px"> <div style="font-size:9px;font-weight:800;color:var(--tx3);text-transform:uppercase;margin-bottom:4px">DE</div> <div style="font-weight:800;font-size:13px">${esc(from)}</div> <div style="font-size:11px;color:var(--tx3)">${esc(fromCity)}</div> </div> <div style="background:var(--acl);border-radius:10px;padding:10px;border:1.5px solid rgba(27,110,243,.2)"> <div style="font-size:9px;font-weight:800;color:var(--ac);text-transform:uppercase;margin-bottom:4px">À</div> <div style="font-weight:800;font-size:13px">${esc(to)}</div> <div style="font-size:11px;color:var(--tx3)">${esc(toCity)}</div> </div> </div> ${art?`<div style="background:var(--ywl);border-radius:10px;padding:8px 12px;margin-bottom:10px;border-left:3px solid var(--yw)"><div style="font-size:10px;font-weight:700;color:var(--tx3)">Article</div><div style="font-size:13px;font-weight:700">${esc(art)}</div></div>`:''} <div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px dashed var(--bd)"> <div style="font-size:11px;color:var(--tx3)">Poids : <strong>${esc(weight)}g</strong></div> <div style="font-size:10px;color:var(--tx3)">${fullDate()}</div> </div> <div style="display:flex;gap:8px;margin-top:12px"> <button class="btn btn-p" onclick="copyText('${esc(track)}')">📋 Copier suivi</button> <button class="btn btn-g" onclick="window.print()">🖨️ Imprimer</button> </div> </div>`;
+};
+}
+
+/* ================================================================
+PAGE 21 — ANALYSE ARTICLE IA
+================================================================ */
+function rAnalyse(pi){
+pi.innerHTML=` <div class="card card-ai"> <div class="sh"><div class="sh-ic ic-pu">🔍</div><div class="sh-t">Analyse article IA</div></div> <div class="fs"> <div><label class="lbl">Décris ton article</label><textarea id="ana-desc" class="inp" rows="3" placeholder="Ex: Veste Levi's en jean taille L, couleur bleue, achetée en 2020, portée 5 fois, petite tache sur la manche gauche"></textarea></div> <button class="btn btn-ai" onclick="analyseArticle()">🔍 Analyser</button> </div> </div> <div id="ana-res"></div>`;
+
+window.analyseArticle=async()=>{
+const desc=((gel(‘ana-desc’)||{value:’’}).value||’’).trim();
+if(!desc){toast(‘Décris l'article’,‘err’);return;}
+const el=gel(‘ana-res’);
+el.innerHTML=`<div class="ai-load"><div class="ai-dots"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div><span style="font-size:12px;color:var(--pu);font-weight:600">Analyse IA…</span></div>`;
+try{
+const resp=await fetch(‘https://api.anthropic.com/v1/messages’,{
+method:‘POST’,headers:{‘Content-Type’:‘application/json’},
+body:JSON.stringify({
+model:‘claude-sonnet-4-20250514’,max_tokens:700,
+messages:[{role:‘user’,content:`Expert Vinted, analyse cet article pour un vendeur :
+“${desc}”
+
+Donne une analyse complète avec :
+📊 COTE DE VENTE : [1-10] — [explication courte]
+💰 PRIX RECOMMANDÉ : [X-Y]€
+⏱️ DÉLAI DE VENTE : [estimation]
+🎯 ACHETEURS CIBLES : [profil]
+✅ POINTS FORTS : [2-3 points]
+⚠️ POINTS D’ATTENTION : [2-3 points]
+💡 CONSEIL TITRE : [suggestion de titre Vinted]
+🔑 MOTS-CLÉS : [5 mots-clés importants]`}] }) }); const data=await resp.json(); const txt=(data.content||[]).map(b=>b.text||'').join('')||''; el.innerHTML=`
+<div class="card card-ai">
+<div class="sh"><div class="sh-ic ic-pu">🔍</div><div class="sh-t">Analyse complète</div></div>
+<div style="white-space:pre-wrap;font-size:13px;line-height:1.8">${esc(txt)}</div>
+<button class="btn btn-ai" style="margin-top:12px" onclick="copyText(${JSON.stringify(txt)})">📋 Copier l’analyse</button>
+</div>`; }catch(e){el.innerHTML=`<div class="card-rd card"><div class="f12 fw8 txt-rd">Erreur IA</div></div>`;}
+};
+}
+
+/* ================================================================
+PAGE 22 — CONSEILS PHOTO
+================================================================ */
+function rPhotos(pi){
+const conseils=[
+{icon:‘☀️’,titre:‘Lumière naturelle’,desc:‘Photographie près d'une fenêtre en journée. Évite le flash qui aplatit et dénature les couleurs.’},
+{icon:‘🏳️’,titre:‘Fond neutre’,desc:‘Utilise un fond blanc, gris clair ou une surface propre. Ça met l'article en valeur sans distraire.’},
+{icon:‘📐’,titre:‘Angles multiples’,desc:‘Au minimum : face, dos, détail tissu, étiquette taille, et les éventuels défauts (soyez honnête !).’},
+{icon:‘👕’,titre:‘Article bien présenté’,desc:‘Plie ou accroche proprement. Pour les vêtements, utilise un cintre ou montre-les portés si possible.’},
+{icon:‘🔍’,titre:‘Gros plans’,desc:‘Un gros plan sur la texture, les coutures ou le logo augmente la confiance et justifie le prix.’},
+{icon:‘📏’,titre:‘Référence de taille’,desc:‘Pose une règle ou un objet connu à côté pour donner une idée des dimensions réelles.’},
+{icon:‘🧹’,titre:‘Nettoyage avant photo’,desc:‘Essuie, dépoussière et retire les peluches avant de photographier. Ça fait toute la différence.’},
+{icon:‘📱’,titre:‘Format portrait’,desc:‘Prends tes photos en format vertical (portrait) - Vinted les affiche mieux sur mobile.’},
+];
+const apps=[
+{name:‘Snapseed’,icon:‘🎨’,desc:‘Retouche gratuite, idéal pour corriger l'exposition et les couleurs’},
+{name:‘Remove.bg’,icon:‘✂️’,desc:‘Supprime le fond en un clic pour un rendu professionnel’},
+{name:‘Lightroom Mobile’,icon:‘📸’,desc:‘Réglages avancés pour des photos lumineuses et nettes’},
+{name:‘Facetune’,icon:‘✨’,desc:‘Netteté et correction rapide pour des photos impeccables’},
+];
+pi.innerHTML=` <div class="card"> <div class="sh"><div class="sh-ic ic-yw">📸</div><div class="sh-t">Conseils photo Vinted</div></div> ${conseils.map(c=>`
+<div style="display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--bd2)">
+<div style="font-size:24px;flex-shrink:0;line-height:1">${c.icon}</div>
+<div>
+<div class="f13 fw8">${esc(c.titre)}</div>
+<div class="f12 txt-tx2 mt4" style="line-height:1.6">${esc(c.desc)}</div>
+</div>
+</div>`).join('')} </div> <div class="card"> <div class="sh"><div class="sh-ic ic-pu">📲</div><div class="sh-t">Apps recommandées</div></div> ${apps.map(a=>`
+<div style="display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--bd2)">
+<div style="font-size:26px;flex-shrink:0">${a.icon}</div>
+<div style="flex:1"><div class="f13 fw8">${esc(a.name)}</div><div class="f11 txt-tx3 mt4">${esc(a.desc)}</div></div>
+</div>`).join('')} </div> <div class="card card-ai"> <div class="sh"><div class="sh-ic ic-pu">🤖</div><div class="sh-t">Description photo par IA</div></div> <div class="f12 txt-tx2 mb8">Décris ce que tu vois sur ta photo et l'IA génère une description optimisée.</div> <textarea id="photo-desc" class="inp" rows="3" placeholder="Ex: Photo d'une veste noire en cuir synthétique, taille M, fond blanc, montrant le col et les fermetures éclairs..."></textarea> <button class="btn btn-ai" style="margin-top:8px" onclick="genPhotoDesc()">✨ Optimiser la description</button> <div id="photo-res"></div> </div>`;
+
+window.genPhotoDesc=async()=>{
+const desc=((gel(‘photo-desc’)||{value:’’}).value||’’).trim();
+if(!desc){toast(‘Décris la photo’,‘err’);return;}
+const el=gel(‘photo-res’);
+el.innerHTML=`<div class="ai-load"><div class="ai-dots"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div><span style="font-size:12px;color:var(--pu);font-weight:600">Génération…</span></div>`;
+try{
+const resp=await fetch(‘https://api.anthropic.com/v1/messages’,{
+method:‘POST’,headers:{‘Content-Type’:‘application/json’},
+body:JSON.stringify({
+model:‘claude-sonnet-4-20250514’,max_tokens:350,
+messages:[{role:‘user’,content:`Tu es expert en vente Vinted. Génère une description courte et vendeuse (3-4 phrases max) basée sur cette description de photo :\n"${desc}"\n\nSois enthousiaste, honnête, et utilise des mots-clés Vinted pertinents.`}]
+})
+});
+const data=await resp.json();
+const res=(data.content||[]).map(b=>b.text||’’).join(’’)||’’;
+el.innerHTML=`<div class="adb" style="margin-top:10px"><div class="adl">Description optimisée</div><div class="adt">${esc(res)}</div><button class="btn btn-ai btn-xs" style="margin-top:8px;width:auto" onclick="copyText(${JSON.stringify(res)})">📋 Copier</button></div>`;
+}catch(e){el.innerHTML=`<div class="card-rd card f12 fw8 txt-rd">Erreur</div>`;}
+};
+}
+
+/* ================================================================
+PAGE 23 — TEMPLATES MESSAGES
+================================================================ */
+function rTemplates(pi){
+const cats={
+‘📦 Expédition’:[
+{titre:‘Confirmation expédition’,msg:‘Bonjour ! 😊 Votre colis a bien été expédié aujourd'hui. Vous recevrez le numéro de suivi dès que disponible. Bonne réception !’},
+{titre:‘Retard expédition’,msg:‘Bonjour, je m'excuse pour ce petit délai. Votre colis partira demain sans faute. Merci de votre patience 🙏’},
+{titre:‘Colis prêt’,msg:‘Bonjour ! Votre colis est prêt et emballé avec soin 📦 Il sera expédié dans les prochaines 24h !’},
+],
+‘🤝 Négociation’:[
+{titre:‘Refus poli’,msg:‘Bonjour, merci pour votre intérêt ! Mon prix est déjà au plus juste pour cet article. Je ne peux malheureusement pas descendre davantage. N'hésitez pas si vous changez d'avis 😊’},
+{titre:‘Contre-offre’,msg:‘Bonjour ! Je comprends votre demande. Je peux faire un geste et proposer [PRIX]€, c'est mon dernier prix. Qu'en pensez-vous ?’},
+{titre:‘Offre groupée’,msg:‘Bonjour ! Je ne peux pas baisser sur cet article seul, mais si vous prenez plusieurs articles ensemble, je vous ferai une belle remise sur le total 😊’},
+],
+‘⭐ Après-vente’:[
+{titre:‘Demande d'avis’,msg:‘Bonjour, j'espère que votre article vous plaît ! Si tout est ok, n'hésitez pas à laisser une évaluation, ça m'aide beaucoup 🙏⭐’},
+{titre:‘Remerciement’,msg:‘Merci beaucoup pour votre achat et votre confiance ! C'était un plaisir de vendre avec vous. Bonne continuation ! 😊’},
+{titre:‘Problème reçu’,msg:‘Bonjour, je suis vraiment désolé(e) pour ce problème. Je vais tout faire pour résoudre ça au plus vite. Pouvez-vous m'envoyer une photo stp ?’},
+],
+‘❓ Infos article’:[
+{titre:‘Mesures’,msg:‘Bonjour ! Voici les mesures approximatives : Taille [X], Longueur [X]cm, Largeur [X]cm. N'hésitez pas si vous avez d'autres questions 😊’},
+{titre:‘État article’,msg:‘Bonjour ! L'article est en [ÉTAT], je l'ai porté [X] fois. Il n'y a [aucun/les] défauts [suivants : …]. Tout est conforme aux photos.’},
+{titre:‘Disponibilité’,msg:‘Bonjour ! Oui, l'article est toujours disponible 😊 N'hésitez pas à faire une offre si vous souhaitez l'acheter !’},
+],
+};
+let activecat=Object.keys(cats)[0];
+function render(){
+pi.innerHTML=` <div class="card"> <div class="sh"><div class="sh-ic ic-ac">💬</div><div class="sh-t">Templates de messages</div></div> <div class="chip-row" id="tpl-cats" style="margin-bottom:12px"> ${Object.keys(cats).map(c=>`<div class="chip${c===activecat?' on':''}" onclick="selTplCat(${JSON.stringify(c)})">${esc(c)}</div>`).join('')} </div> ${cats[activecat].map((t,i)=>`
+<div class="adb" style="margin-bottom:10px">
+<div class="adl">${esc(t.titre)}</div>
+<div class="adt" style="line-height:1.7">${esc(t.msg)}</div>
+<button class="btn btn-p btn-xs" style="margin-top:8px;width:auto" onclick="copyText(${JSON.stringify(t.msg)})">📋 Copier</button>
+</div>`).join('')} </div> <div class="card card-ai"> <div class="sh"><div class="sh-ic ic-pu">🤖</div><div class="sh-t">Template personnalisé IA</div></div> <div><label class="lbl">Décris la situation</label><textarea id="tpl-sit" class="inp" rows="2" placeholder="Ex: L'acheteur dit que la couleur est différente des photos"></textarea></div> <button class="btn btn-ai" style="margin-top:8px" onclick="genTemplate()">✨ Générer le message</button> <div id="tpl-res"></div> </div>`;
+}
+render();
+window.selTplCat=c=>{activecat=c;render();};
+window.genTemplate=async()=>{
+const sit=((gel(‘tpl-sit’)||{value:’’}).value||’’).trim();
+if(!sit){toast(‘Décris la situation’,‘err’);return;}
+const el=gel(‘tpl-res’);
+el.innerHTML=`<div class="ai-load"><div class="ai-dots"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div><span style="font-size:12px;color:var(--pu);font-weight:600">Rédaction…</span></div>`;
+try{
+const resp=await fetch(‘https://api.anthropic.com/v1/messages’,{
+method:‘POST’,headers:{‘Content-Type’:‘application/json’},
+body:JSON.stringify({
+model:‘claude-sonnet-4-20250514’,max_tokens:300,
+messages:[{role:‘user’,content:`Vendeur Vinted. Situation : "${sit}"\nRédige un message court, poli et professionnel pour gérer cette situation. Réponds uniquement avec le message, sans explication.`}]
+})
+});
+const data=await resp.json();
+const res=(data.content||[]).map(b=>b.text||’’).join(’’)||’’;
+el.innerHTML=`<div class="adb" style="margin-top:10px"><div class="adt">${esc(res)}</div><button class="btn btn-p btn-xs" style="margin-top:8px;width:auto" onclick="copyText(${JSON.stringify(res)})">📋 Copier</button></div>`;
+}catch(e){el.innerHTML=`<div class="card-rd card f12 fw8 txt-rd">Erreur</div>`;}
+};
+}
+
+/* ================================================================
+PAGE 24 — RAPPORT
+================================================================ */
+function rRapport(pi){
+const parcels=filteredParcels();
+const done=parcels.filter(p=>p.status===‘done’);
+const totalNet=calcTotal(null);
+const totalRevenu=done.reduce((t,p)=>t+(parseFloat(p.price)||0),0);
+const totalFrais=done.reduce((t,p)=>t+(parseFloat(p.fees)||0),0);
+const totalPack=done.reduce((t,p)=>t+(parseFloat(p.packCost)||0),0);
+const avgNet=done.length?totalNet/done.length:0;
+const best=done.reduce((b,p)=>calcNet(p)>calcNet(b||{price:0})?p:b,null);
+
+pi.innerHTML=` <div class="card"> <div class="sh"><div class="sh-ic ic-gn">📋</div><div class="sh-t">Rapport complet</div> <button class="btn btn-g btn-xs" onclick="exportRapport()">📤 Exporter</button> </div> <div class="hero" style="margin-bottom:14px"> <div class="hero-lbl">Revenus nets totaux</div> <div class="hero-amt">${fmtE(totalNet)}</div> <div class="hero-sub">${done.length} ventes finalisées</div> </div> <div class="sec-lbl">Revenus</div> <div class="row"><div class="row-l">Chiffre d'affaires brut</div><div class="row-v mono txt-ac">${fmtE(totalRevenu)}</div></div> <div class="row"><div class="row-l">Frais Vinted total</div><div class="row-v mono txt-rd">-${fmtE(totalFrais)}</div></div> <div class="row"><div class="row-l">Frais emballage total</div><div class="row-v mono txt-or">-${fmtE(totalPack)}</div></div> <div class="row" style="background:var(--gnl);border-radius:var(--r2);padding:10px 14px;margin:6px 0;border:none"><div class="row-l fw8">Revenu net</div><div class="f16 fw9 mono txt-gn">${fmtE(totalNet)}</div></div> <div class="sec-lbl" style="margin-top:12px">Moyennes</div> <div class="row"><div class="row-l">Prix moyen de vente</div><div class="row-v mono">${fmtE(done.length?totalRevenu/done.length:0)}</div></div> <div class="row"><div class="row-l">Net moyen par vente</div><div class="row-v mono txt-gn">${fmtE(avgNet)}</div></div> <div class="row"><div class="row-l">Marge moyenne</div><div class="row-v mono txt-ac">${totalRevenu>0?Math.round(totalNet/totalRevenu*100):0}%</div></div> ${best?`
+<div class="sec-lbl" style="margin-top:12px">Meilleure vente</div>
+<div style="background:var(--ywl);border-radius:var(--r2);padding:12px;border:1.5px solid rgba(245,169,0,.25)">
+<div class="f14 fw8">🏆 ${esc(best.title)}</div>
+<div class="f12 txt-tx3 mt4">${esc(best.dateAdded)}</div>
+<div class="f20 fw9 mono txt-gn mt4">${fmtE(calcNet(best))}</div>
+</div>`:''} <div class="sec-lbl" style="margin-top:12px">Colis actifs</div> <div class="g4"> <div class="sc"><div class="sv txt-yw">${parcels.filter(p=>p.status==='pending').length}</div><div class="sl">En attente</div></div> <div class="sc"><div class="sv txt-ac">${parcels.filter(p=>p.status==='sold').length}</div><div class="sl">Vendus</div></div> <div class="sc"><div class="sv txt-or">${parcels.filter(p=>p.status==='shipped').length}</div><div class="sl">Expédiés</div></div> <div class="sc"><div class="sv txt-rd">${parcels.filter(p=>p.status==='problem').length}</div><div class="sl">Problèmes</div></div> </div> </div>`;
+
+window.exportRapport=()=>{
+let txt=`=== RAPPORT VINTEDPRO ===\n${fullDate()}\n\n`;
+txt+=`CA Brut : ${fmtE(totalRevenu)}\nFrais Vinted : -${fmtE(totalFrais)}\nFrais Emballage : -${fmtE(totalPack)}\nREVENU NET : ${fmtE(totalNet)}\n\n`;
+txt+=`Ventes finalisées : ${done.length}\nPrix moyen : ${fmtE(done.length?totalRevenu/done.length:0)}\nNet moyen : ${fmtE(avgNet)}\n\n`;
+txt+=`=== DÉTAIL VENTES ===\n`;
+done.forEach(p=>{txt+=`${p.dateAdded} | ${p.title} | ${fmtE(p.price)} | Net: ${fmtE(calcNet(p))}\n`;});
+copyText(txt);
+toast(‘Rapport copié dans le presse-papier’,‘ok’);
+};
+}
+
+/* ================================================================
+PAGE 25 — SPIN PRIX (roue des prix)
+================================================================ */
+function rSpinPrix(pi){
+pi.innerHTML=` <div class="card"> <div class="sh"><div class="sh-ic ic-yw">🎰</div><div class="sh-t">Roulette des prix</div></div> <div class="f12 txt-tx2 mb8">Tu hésites sur le prix ? Lance la roulette pour une suggestion !</div> <div><label class="lbl">Prix minimum (€)</label><input id="spin-min" class="inp" type="number" step="0.01" placeholder="5.00" value="5"></div> <div style="margin-top:8px"><label class="lbl">Prix maximum (€)</label><input id="spin-max" class="inp" type="number" step="0.01" placeholder="50.00" value="50"></div> <div id="spin-display" style="font-size:72px;font-weight:900;font-family:var(--mono);text-align:center;padding:28px 0;color:var(--tx3);letter-spacing:-.04em;transition:all .1s">??.??€</div> <button class="btn btn-ai" onclick="spinPrix()">🎰 Lancer !</button> <div id="spin-conseil" style="margin-top:10px"></div> </div> <div class="card"> <div class="sh"><div class="sh-ic ic-or">🎯</div><div class="sh-t">Stratégies de prix</div></div> ${[ {icon:'⚡',t:'Prix choc',d:'Baisser de 20% sous le marché pour vendre en moins de 24h'}, {icon:'💎',t:'Prix premium',d:'10-15% au-dessus avec des photos parfaites et une super description'}, {icon:'🔄',t:'Prix évolutif',d:'Commence haut, baisse de 5% chaque semaine si pas vendu'}, {icon:'🎁',t:'Bundle deal',d:'Propose -15% si l\'acheteur prend 2+ articles'}, ].map(s=>`
+<div style="display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--bd2)">
+<div style="font-size:24px">${s.icon}</div>
+<div><div class="f13 fw8">${esc(s.t)}</div><div class="f11 txt-tx2 mt4">${esc(s.d)}</div></div>
+</div>`).join('')} </div>`;
+
+window.spinPrix=()=>{
+const min=parseFloat((gel(‘spin-min’)||{value:’’}).value)||5;
+const max=parseFloat((gel(‘spin-max’)||{value:’’}).value)||50;
+if(min>=max){toast(‘Min doit être inférieur à max’,‘err’);return;}
+const el=gel(‘spin-display’);
+const conseil=gel(‘spin-conseil’);
+let count=0;
+const interval=setInterval(()=>{
+const random=(Math.random()*(max-min)+min);
+el.textContent=fmt(random)+‘€’;
+el.style.color=[‘var(–ac)’,‘var(–gn)’,‘var(–or)’,‘var(–pu)’][count%4];
+count++;
+if(count>20){
+clearInterval(interval);
+const finalPrice=Math.round((Math.random()*(max-min)+min)*2)/2;
+el.textContent=fmt(finalPrice)+‘€’;
+el.style.color=‘var(–gn)’;
+el.style.transform=‘scale(1.2)’;
+setTimeout(()=>{el.style.transform=‘scale(1)’;},300);
+const net=finalPrice-(finalPrice*0.05)-(finalPrice<=20?1:finalPrice<=50?1.80:2.80);
+conseil.innerHTML=`<div class="adtip">💡 À ${fmt(finalPrice)}€, ton net estimé sera <strong>${fmt(net)}€</strong>. ${finalPrice<(min+max)/2?'C\'est un prix agressif, tu vendras vite !':'C\'est un bon équilibre qualité/profit !'}</div>`;
+confetti();
+}
+},80);
+};
+}
+
+/* ================================================================
+PAGE 26 — RÉGLAGES
+================================================================ */
+function rReglages(pi){
+if(!S.settings)S.settings={notifBas:true,notifBloque:true,darkMode:false,autoFees:true,currency:‘EUR’};
+function render(){
+pi.innerHTML=` <div class="card"> <div class="sh"><div class="sh-ic ic-ac">⚙️</div><div class="sh-t">Réglages</div></div> <div class="tog-row"> <div class="tog-inf"><div class="tog-lbl">Alertes stock bas</div><div class="tog-sub">Notification quand un emballage est en rupture</div></div> <div class="tog${S.settings.notifBas?' on':''}" onclick="toggleSet('notifBas')"></div> </div> <div class="tog-row"> <div class="tog-inf"><div class="tog-lbl">Alertes colis bloqués</div><div class="tog-sub">Notification si un colis reste >5 jours sans avancement</div></div> <div class="tog${S.settings.notifBloque?' on':''}" onclick="toggleSet('notifBloque')"></div> </div> <div class="tog-row"> <div class="tog-inf"><div class="tog-lbl">Calcul frais automatique</div><div class="tog-sub">Suggère les frais Vinted lors de l'ajout</div></div> <div class="tog${S.settings.autoFees?' on':''}" onclick="toggleSet('autoFees')"></div> </div> </div> <div class="card"> <div class="sh"><div class="sh-ic ic-rd">🗑️</div><div class="sh-t">Données</div></div> <div class="tog-row"> <div class="tog-inf"><div class="tog-lbl">Sauvegarder les données</div><div class="tog-sub">Copier toutes tes données dans le presse-papier</div></div> <button class="btn btn-g btn-xs" onclick="backupData()">💾 Backup</button> </div> <div class="tog-row"> <div class="tog-inf"><div class="tog-lbl">Restaurer</div><div class="tog-sub">Coller des données sauvegardées</div></div> <button class="btn btn-yw btn-xs" onclick="restoreData()">📥 Restaurer</button> </div> <div class="tog-row"> <div class="tog-inf"><div class="tog-lbl">Tout effacer</div><div class="tog-sub" style="color:var(--rd)">Supprimer toutes les données — irréversible</div></div> <button class="btn btn-d btn-xs" onclick="resetAll()">💥 Reset</button> </div> </div> <div class="card"> <div class="sh"><div class="sh-ic ic-pu">ℹ️</div><div class="sh-t">À propos</div></div> <div class="row"><div class="row-l">Version</div><div class="row-v">VintedPro 2.0</div></div> <div class="row"><div class="row-l">Colis enregistrés</div><div class="row-v mono">${S.parcels.length}</div></div> <div class="row"><div class="row-l">Comptes</div><div class="row-v mono">${S.accounts.length}</div></div> <div class="row"><div class="row-l">Données stockées</div><div class="row-v mono">${Math.round(JSON.stringify(S).length/1024)}KB</div></div> </div>`;
+}
+render();
+window.toggleSet=(key)=>{
+if(!S.settings)S.settings={};
+S.settings[key]=!S.settings[key];
+saveState();render();
+toast(‘Réglage mis à jour’,‘ok’);
+};
+window.backupData=()=>{
+copyText(JSON.stringify(S));
+toast(‘Données copiées dans le presse-papier ✓’,‘ok’);
+};
+window.restoreData=()=>{
+const txt=prompt(‘Colle tes données sauvegardées :’);
+if(!txt)return;
+try{
+const d=JSON.parse(txt);
+Object.keys(S).forEach(k=>{if(d[k]!==undefined)S[k]=d[k];});
+saveState();rerenderAll();
+toast(‘Données restaurées ✓’,‘ok’);
+}catch(e){toast(‘Données invalides’,‘err’);}
+};
+window.resetAll=()=>{
+if(!confirm(‘Vraiment tout effacer ? Cette action est irréversible.’))return;
+localStorage.removeItem(‘vp12’);
+location.reload();
+};
+}
+
+/* ================================================================
+PAGE 27 — BADGES & ACHIEVEMENTS
+================================================================ */
+function rBadges(pi){
+const done=S.parcels.filter(p=>p.status===‘done’);
+const totalNet=calcTotal(null);
+const badges=[
+{id:‘first’,icon:‘🥚’,title:‘Premier pas’,desc:‘Ta première vente’,done:done.length>=1,progress:Math.min(done.length,1),max:1},
+{id:‘ten’,icon:‘🔟’,title:‘Vendeur actif’,desc:‘10 ventes réalisées’,done:done.length>=10,progress:Math.min(done.length,10),max:10},
+{id:‘fifty’,icon:‘🏆’,title:‘Expert Vinted’,desc:‘50 ventes réalisées’,done:done.length>=50,progress:Math.min(done.length,50),max:50},
+{id:‘hundred’,icon:‘💯’,title:‘Légende’,desc:‘100 ventes ! Incroyable’,done:done.length>=100,progress:Math.min(done.length,100),max:100},
+{id:‘fifty_euros’,icon:‘💰’,title:‘Primo-gagnant’,desc:‘50€ de revenus nets’,done:totalNet>=50,progress:Math.min(totalNet,50),max:50},
+{id:‘five_hundred’,icon:‘💎’,title:‘Magnat’,desc:‘500€ de revenus nets’,done:totalNet>=500,progress:Math.min(totalNet,500),max:500},
+{id:‘thousand’,icon:‘🚀’,title:‘Millionnaire (presque)’,desc:‘1000€ de revenus nets’,done:totalNet>=1000,progress:Math.min(totalNet,1000),max:1000},
+{id:‘accounts’,icon:‘👥’,title:‘Multi-compte’,desc:‘3 comptes actifs’,done:S.accounts.length>=3,progress:Math.min(S.accounts.length,3),max:3},
+{id:‘stock’,icon:‘📦’,title:‘Logisticien’,desc:‘5 types d'emballages en stock’,done:S.packStock.length>=5,progress:Math.min(S.packStock.length,5),max:5},
+{id:‘goals’,icon:‘🎯’,title:‘Ambitieux’,desc:‘3 objectifs créés’,done:(S.goals||[]).length>=3,progress:Math.min((S.goals||[]).length,3),max:3},
+{id:‘wishlist’,icon:‘🛍️’,title:‘Curateur’,desc:‘5 articles en wishlist’,done:(S.wishlist||[]).length>=5,progress:Math.min((S.wishlist||[]).length,5),max:5},
+{id:‘budget_tracked’,icon:‘📊’,title:‘CFO’,desc:‘10 transactions budget’,done:(S.budget||[]).length>=10,progress:Math.min((S.budget||[]).length,10),max:10},
+];
+const unlocked=badges.filter(b=>b.done).length;
+pi.innerHTML=` <div class="card"> <div class="sh"><div class="sh-ic ic-yw">🏅</div><div class="sh-t">Mes badges</div><span class="badge badge-ac">${unlocked}/${badges.length}</span></div> <div class="pbar"><div class="pbar-f pbar-gn" style="width:${Math.round(unlocked/badges.length*100)}%"></div></div> <div class="f11 txt-tx3 mt4 mb8">${unlocked} badge${unlocked>1?'s':''} débloqué${unlocked>1?'s':''} sur ${badges.length}</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px"> ${badges.map(b=>`
+<div style="background:${b.done?'var(--ywl)':'var(--sf2)'};border-radius:var(--r2);padding:14px;border:${b.done?'2px solid rgba(245,169,0,.35)':'1.5px solid var(--bd)'};opacity:${b.done?1:.55};transition:all .3s">
+<div style="font-size:32px;text-align:center;margin-bottom:6px;${!b.done?'filter:grayscale(1)':''}">${b.icon}</div>
+<div style="font-size:12px;font-weight:800;text-align:center">${esc(b.title)}</div>
+<div style="font-size:10px;color:var(--tx3);text-align:center;margin-top:3px">${esc(b.desc)}</div>
+${!b.done?` <div class="pbar" style="margin:8px 0 0"><div class="pbar-f" style="width:${Math.round(b.progress/b.max*100)}%"></div></div> <div style="font-size:9px;text-align:center;color:var(--tx3)">${b.progress}/${b.max}</div>`
+:`<div style="text-align:center;margin-top:6px;font-size:10px;font-weight:700;color:#7A5000">✓ Débloqué</div>`}
+</div>`).join('')} </div> </div>`;
+}
+
+/* ================================================================
+CHART 3D
+================================================================ */
+function initChart3D(months, maxM){
+var c=document.getElementById(‘chart3d’);
+if(!c)return;
+var _angle=0.42,_spinning=false;
+window.spinChart3d=function(){
+if(_spinning)return;_spinning=true;
+var start=null,dur=900,from=_angle,to=_angle+Math.PI*0.65;
+function step(ts){
+if(!start)start=ts;
+var p=Math.min((ts-start)/dur,1);
+var ease=1-Math.pow(1-p,3);
+_angle=from+(to-from)*ease;
+drawChart3d(_angle);
+if(p<1)requestAnimationFrame(step);
+else{_spinning=false;_angle=to;}
+}
+requestAnimationFrame(step);
+};
+function drawChart3d(angle){
+var W=c.width,H=c.height;
+var ctx=c.getContext(‘2d’);
+var dark=window.matchMedia(’(prefers-color-scheme:dark)’).matches;
+ctx.clearRect(0,0,W,H);
+var n=months.length;
+if(!n)return;
+var barW=52,gap=20,depth=20;
+var totalW=n*(barW+gap)-gap;
+var ox=(W-totalW)/2+barW/2;
+var oy=H-46;
+var maxH=H-86;
+var colors=[
+[’#1B6EF3’,’#0E3FA0’,’#60A5FA’],
+[’#00C97B’,’#007A4A’,’#34D399’],
+[’#7C5CFC’,’#4A2FBE’,’#A78BFA’],
+[’#FF8C00’,’#9A5000’,’#FDBA74’],
+[’#FF3B5C’,’#990022’,’#FB7185’],
+[’#F5A900’,’#8A5E00’,’#FDE68A’]
+];
+var cosa=Math.cos(angle)*0.52,sina=Math.sin(angle)*0.34;
+for(var i=0;i<n;i++){
+var val=months[i][1];
+var lbl=months[i][0];
+var bh=Math.max(12,Math.round(val/maxM*maxH));
+var bx=ox+i*(barW+gap);
+var col=colors[i%colors.length];
+var d=depth;
+ctx.save();ctx.shadowColor=‘rgba(0,0,0,0.2)’;ctx.shadowBlur=8;ctx.shadowOffsetX=2;ctx.shadowOffsetY=4;
+ctx.fillStyle=col[1];
+ctx.beginPath();if(ctx.roundRect)ctx.roundRect(bx-barW/2,oy-bh,barW,bh,[4,4,0,0]);else ctx.rect(bx-barW/2,oy-bh,barW,bh);
+ctx.fill();ctx.restore();
+var grd=ctx.createLinearGradient(bx-barW/2,oy-bh,bx+barW/2,oy);
+grd.addColorStop(0,col[0]);grd.addColorStop(1,col[1]);
+ctx.fillStyle=grd;
+ctx.beginPath();if(ctx.roundRect)ctx.roundRect(bx-barW/2,oy-bh,barW,bh,[4,4,0,0]);else ctx.rect(bx-barW/2,oy-bh,barW,bh);
+ctx.fill();
+var sh=ctx.createLinearGradient(bx-barW/2,oy-bh,bx-barW/2+barW*0.45,oy);
+sh.addColorStop(0,‘rgba(255,255,255,0.22)’);sh.addColorStop(1,‘rgba(255,255,255,0)’);
+ctx.fillStyle=sh;
+ctx.beginPath();if(ctx.roundRect)ctx.roundRect(bx-barW/2,oy-bh,barW*0.45,bh,[4,4,0,0]);else ctx.rect(bx-barW/2,oy-bh,barW*0.45,bh);
+ctx.fill();
+ctx.fillStyle=col[1];ctx.globalAlpha=0.82;
+ctx.beginPath();
+ctx.moveTo(bx+barW/2,oy);ctx.lineTo(bx+barW/2+d*cosa,oy-d*sina);
+ctx.lineTo(bx+barW/2+d*cosa,oy-bh-d*sina);ctx.lineTo(bx+barW/2,oy-bh);
+ctx.closePath();ctx.fill();ctx.globalAlpha=1;
+var tg=ctx.createLinearGradient(bx-barW/2,oy-bh,bx+barW/2+d*cosa,oy-bh-d*sina);
+tg.addColorStop(0,col[2]);tg.addColorStop(1,col[0]);
+ctx.fillStyle=tg;
+ctx.beginPath();
+ctx.moveTo(bx-barW/2,oy-bh);ctx.lineTo(bx+barW/2,oy-bh);
+ctx.lineTo(bx+barW/2+d*cosa,oy-bh-d*sina);ctx.lineTo(bx-barW/2+d*cosa,oy-bh-d*sina);
+ctx.closePath();ctx.fill();
+ctx.fillStyle=‘rgba(255,255,255,0.25)’;
+ctx.beginPath();ctx.moveTo(bx-barW/2+2,oy-bh);ctx.lineTo(bx,oy-bh);
+ctx.lineTo(bx+d*cosa*0.5,oy-bh-d*sina*0.5);ctx.lineTo(bx-barW/2+2+d*cosa*0.5,oy-bh-d*sina*0.5);
+ctx.closePath();ctx.fill();
+ctx.fillStyle=dark?‘rgba(242,244,255,0.95)’:‘rgba(10,12,20,0.88)’;
+ctx.font=‘bold 8.5px JetBrains Mono,monospace’;ctx.textAlign=‘center’;
+ctx.fillText(val.toFixed(0)+‘€’,bx+d*cosa*0.5,oy-bh-d*sina-7);
+ctx.fillStyle=dark?‘rgba(148,153,171,0.88)’:‘rgba(90,95,114,0.9)’;
+ctx.font=‘600 8.5px Plus Jakarta Sans,sans-serif’;ctx.textAlign=‘center’;
+ctx.fillText(lbl,bx+d*cosa*0.3,oy+17);
+}
+ctx.strokeStyle=dark?‘rgba(255,255,255,0.07)’:‘rgba(0,0,0,0.07)’;
+ctx.lineWidth=1;ctx.beginPath();
+ctx.moveTo(ox-barW/2-10,oy);
+ctx.lineTo(ox+(n-1)*(barW+gap)+barW/2+depth*cosa+10,oy-depth*sina);
+ctx.stroke();
+}
+drawChart3d(_angle);
+}
+
+/* ================================================================
+WAREHOUSE 3D
+================================================================ */
+
+/* ================================================================
+GARAGE 3D — realistic garage like photo
+================================================================ */
+var _garageState={rotX:0.28,rotY:-0.35,zoom:1,dragging:false,lx:0,ly:0,pinchDist:0,autoInt:null,stocks:[]};
+
+function resetGarageView(){
+_garageState.rotX=0.28;_garageState.rotY=-0.35;_garageState.zoom=1;
+var c=document.getElementById(‘garage3d’);
+if(c)_garageDraw(c,_garageState.stocks);
+}
+
+function initGarage3D(stocks){
+var c=document.getElementById(‘garage3d’);
+if(!c)return;
+if(_garageState.autoInt)clearInterval(_garageState.autoInt);
+_garageState.stocks=stocks||[];
+
+// Remove old listeners by cloning
+var nc=c.cloneNode(true);
+c.parentNode.replaceChild(nc,c);
+c=nc;
+
+function onMouseDown(e){_garageState.dragging=true;_garageState.lx=e.clientX;_garageState.ly=e.clientY;c.style.cursor=‘grabbing’;}
+function onMouseMove(e){
+if(!_garageState.dragging)return;
+_garageState.rotY+=(e.clientX-_garageState.lx)*0.007;
+_garageState.rotX+=(e.clientY-_garageState.ly)*0.005;
+_garageState.rotX=Math.max(-0.1,Math.min(0.75,_garageState.rotX));
+_garageState.lx=e.clientX;_garageState.ly=e.clientY;
+_garageDraw(c,_garageState.stocks);
+}
+function onMouseUp(){_garageState.dragging=false;c.style.cursor=‘grab’;}
+function onTouchStart(e){
+if(e.touches.length===2){
+_garageState.pinchDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+} else {
+_garageState.lx=e.touches[0].clientX;_garageState.ly=e.touches[0].clientY;
+}
+}
+function onTouchMove(e){
+if(e.touches.length===2){
+var d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+_garageState.zoom=Math.max(0.5,Math.min(2.5,_garageState.zoom*(d/_garageState.pinchDist)));
+_garageState.pinchDist=d;
+} else {
+_garageState.rotY+=(e.touches[0].clientX-_garageState.lx)*0.008;
+_garageState.rotX+=(e.touches[0].clientY-_garageState.ly)*0.006;
+_garageState.rotX=Math.max(-0.1,Math.min(0.75,_garageState.rotX));
+_garageState.lx=e.touches[0].clientX;_garageState.ly=e.touches[0].clientY;
+}
+_garageDraw(c,_garageState.stocks);
+}
+c.addEventListener(‘mousedown’,onMouseDown);
+c.addEventListener(‘mousemove’,onMouseMove);
+c.addEventListener(‘mouseup’,onMouseUp);
+c.addEventListener(‘mouseleave’,onMouseUp);
+c.addEventListener(‘touchstart’,onTouchStart,{passive:true});
+c.addEventListener(‘touchmove’,onTouchMove,{passive:true});
+
+_garageDraw(c,_garageState.stocks);
+
+// Slow auto-rotate
+_garageState.autoInt=setInterval(function(){
+if(_garageState.dragging)return;
+var cc=document.getElementById(‘garage3d’);
+if(!cc){clearInterval(_garageState.autoInt);return;}
+_garageState.rotY-=0.003;
+_garageState.rotY=Math.max(-1.2,Math.min(0.4,_garageState.rotY));
+_garageDraw(cc,_garageState.stocks);
+},50);
+}
+
+function _garageDraw(c,stocks){
+var W=c.width,H=c.height;
+var ctx=c.getContext(‘2d’);
+var rX=_garageState.rotX,rY=_garageState.rotY,zoom=_garageState.zoom;
+ctx.clearRect(0,0,W,H);
+
+// ── projection ──────────────────────────────────────────────
+function proj(x,y,z){
+var cosY=Math.cos(rY),sinY=Math.sin(rY);
+var cosX=Math.cos(rX),sinX=Math.sin(rX);
+var rx=x*cosY+z*sinY;
+var ry=x*sinY*sinX-y*cosX+z*cosY*sinX;  // flip y for screen
+// perspective
+var fov=520*zoom;
+var pz=ry+6;
+if(pz<0.1)pz=0.1;
+return {
+sx:W/2+(rx/pz)*fov,
+sy:H*0.52-((-y*cosX+z*sinX)/pz)*fov*0.7,
+d:pz
+};
+}
+
+function poly(pts3,fill,stroke,alpha){
+if(alpha!==undefined)ctx.globalAlpha=alpha;
+ctx.fillStyle=fill;
+ctx.beginPath();
+ctx.moveTo(pts3[0].sx,pts3[0].sy);
+for(var i=1;i<pts3.length;i++)ctx.lineTo(pts3[i].sx,pts3[i].sy);
+ctx.closePath();ctx.fill();
+if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=0.6;ctx.stroke();}
+ctx.globalAlpha=1;
+}
+
+// ── background sky outside garage ───────────────────────────
+var skyGrd=ctx.createLinearGradient(0,0,0,H);
+skyGrd.addColorStop(0,’#d0d8e8’);skyGrd.addColorStop(1,’#e8e0cc’);
+ctx.fillStyle=skyGrd;ctx.fillRect(0,0,W,H);
+
+// ── garage interior walls ────────────────────────────────────
+// back wall
+var bwTL=proj(-5,3,-6),bwTR=proj(5,3,-6),bwBL=proj(-5,-2,-6),bwBR=proj(5,-2,-6);
+poly([bwTL,bwTR,bwBR,bwBL],’#c8c4bc’,’#bbb8b0’);
+
+// left wall
+var lwTL=proj(-5,3,-6),lwTR=proj(-5,3,1),lwBL=proj(-5,-2,-6),lwBR=proj(-5,-2,1);
+poly([lwTL,lwTR,lwBR,lwBL],’#b8b4ac’,’#aaa8a0’);
+
+// right wall
+var rwTL=proj(5,3,-6),rwTR=proj(5,3,1),rwBL=proj(5,-2,-6),rwBR=proj(5,-2,1);
+poly([rwTL,rwTR,rwBR,rwBL],’#d0ccc4’,’#c0bcb4’);
+
+// ceiling
+var cTL=proj(-5,3,-6),cTR=proj(5,3,-6),cBL=proj(-5,3,1),cBR=proj(5,3,1);
+poly([cTL,cTR,cBR,cBL],’#e0ddd8’,’#d0cdc8’);
+
+// ── concrete floor ───────────────────────────────────────────
+var fTL=proj(-5,-2,-6),fTR=proj(5,-2,-6),fBL=proj(-5,-2,1),fBR=proj(5,-2,1);
+var floorGrd=ctx.createLinearGradient(fTL.sx,fTL.sy,fBL.sx,fBL.sy);
+floorGrd.addColorStop(0,’#a8a8a0’);floorGrd.addColorStop(0.5,’#b8b8b0’);floorGrd.addColorStop(1,’#c0c0b8’);
+poly([fTL,fTR,fBR,fBL],floorGrd,’#909088’);
+
+// Floor cracks/texture lines
+ctx.strokeStyle=‘rgba(0,0,0,0.05)’;ctx.lineWidth=0.8;
+var fl1s=proj(0,-2,-6),fl1e=proj(0,-2,1);
+ctx.beginPath();ctx.moveTo(fl1s.sx,fl1s.sy);ctx.lineTo(fl1e.sx,fl1e.sy);ctx.stroke();
+var fl2s=proj(-5,-2,-2),fl2e=proj(5,-2,-2);
+ctx.beginPath();ctx.moveTo(fl2s.sx,fl2s.sy);ctx.lineTo(fl2e.sx,fl2e.sy);ctx.stroke();
+
+// ── garage door frame (top) ──────────────────────────────────
+var gdfTL=proj(-5,3,1),gdfTR=proj(5,3,1),gdfBL=proj(-5,-2,1),gdfBR=proj(5,-2,1);
+// Door opening - just darken edges
+ctx.strokeStyle=‘rgba(0,0,0,0.4)’;ctx.lineWidth=4;
+ctx.beginPath();ctx.moveTo(gdfTL.sx,gdfTL.sy);ctx.lineTo(gdfTR.sx,gdfTR.sy);ctx.stroke();
+ctx.beginPath();ctx.moveTo(gdfTL.sx,gdfTL.sy);ctx.lineTo(gdfBL.sx,gdfBL.sy);ctx.stroke();
+ctx.beginPath();ctx.moveTo(gdfTR.sx,gdfTR.sy);ctx.lineTo(gdfBR.sx,gdfBR.sy);ctx.stroke();
+
+// Garage door rails on ceiling
+for(var ri=0;ri<3;ri++){
+var rx2=-1.5+ri*1.5;
+var rp1=proj(rx2,2.6,-4),rp2=proj(rx2,2.6,1);
+ctx.strokeStyle=‘rgba(180,180,180,0.6)’;ctx.lineWidth=2;
+ctx.beginPath();ctx.moveTo(rp1.sx,rp1.sy);ctx.lineTo(rp2.sx,rp2.sy);ctx.stroke();
+}
+
+// ── door at back wall ────────────────────────────────────────
+var dTL=proj(-0.6,2,-6),dTR=proj(0.6,2,-6),dBL=proj(-0.6,-2,-6),dBR=proj(0.6,-2,-6);
+poly([dTL,dTR,dBR,dBL],’#e8e4dc’,’#c0bcb4’);
+// Door frame
+ctx.strokeStyle=’#a0a098’;ctx.lineWidth=2;
+ctx.beginPath();ctx.moveTo(dTL.sx,dTL.sy);ctx.lineTo(dTR.sx,dTR.sy);ctx.lineTo(dBR.sx,dBR.sy);ctx.lineTo(dBL.sx,dBL.sy);ctx.closePath();ctx.stroke();
+// Doorknob
+var dk=proj(0.45,0,-6);
+ctx.fillStyle=’#888’;ctx.beginPath();ctx.arc(dk.sx,dk.sy,3,0,Math.PI*2);ctx.fill();
+
+// ── wall-mounted shelf (right side, like photo) ──────────────
+function drawWallShelf(x1,x2,y,z1,z2){
+var sP=[proj(x1,y,z1),proj(x2,y,z1),proj(x2,y,z2),proj(x1,y,z2)];
+var sBot=[proj(x1,y-0.06,z1),proj(x2,y-0.06,z1),proj(x2,y-0.06,z2),proj(x1,y-0.06,z2)];
+poly([sP[0],sP[1],sP[2],sP[3]],’#c8a878’,’#9a7a50’);
+poly([sP[0],sP[1],sBot[1],sBot[0]],’#b09060’,’#9a7a50’);
+// Brackets
+for(var bi=0;bi<3;bi++){
+var bx2=x1+(x2-x1)*bi/2;
+var br=[proj(bx2,y,z2),proj(bx2,y-0.5,z2+0.1),proj(bx2,y-0.5,z1)];
+ctx.strokeStyle=‘rgba(80,60,30,0.5)’;ctx.lineWidth=2;
+ctx.beginPath();ctx.moveTo(br[0].sx,br[0].sy);ctx.lineTo(br[1].sx,br[1].sy);ctx.lineTo(br[2].sx,br[2].sy);ctx.stroke();
+}
+}
+drawWallShelf(2.8,4.8,0.2,-6,-5);
+drawWallShelf(2.8,4.8,1.4,-6,-5);
+drawWallShelf(2.8,4.8,2.6,-6,-5);
+
+// Broom on left wall
+var broom1=proj(-4.8,-2,-3),broom2=proj(-4.6,2.5,-3);
+ctx.strokeStyle=’#8B6914’;ctx.lineWidth=3;
+ctx.beginPath();ctx.moveTo(broom1.sx,broom1.sy);ctx.lineTo(broom2.sx,broom2.sy);ctx.stroke();
+var broomHead=proj(-4.8,-1.9,-3);
+ctx.fillStyle=’#4a3a1a’;ctx.beginPath();ctx.ellipse(broomHead.sx,broomHead.sy,6,3,0.3,0,Math.PI*2);ctx.fill();
+
+// ── 3D box drawing function ──────────────────────────────────
+function drawBox3D(x,y,z,w,h,d,topC,frontC,sideC,label,qty,lowStock){
+var p=[
+proj(x,y,z),       proj(x+w,y,z),
+proj(x+w,y+h,z),   proj(x,y+h,z),
+proj(x,y,z+d),     proj(x+w,y,z+d),
+proj(x+w,y+h,z+d), proj(x,y+h,z+d),
+];
+// back faces first
+poly([p[0],p[1],p[2],p[3]],sideC+‘dd’,‘rgba(0,0,0,0.1)’);
+poly([p[0],p[4],p[7],p[3]],‘rgba(0,0,0,0.15)’,‘rgba(0,0,0,0.05)’);
+// side face
+poly([p[1],p[5],p[6],p[2]],sideC,‘rgba(0,0,0,0.08)’);
+// front face
+var fg=ctx.createLinearGradient(p[4].sx,p[4].sy,p[5].sx,p[5].sy);
+fg.addColorStop(0,frontC);fg.addColorStop(1,lowStock?’#FF3B5C’:frontC);
+poly([p[4],p[5],p[6],p[7]],fg,‘rgba(0,0,0,0.06)’);
+// top face
+var tg=ctx.createLinearGradient(p[3].sx,p[3].sy,p[7].sx,p[7].sy);
+tg.addColorStop(0,topC);tg.addColorStop(1,frontC);
+poly([p[3],p[2],p[6],p[7]],tg,‘rgba(0,0,0,0.04)’);
+// Cardboard texture lines on front
+ctx.strokeStyle=‘rgba(0,0,0,0.07)’;ctx.lineWidth=0.5;
+for(var ti=1;ti<3;ti++){
+var ty2=(p[4].sy*(3-ti)+p[7].sy*ti)/3;
+var tx1=(p[4].sx*(3-ti)+p[7].sx*ti)/3;
+var tx2=(p[5].sx*(3-ti)+p[6].sx*ti)/3;
+ctx.beginPath();ctx.moveTo(tx1,ty2);ctx.lineTo(tx2,ty2);ctx.stroke();
+}
+// Amazon tape strip
+var tapm=[(p[4].sx+p[5].sx)/2,(p[4].sy+p[5].sy)/2];
+var tapb=[(p[7].sx+p[6].sx)/2,(p[7].sy+p[6].sy)/2];
+ctx.strokeStyle=‘rgba(100,160,220,0.45)’;ctx.lineWidth=4;
+ctx.beginPath();ctx.moveTo(tapm[0],tapm[1]);ctx.lineTo(tapb[0],tapb[1]);ctx.stroke();
+// Label sticker on front
+var lx=(p[4].sx+p[5].sx+p[7].sx+p[6].sx)/4;
+var ly=(p[4].sy+p[5].sy+p[7].sy+p[6].sy)/4;
+if(label){
+ctx.fillStyle=‘rgba(255,255,220,0.88)’;
+var lw=Math.abs(p[5].sx-p[4].sx)*0.7;
+ctx.fillRect(lx-lw/2,ly-7,lw,14);
+ctx.fillStyle=’#333’;ctx.font=‘bold 7px sans-serif’;ctx.textAlign=‘center’;
+var sl=label.length>9?label.slice(0,8)+’…’:label;
+ctx.fillText(sl,lx,ly+3);
+}
+// Qty badge
+if(qty!==undefined){
+var qp=proj(x+w,y+h,z+d);
+ctx.fillStyle=lowStock?’#FF3B5C’:’#1B6EF3’;
+ctx.beginPath();ctx.arc(qp.sx,qp.sy,8,0,Math.PI*2);ctx.fill();
+ctx.fillStyle=’#fff’;ctx.font=‘bold 7px sans-serif’;ctx.textAlign=‘center’;
+ctx.fillText(qty>99?‘99+’:qty,qp.sx,qp.sy+2.5);
+}
+// Low stock X
+if(lowStock){
+ctx.strokeStyle=‘rgba(255,59,92,0.9)’;ctx.lineWidth=2;
+ctx.beginPath();ctx.moveTo(p[4].sx+3,p[4].sy+3);ctx.lineTo(p[5].sx-3,p[5].sy+3);ctx.stroke();
+ctx.beginPath();ctx.moveTo(p[5].sx-3,p[4].sy+3);ctx.lineTo(p[4].sx+3,p[5].sy+3);ctx.stroke();
+}
+}
+
+// ── place boxes ──────────────────────────────────────────────
+var boxColors=[
+{top:’#d4a843’,front:’#c8924a’,side:’#b07838’},
+{top:’#e8c87a’,front:’#d4a843’,side:’#b88c30’},
+{top:’#c89060’,front:’#b87840’,side:’#a06030’},
+{top:’#d8b870’,front:’#c4983a’,side:’#a87828’},
+{top:’#e0c890’,front:’#ccaa50’,side:’#b09030’},
+{top:’#d0a050’,front:’#bc8030’,side:’#a06820’},
+];
+var usedStocks=stocks.slice();
+if(!usedStocks.length){
+usedStocks=[
+{name:‘Bulles A4’,qty:12,threshold:5},
+{name:‘Boîtes S’,qty:4,threshold:5},
+{name:‘Papier kraft’,qty:20,threshold:0},
+{name:‘Sacs’,qty:8,threshold:3},
+];
+}
+
+// Floor boxes (left side, like photo)
+var floorLayout=[
+{x:-4.2,z:-1.5,w:0.9,h:0.7,d:0.7},
+{x:-3.1,z:-1.5,w:1.2,h:0.9,d:0.8},
+{x:-1.7,z:-1.8,w:0.8,h:0.6,d:0.6},
+{x:-4.3,z:-0.5,w:1.4,h:1.1,d:0.9},
+];
+floorLayout.forEach(function(fl,i){
+var stk=usedStocks[i]||{name:‘Colis’,qty:Math.floor(Math.random()*15)+1,threshold:0};
+var col=boxColors[i%boxColors.length];
+var low=stk.threshold>0&&stk.qty<=stk.threshold;
+drawBox3D(fl.x,-2+fl.h/2*0,fl.z,fl.w,fl.h,fl.d,col.top,col.front,col.side,stk.name,stk.qty,low);
+});
+
+// Shelf boxes (right wall shelves)
+var shelfBoxes=[
+{si:0,xi:0},{si:0,xi:1},
+{si:1,xi:0},{si:1,xi:1},
+{si:2,xi:0},{si:2,xi:1},
+];
+var shelfY=[-1.8+2.2,  -1.8+1.0, -1.8+(-0.2)];  // shelf heights: top, mid, bottom
+shelfBoxes.forEach(function(sb,i){
+var stk=usedStocks[(i+4)%usedStocks.length]||{name:‘Stock’,qty:5,threshold:0};
+var col=boxColors[(i+2)%boxColors.length];
+var bx=2.9+sb.xi*1.0;
+var by=shelfY[sb.si]||0;
+var low=stk.threshold>0&&stk.qty<=stk.threshold;
+drawBox3D(bx,by,-5.9,0.85,0.7,0.65,col.top,col.front,col.side,stk.name,stk.qty,low);
+});
+
+// ── garbage bag (like photo) ─────────────────────────────────
+var gbag=proj(1.5,-1.5,-0.5);
+var bagGrd=ctx.createRadialGradient(gbag.sx-5,gbag.sy-5,2,gbag.sx,gbag.sy,22);
+bagGrd.addColorStop(0,’#555’);bagGrd.addColorStop(1,’#111’);
+ctx.fillStyle=bagGrd;ctx.beginPath();ctx.ellipse(gbag.sx,gbag.sy,22,18,0.2,0,Math.PI*2);ctx.fill();
+ctx.fillStyle=‘rgba(255,255,255,0.08)’;ctx.beginPath();ctx.ellipse(gbag.sx-6,gbag.sy-5,7,5,0.5,0,Math.PI*2);ctx.fill();
+
+// ── overhead light glow ──────────────────────────────────────
+var light=proj(0,2.9,-2);
+var lgrd=ctx.createRadialGradient(light.sx,light.sy,0,light.sx,light.sy,W*0.4);
+lgrd.addColorStop(0,‘rgba(255,250,220,0.18)’);lgrd.addColorStop(1,‘rgba(0,0,0,0)’);
+ctx.fillStyle=lgrd;ctx.fillRect(0,0,W,H);
+// Light fixture
+ctx.fillStyle=‘rgba(255,250,200,0.9)’;
+ctx.beginPath();ctx.ellipse(light.sx,light.sy,10,4,0,0,Math.PI*2);ctx.fill();
+
+// ── driveway apron at front ──────────────────────────────────
+var drTL=proj(-5,-2,1),drTR=proj(5,-2,1),drBL=proj(-5,-2,3.5),drBR=proj(5,-2,3.5);
+var drGrd=ctx.createLinearGradient(drTL.sx,drTL.sy,drBL.sx,drBL.sy);
+drGrd.addColorStop(0,’#c8c8c0’);drGrd.addColorStop(1,’#d8d8d0’);
+poly([drTL,drTR,drBR,drBL],drGrd,’#b0b0a8’);
+// Driveway seam
+ctx.strokeStyle=‘rgba(0,0,0,0.08)’;ctx.lineWidth=1;
+var ds1=proj(-5,-2,2.2),ds2=proj(5,-2,2.2);
+ctx.beginPath();ctx.moveTo(ds1.sx,ds1.sy);ctx.lineTo(ds2.sx,ds2.sy);ctx.stroke();
+}
+
+/* ================================================================
+GARAGE ISOMÉTRIQUE 3D — style diorama premium
+================================================================ */
+var _GS = {
+rotX: 0.55, rotY: 0.78, zoom: 1,
+drag: false, lx: 0, ly: 0, pd: 0,
+autoInt: null, stocks: [], newBox: null, animT: 0
+};
+
+function resetGarageView(){
+_GS.rotX=0.55; _GS.rotY=0.78; _GS.zoom=1;
+var c=document.getElementById(‘garage3d’);
+if(c) _gDraw(c);
+}
+
+function initGarage3D(stocks){
+var c=document.getElementById(‘garage3d’);
+if(!c) return;
+if(_GS.autoInt) clearInterval(_GS.autoInt);
+_GS.stocks = stocks||[];
+
+// Clone to remove old listeners
+var nc=c.cloneNode(true);
+c.parentNode.replaceChild(nc,c); c=nc;
+
+c.addEventListener(‘mousedown’,function(e){_GS.drag=true;_GS.lx=e.clientX;_GS.ly=e.clientY;c.style.cursor=‘grabbing’;});
+c.addEventListener(‘mousemove’,function(e){
+if(!_GS.drag)return;
+_GS.rotY+=(e.clientX-_GS.lx)*0.006; _GS.lx=e.clientX;
+_GS.rotX+=(e.clientY-_GS.ly)*0.004; _GS.ly=e.clientY;
+_GS.rotX=Math.max(0.2,Math.min(0.9,_GS.rotX));
+_gDraw(c);
+});
+c.addEventListener(‘mouseup’,function(){_GS.drag=false;c.style.cursor=‘grab’;});
+c.addEventListener(‘mouseleave’,function(){_GS.drag=false;c.style.cursor=‘grab’;});
+c.addEventListener(‘touchstart’,function(e){
+if(e.touches.length===2) _GS.pd=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+else {_GS.lx=e.touches[0].clientX;_GS.ly=e.touches[0].clientY;}
+},{passive:true});
+c.addEventListener(‘touchmove’,function(e){
+if(e.touches.length===2){
+var d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+_GS.zoom=Math.max(0.5,Math.min(2.5,_GS.zoom*(d/_GS.pd))); _GS.pd=d;
+} else {
+_GS.rotY+=(e.touches[0].clientX-_GS.lx)*0.007; _GS.lx=e.touches[0].clientX;
+_GS.rotX+=(e.touches[0].clientY-_GS.ly)*0.005; _GS.ly=e.touches[0].clientY;
+_GS.rotX=Math.max(0.2,Math.min(0.9,_GS.rotX));
+}
+_gDraw(c);
+},{passive:true});
+
+_gDraw(c);
+
+// Slow auto-rotate
+_GS.autoInt=setInterval(function(){
+if(_GS.drag) return;
+var cc=document.getElementById(‘garage3d’);
+if(!cc){clearInterval(_GS.autoInt);return;}
+_GS.rotY+=0.0025; _gDraw(cc);
+},50);
+}
+
+// ── ISO projection ──────────────────────────────────────────────────────────
+function _gProj(x,y,z){
+var rY=_GS.rotY, rX=_GS.rotX, zoom=_GS.zoom;
+var cosY=Math.cos(rY),sinY=Math.sin(rY),cosX=Math.cos(rX),sinX=Math.sin(rX);
+var rx=x*cosY+z*sinY;
+var ry=(-x*sinY+z*cosY)*sinX+y*cosX;
+var rz=(-x*sinY+z*cosY)*cosX-y*sinX;
+var sc=220*zoom;
+return {sx:400+rx*sc, sy:250-ry*sc*0.7+rz*sc*0.1, d:rz};
+}
+
+function _gFace(ctx,pts,fill,stroke,alpha){
+ctx.globalAlpha=alpha!==undefined?alpha:1;
+ctx.fillStyle=fill;
+ctx.beginPath();ctx.moveTo(pts[0].sx,pts[0].sy);
+for(var i=1;i<pts.length;i++) ctx.lineTo(pts[i].sx,pts[i].sy);
+ctx.closePath();ctx.fill();
+if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=0.7;ctx.stroke();}
+ctx.globalAlpha=1;
+}
+
+function _gBox(ctx,x,y,z,w,h,d,cTop,cFront,cSide,opts){
+opts=opts||{};
+var p=[
+_gProj(x,y,z),       _gProj(x+w,y,z),
+_gProj(x+w,y+h,z),   _gProj(x,y+h,z),
+_gProj(x,y,z+d),     _gProj(x+w,y,z+d),
+_gProj(x+w,y+h,z+d), _gProj(x,y+h,z+d),
+];
+// Determine which faces to draw based on view angle
+_gFace(ctx,[p[0],p[1],p[5],p[4]],cSide+‘bb’,‘rgba(0,0,0,.15)’);       // bottom
+_gFace(ctx,[p[0],p[3],p[7],p[4]],‘rgba(0,0,0,.25)’,‘rgba(0,0,0,.1)’); // left dark
+_gFace(ctx,[p[1],p[2],p[6],p[5]],cSide,‘rgba(0,0,0,.1)’);             // right
+_gFace(ctx,[p[4],p[5],p[6],p[7]],cFront,‘rgba(0,0,0,.06)’);            // front
+_gFace(ctx,[p[3],p[2],p[6],p[7]],cTop,‘rgba(255,255,255,.04)’);        // top
+
+// Top sheen
+var tg=ctx.createLinearGradient(p[3].sx,p[3].sy,p[6].sx,p[6].sy);
+tg.addColorStop(0,‘rgba(255,255,255,.18)’);tg.addColorStop(0.5,‘rgba(255,255,255,.04)’);tg.addColorStop(1,‘rgba(0,0,0,.05)’);
+_gFace(ctx,[p[3],p[2],p[6],p[7]],tg);
+
+// Shadow on floor
+if(opts.shadow!==false){
+var fc=ctx.createRadialGradient((p[0].sx+p[5].sx)/2,(p[0].sy+p[5].sy)/2+6,0,(p[0].sx+p[5].sx)/2,(p[0].sy+p[5].sy)/2+6,w*60);
+fc.addColorStop(0,‘rgba(0,0,0,.25)’);fc.addColorStop(1,‘rgba(0,0,0,0)’);
+ctx.fillStyle=fc;ctx.beginPath();ctx.ellipse((p[0].sx+p[5].sx)/2,(p[0].sy+p[5].sy)/2+8,w*40,10,0,0,Math.PI*2);ctx.fill();
+}
+
+if(opts.label){
+var cx=(p[4].sx+p[5].sx+p[6].sx+p[7].sx)/4;
+var cy=(p[4].sy+p[5].sy+p[6].sy+p[7].sy)/4;
+var fw=Math.abs(p[5].sx-p[4].sx);
+// sticker
+ctx.fillStyle=‘rgba(255,252,220,.92)’;
+ctx.fillRect(cx-fw*0.38,cy-8,fw*0.76,15);
+ctx.strokeStyle=‘rgba(180,160,80,.4)’;ctx.lineWidth=0.5;
+ctx.strokeRect(cx-fw*0.38,cy-8,fw*0.76,15);
+ctx.fillStyle=’#2a1a04’;ctx.font=‘bold ‘+Math.max(7,fw*0.11)+‘px sans-serif’;ctx.textAlign=‘center’;
+var sl=opts.label.length>10?opts.label.slice(0,9)+’…’:opts.label;
+ctx.fillText(sl,cx,cy+3);
+}
+
+if(opts.qty!==undefined){
+var qp=p[2]; // top-right corner
+var isLow=opts.low;
+// Glow if low
+if(isLow){
+ctx.fillStyle=‘rgba(255,59,92,.15)’;
+ctx.beginPath();ctx.arc(qp.sx,qp.sy,16,0,Math.PI*2);ctx.fill();
+}
+ctx.fillStyle=isLow?’#FF3B5C’:’#1B6EF3’;
+ctx.beginPath();ctx.arc(qp.sx,qp.sy,9,0,Math.PI*2);ctx.fill();
+ctx.fillStyle=’#fff’;ctx.font=‘bold 8px monospace’;ctx.textAlign=‘center’;
+ctx.fillText(opts.qty>99?‘99+’:opts.qty,qp.sx,qp.sy+3);
+}
+
+// Tape on top
+if(opts.tape){
+ctx.strokeStyle=‘rgba(120,180,255,.4)’;ctx.lineWidth=3.5;
+var tc1=(p[3].sx+p[2].sx)/2, tc2=(p[3].sy+p[2].sy)/2;
+var tc3=(p[7].sx+p[6].sx)/2, tc4=(p[7].sy+p[6].sy)/2;
+ctx.beginPath();ctx.moveTo(tc1,tc2);ctx.lineTo(tc3,tc4);ctx.stroke();
+}
+
+// Warning X if empty/low
+if(opts.warn){
+ctx.strokeStyle=‘rgba(255,59,92,.85)’;ctx.lineWidth=2.5;
+ctx.beginPath();ctx.moveTo(p[4].sx+4,p[4].sy+4);ctx.lineTo(p[6].sx-4,p[6].sy-4);ctx.stroke();
+ctx.beginPath();ctx.moveTo(p[5].sx-4,p[5].sy+4);ctx.lineTo(p[7].sx+4,p[7].sy-4);ctx.stroke();
+}
+
+return {cx:(p[4].sx+p[5].sx+p[6].sx+p[7].sx)/4, cy:(p[4].sy+p[5].sy+p[6].sy+p[7].sy)/4};
+}
+
+function _gDraw(c){
+var W=c.width,H=c.height;
+var ctx=c.getContext(‘2d’);
+ctx.clearRect(0,0,W,H);
+var stocks=_GS.stocks;
+
+// ── AMBIENT BACKGROUND ────────────────────────────────────────
+var ambBg=ctx.createRadialGradient(W*0.5,H*0.4,10,W*0.5,H*0.4,W*0.7);
+ambBg.addColorStop(0,’#2a1e0a’);ambBg.addColorStop(1,’#0e0906’);
+ctx.fillStyle=ambBg;ctx.fillRect(0,0,W,H);
+
+// ── ROOM WALLS (ISO) ──────────────────────────────────────────
+var RW=4.5, RH=3.5, RD=4.5; // room half-width, height, depth
+var wallCol=’#3a2c18’;
+var floorCol=’#2a2218’;
+
+// Back-left wall
+var wBL=[_gProj(-RW,0,-RD),_gProj(-RW,RH,-RD),_gProj(-RW,RH,RD),_gProj(-RW,0,RD)];
+_gFace(ctx,wBL,’#2e2416’,‘rgba(0,0,0,.3)’);
+// Wall planks texture (left wall)
+for(var pi2=0;pi2<6;pi2++){
+var wy1=_gProj(-RW,pi2*0.6,-RD), wy2=_gProj(-RW,pi2*0.6,RD);
+ctx.strokeStyle=‘rgba(0,0,0,.15)’;ctx.lineWidth=1;
+ctx.beginPath();ctx.moveTo(wy1.sx,wy1.sy);ctx.lineTo(wy2.sx,wy2.sy);ctx.stroke();
+}
+
+// Back-right wall
+var wBR=[_gProj(-RW,0,-RD),_gProj(RW,0,-RD),_gProj(RW,RH,-RD),_gProj(-RW,RH,-RD)];
+_gFace(ctx,wBR,’#352818’,‘rgba(0,0,0,.2)’);
+// Wall planks (back wall)
+for(var pj=0;pj<7;pj++){
+var wx1=_gProj(-RW+pj*1.3,0,-RD), wx2=_gProj(-RW+pj*1.3,RH,-RD);
+ctx.strokeStyle=‘rgba(0,0,0,.12)’;ctx.lineWidth=0.8;
+ctx.beginPath();ctx.moveTo(wx1.sx,wx1.sy);ctx.lineTo(wx2.sx,wx2.sy);ctx.stroke();
+}
+
+// Ceiling
+var ceil=[_gProj(-RW,RH,-RD),_gProj(RW,RH,-RD),_gProj(RW,RH,RD),_gProj(-RW,RH,RD)];
+_gFace(ctx,ceil,’#261e0e’,‘rgba(0,0,0,.2)’);
+
+// Floor with dark tiles
+var fpts=[_gProj(-RW,0,-RD),_gProj(RW,0,-RD),_gProj(RW,0,RD),_gProj(-RW,0,RD)];
+var fg2=ctx.createLinearGradient(fpts[0].sx,fpts[0].sy,fpts[2].sx,fpts[2].sy);
+fg2.addColorStop(0,’#1e1a10’);fg2.addColorStop(1,’#2a2218’);
+_gFace(ctx,fpts,fg2,‘rgba(0,0,0,.2)’);
+// Floor grid
+ctx.strokeStyle=‘rgba(255,255,255,.04)’;ctx.lineWidth=0.6;
+for(var gx2=-4;gx2<=4;gx2+=1.5){
+var gl1=_gProj(gx2,0,-RD),gl2=_gProj(gx2,0,RD);
+ctx.beginPath();ctx.moveTo(gl1.sx,gl1.sy);ctx.lineTo(gl2.sx,gl2.sy);ctx.stroke();
+}
+for(var gz2=-4;gz2<=4;gz2+=1.5){
+var gm1=_gProj(-RW,0,gz2),gm2=_gProj(RW,0,gz2);
+ctx.beginPath();ctx.moveTo(gm1.sx,gm1.sy);ctx.lineTo(gm2.sx,gm2.sy);ctx.stroke();
+}
+
+// ── NEON SIGN ────────────────────────────────────────────────
+var nsP=_gProj(0.5,2.9,-RD);
+// Sign board
+_gBox(ctx,0,2.5,-RD+0.02,2.2,0.55,0.05,’#1a1208’,’#1a1208’,’#111008’,{shadow:false});
+// Neon glow
+ctx.fillStyle=‘rgba(255,220,0,.08)’;ctx.beginPath();ctx.ellipse(nsP.sx,nsP.sy,80,20,0,0,Math.PI*2);ctx.fill();
+ctx.font=‘bold 11px monospace’;ctx.textAlign=‘center’;
+ctx.fillStyle=‘rgba(255,220,0,.0)’;ctx.shadowColor=’#FFD700’;ctx.shadowBlur=12;
+ctx.fillStyle=’#FFD700’;
+ctx.fillText(‘VINTED PRO’,nsP.sx,nsP.sy+4);
+ctx.shadowBlur=0;
+
+// ── WINDOW (back wall, top-left) ──────────────────────────────
+_gBox(ctx,-RW+0.05,1.8,-3,0.05,1.2,2.2,’#c8e8ff’,’#d0eeff’,’#a0c8e8’,{shadow:false});
+// Window glow
+var wgP=_gProj(-RW,2.4,-2);
+var wgr=ctx.createRadialGradient(wgP.sx,wgP.sy,0,wgP.sx,wgP.sy,80);
+wgr.addColorStop(0,‘rgba(200,230,255,.15)’);wgr.addColorStop(1,‘rgba(0,0,0,0)’);
+ctx.fillStyle=wgr;ctx.fillRect(wgP.sx-80,wgP.sy-40,160,80);
+
+// ── LAMP (pendant, left of center) ───────────────────────────
+var lampP=_gProj(-0.5,RH,-1);
+// Cord
+ctx.strokeStyle=’#3a2c18’;ctx.lineWidth=2;
+var lampTop=_gProj(-0.5,RH,-1);
+var lampBot=_gProj(-0.5,RH-0.8,-1);
+ctx.beginPath();ctx.moveTo(lampTop.sx,lampTop.sy);ctx.lineTo(lampBot.sx,lampBot.sy);ctx.stroke();
+// Shade
+_gBox(ctx,-0.8,RH-1.05,-1.25,0.6,0.3,0.5,’#2a8a2a’,’#1e6e1e’,’#185818’,{shadow:false});
+// Warm glow
+var lgr=ctx.createRadialGradient(lampBot.sx,lampBot.sy+10,0,lampBot.sx,lampBot.sy+10,120);
+lgr.addColorStop(0,‘rgba(255,240,160,.18)’);lgr.addColorStop(1,‘rgba(0,0,0,0)’);
+ctx.fillStyle=lgr;ctx.fillRect(lampBot.sx-120,lampBot.sy-10,240,140);
+// Bulb glow
+ctx.fillStyle=‘rgba(255,250,180,.9)’;ctx.beginPath();ctx.arc(lampBot.sx,lampBot.sy+10,4,0,Math.PI*2);ctx.fill();
+
+// ── RIGHT WALL LAMP ──────────────────────────────────────────
+var rlampP=_gProj(RW-0.05,2.5,-1.5);
+_gBox(ctx,RW-0.05,2.3,-1.8,0.05,0.15,0.4,’#1a5c1a’,’#186018’,’#145414’,{shadow:false});
+var rlgr=ctx.createRadialGradient(rlampP.sx,rlampP.sy+15,0,rlampP.sx,rlampP.sy+15,80);
+rlgr.addColorStop(0,‘rgba(255,240,160,.14)’);rlgr.addColorStop(1,‘rgba(0,0,0,0)’);
+ctx.fillStyle=rlgr;ctx.fillRect(rlampP.sx-80,rlampP.sy,160,80);
+
+// ── WORKBENCH (left-center) ───────────────────────────────────
+// Legs
+_gBox(ctx,-3.4,0,-2.5,0.12,1.1,0.12,’#4a3420’,’#3a2818’,’#2e2010’,{shadow:false});
+_gBox(ctx,-1.3,0,-2.5,0.12,1.1,0.12,’#4a3420’,’#3a2818’,’#2e2010’,{shadow:false});
+_gBox(ctx,-3.4,0,-1.2,0.12,1.1,0.12,’#4a3420’,’#3a2818’,’#2e2010’,{shadow:false});
+_gBox(ctx,-1.3,0,-1.2,0.12,1.1,0.12,’#4a3420’,’#3a2818’,’#2e2010’,{shadow:false});
+// Table top
+_gBox(ctx,-3.5,1.1,-2.6,2.3,0.12,1.5,’#6a4c30’,’#5a3c24’,’#4a2e18’,{shadow:false});
+// Shelf below table
+_gBox(ctx,-3.4,0.4,-2.5,2.1,0.08,1.3,’#5a3c24’,’#4a2c18’,’#3a2010’,{shadow:false});
+
+// ── TOOL CHEST (red, like photo) ──────────────────────────────
+_gBox(ctx,-2.8,0,-0.6,1.8,1.5,1.0,’#cc2020’,’#aa1818’,’#881010’,{shadow:true});
+// Drawers
+for(var dr=0;dr<4;dr++){
+_gBox(ctx,-2.75,0.06+dr*0.35,-0.55,1.7,0.27,0.02,’#bb1818’,’#991010’,’#771010’,{shadow:false});
+// Handle
+var hp=_gProj(-1.9,0.22+dr*0.35,-0.55);
+ctx.fillStyle=’#c8a830’;ctx.beginPath();ctx.arc(hp.sx,hp.sy,4,0,Math.PI*2);ctx.fill();
+ctx.fillStyle=’#a08020’;ctx.beginPath();ctx.arc(hp.sx,hp.sy,2,0,Math.PI*2);ctx.fill();
+}
+// Top surface with tools
+var toolP=_gProj(-1.9,1.52,-0.1);
+ctx.fillStyle=’#cc8820’;ctx.fillRect(toolP.sx-12,toolP.sy-3,24,5);// wrench
+ctx.fillStyle=’#aaaaaa’;ctx.fillRect(toolP.sx+15,toolP.sy-3,6,5);// screwdriver
+
+// ── METAL SHELVES (right side wall) ───────────────────────────
+var shelfFrameColor=’#666060’;
+// Uprights
+_gBox(ctx,2.8,0,-RD+0.1,0.06,3.4,0.06,shelfFrameColor,shelfFrameColor,’#444’,{shadow:false});
+_gBox(ctx,4.3,0,-RD+0.1,0.06,3.4,0.06,shelfFrameColor,shelfFrameColor,’#444’,{shadow:false});
+_gBox(ctx,2.8,0,-RD+1.8,0.06,3.4,0.06,shelfFrameColor,shelfFrameColor,’#444’,{shadow:false});
+_gBox(ctx,4.3,0,-RD+1.8,0.06,3.4,0.06,shelfFrameColor,shelfFrameColor,’#444’,{shadow:false});
+// Shelf planks
+var shelfHeights=[0.6,1.5,2.5];
+shelfHeights.forEach(function(sy2){
+_gBox(ctx,2.75,sy2,-RD+0.1,1.6,0.07,1.7,’#888’,’#777’,’#555’,{shadow:false});
+});
+
+// ── PLACE STOCK BOXES ON SHELVES ──────────────────────────────
+// Box palette: warm cardboard tones
+var boxPalette=[
+{t:’#e8c870’,f:’#d4a840’,s:’#b88828’},
+{t:’#e0b060’,f:’#c89030’,s:’#a87020’},
+{t:’#e8d090’,f:’#d4b050’,s:’#b89030’},
+{t:’#d4c060’,f:’#c0a030’,s:’#a08020’},
+{t:’#dcc878’,f:’#c8a848’,s:’#ac8830’},
+{t:’#e4b848’,f:’#d09828’,s:’#b47820’},
+];
+
+// Shelf positions: 3 shelves × 2 slots each = 6 positions
+var shelfSlots=[
+{x:2.82,z:-RD+0.15,sy:0.67},{x:3.7,z:-RD+0.15,sy:0.67},
+{x:2.82,z:-RD+0.15,sy:1.57},{x:3.7,z:-RD+0.15,sy:1.57},
+{x:2.82,z:-RD+0.15,sy:2.57},{x:3.7,z:-RD+0.15,sy:2.57},
+];
+
+var usedStocks = stocks.length ? stocks : [];
+
+// Draw empty slot indicators first
+shelfSlots.forEach(function(slot,i){
+if(i>=usedStocks.length){
+// Empty slot — faint outline
+var ep=[
+_gProj(slot.x,slot.sy,-RD+0.15),
+_gProj(slot.x+0.82,slot.sy,-RD+0.15),
+_gProj(slot.x+0.82,slot.sy+0.65,-RD+0.15),
+_gProj(slot.x,slot.sy+0.65,-RD+0.15),
+];
+ctx.strokeStyle=‘rgba(255,255,255,.07)’;ctx.lineWidth=1;ctx.setLineDash([4,4]);
+ctx.beginPath();ctx.moveTo(ep[0].sx,ep[0].sy);
+ep.forEach(function(pt){ctx.lineTo(pt.sx,pt.sy);});
+ctx.closePath();ctx.stroke();ctx.setLineDash([]);
+}
+});
+
+// Draw actual stock boxes
+usedStocks.forEach(function(stk,i){
+if(i>=shelfSlots.length) return;
+var slot=shelfSlots[i];
+var col=boxPalette[i%boxPalette.length];
+var isLow=stk.threshold>0&&stk.qty<=stk.threshold;
+var isEmpty=stk.qty===0;
+
+```
+// Animate new box dropping in
+var animOffset=0;
+if(_GS.newBox===stk.id&&_GS.animT<1){
+  animOffset=(1-_GS.animT)*2;
+  _GS.animT+=0.05;
+}
+
+var boxH=0.58;
+var by=slot.sy+animOffset;
+
+if(isEmpty){
+  // Show crushed/empty box
+  _gBox(ctx,slot.x,by,slot.z,0.82,0.18,0.72,col.t+'88',col.f+'88',col.s+'88',{
+    shadow:true,label:stk.name,warn:true,tape:false,qty:0,low:true
+  });
+} else {
+  // Stack of boxes based on qty (visual only)
+  var stackH=Math.min(3,Math.ceil(stk.qty/5));
+  for(var s2=0;s2<stackH;s2++){
+    var bCol=s2===stackH-1?col:{t:col.t+'cc',f:col.f+'cc',s:col.s+'cc'};
+    var isTop=s2===stackH-1;
+    _gBox(ctx,slot.x+(s2>0?0.04:0),by+s2*(boxH-0.05),slot.z+(s2>0?0.04:0),0.82-(s2>0?0.08:0),boxH,0.72,
+      bCol.t,bCol.f,bCol.s,{
+        shadow:s2===0,
+        label:isTop?stk.name:null,
+        tape:isTop,
+        qty:isTop?stk.qty:undefined,
+        low:isLow&&isTop,
+        warn:isLow&&isTop
+      });
+  }
+}
+```
+
+});
+
+// ── FLOOR STUFF ────────────────────────────────────────────────
+// Small barrel (decorative)
+_gBox(ctx,1.2,0,1.5,0.7,1.0,0.7,’#2a7a2a’,’#226622’,’#184c18’,{shadow:true});
+var barH=_gProj(1.55,1.0,1.85);
+ctx.strokeStyle=‘rgba(200,200,200,.4)’;ctx.lineWidth=2;
+ctx.beginPath();ctx.arc(barH.sx,barH.sy,20,0,Math.PI*2);ctx.stroke();
+
+// Ladder (right wall)
+var lad1=_gProj(RW-0.2,0,-2.8),lad2=_gProj(RW-0.2,3,-2.8);
+ctx.strokeStyle=’#aaaaaa’;ctx.lineWidth=3;
+ctx.beginPath();ctx.moveTo(lad1.sx,lad1.sy);ctx.lineTo(lad2.sx,lad2.sy);ctx.stroke();
+var lad3=_gProj(RW-0.5,0,-2.8),lad4=_gProj(RW-0.5,3,-2.8);
+ctx.beginPath();ctx.moveTo(lad3.sx,lad3.sy);ctx.lineTo(lad4.sx,lad4.sy);ctx.stroke();
+for(var rung=0;rung<7;rung++){
+var r1=_gProj(RW-0.5,rung*0.45,-2.8),r2=_gProj(RW-0.2,rung*0.45,-2.8);
+ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(r1.sx,r1.sy);ctx.lineTo(r2.sx,r2.sy);ctx.stroke();
+}
+
+// Broom (left wall)
+var bTop=_gProj(-RW+0.08,3,-3.5),bBot=_gProj(-RW+0.08,0,-3.5);
+ctx.strokeStyle=’#8B6914’;ctx.lineWidth=3;
+ctx.beginPath();ctx.moveTo(bTop.sx,bTop.sy);ctx.lineTo(bBot.sx,bBot.sy);ctx.stroke();
+ctx.fillStyle=’#5a3a1a’;ctx.beginPath();ctx.ellipse(bBot.sx,bBot.sy-4,6,3,0.2,0,Math.PI*2);ctx.fill();
+
+// Fire extinguisher (right corner)
+_gBox(ctx,RW-0.9,0,-RD+0.5,0.3,1.0,0.3,’#cc2020’,’#aa1818’,’#881010’,{shadow:true});
+var extP=_gProj(RW-0.75,1.05,-RD+0.65);
+ctx.strokeStyle=’#888’;ctx.lineWidth=2;
+ctx.beginPath();ctx.arc(extP.sx,extP.sy,4,0,Math.PI*2);ctx.stroke();
+
+// ── STATUS LEGEND ─────────────────────────────────────────────
+var legx=10,legy=H-14;
+ctx.fillStyle=‘rgba(0,0,0,.4)’;ctx.fillRect(6,H-22,200,18);
+[[‘Stock OK’,’#1B6EF3’],[‘Stock bas’,’#FF8C00’],[‘Vide’,’#FF3B5C’]].forEach(function(l){
+ctx.fillStyle=l[1];ctx.beginPath();ctx.arc(legx+4,legy,4,0,Math.PI*2);ctx.fill();
+ctx.fillStyle=‘rgba(255,255,255,.6)’;ctx.font=‘600 8px sans-serif’;ctx.textAlign=‘left’;
+ctx.fillText(l[0],legx+11,legy+3);
+legx+=ctx.measureText(l[0]).width+24;
+});
+
+// ── AMBIENT OVERLAY ───────────────────────────────────────────
+var aov=ctx.createRadialGradient(W*0.5,H*0.35,0,W*0.5,H*0.35,W*0.6);
+aov.addColorStop(0,‘rgba(255,240,160,.04)’);aov.addColorStop(1,‘rgba(0,0,0,.3)’);
+ctx.fillStyle=aov;ctx.fillRect(0,0,W,H);
+
+// Vignette
+var vig=ctx.createRadialGradient(W/2,H/2,H*0.3,W/2,H/2,W*0.8);
+vig.addColorStop(0,‘rgba(0,0,0,0)’);vig.addColorStop(1,‘rgba(0,0,0,.55)’);
+ctx.fillStyle=vig;ctx.fillRect(0,0,W,H);
+}
+
+/* ================================================================
+PAGE 28 — ENTREPÔT 3D COLIS
+================================================================ */
+function rColis3D(pi){
+var currentFilter=‘all’;
+function getParcels(){
+var p=filteredParcels();
+if(currentFilter===‘all’) return p;
+return p.filter(function(x){return x.status===currentFilter;});
+}
+function render(){
+var parcels=getParcels();
+pi.innerHTML=` <div style="border-radius:20px;overflow:hidden;background:#0a0a14;box-shadow:0 16px 48px rgba(0,0,0,.6)"> <div style="background:linear-gradient(90deg,#0d1a3a,#0a0a14);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(27,110,243,.15)"> <div style="display:flex;align-items:center;gap:8px"> <span style="font-size:16px">📦</span> <span style="font-size:13px;font-weight:800;color:#60a5fa;letter-spacing:-.03em">Entrepôt des colis</span> </div> <div style="text-align:right"> <div style="font-size:11px;font-weight:900;color:#60a5fa;font-family:monospace">${fmtE(parcels.reduce(function(t,p){return t+(parseFloat(p.price)||0);},0))}</div> <div style="font-size:9px;color:rgba(96,165,250,.4)">${parcels.length} colis · valeur totale</div> </div> </div> <canvas id="colis3d" width="800" height="520" style="width:100%;height:310px;display:block;touch-action:none;cursor:grab"></canvas> <div style="background:#070710;padding:6px 14px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none"> ${[['all','Tous'],['pending','Attente'],['sold','Vendus'],['shipped','Expédiés'],['done','Reçus ✓'],['problem','Problèmes']].map(function(f){ return '<button onclick="setColis3DFilter(\''+f[0]+'\')" id="f3d-'+f[0]+'" style="background:'+(currentFilter===f[0]?'rgba(27,110,243,.8)':'rgba(255,255,255,.06)')+';border:none;color:'+(currentFilter===f[0]?'#fff':'rgba(255,255,255,.5)')+';font-size:10px;font-weight:700;padding:4px 12px;border-radius:20px;cursor:pointer;white-space:nowrap;flex-shrink:0">'+f[1]+'</button>'; }).join('')} </div> </div> <div style="font-size:10px;color:var(--tx3);text-align:center;margin-top:6px;margin-bottom:2px">Glisse pour pivoter · Tape un colis pour les détails</div> <div id="c3d-detail"></div>`;
+setTimeout(function(){initColis3D(parcels);},60);
+}
+render();
+window.setColis3DFilter=function(f){currentFilter=f;render();};
+}
+
+var _C3={rotX:0.48,rotY:0.72,zoom:0.62,drag:false,lx:0,ly:0,pd:0,autoInt:null,boxes:[]};
+
+function initColis3D(parcels){
+var c=document.getElementById(‘colis3d’);
+if(!c) return;
+if(_C3.autoInt) clearInterval(_C3.autoInt);
+
+var nc=c.cloneNode(true);c.parentNode.replaceChild(nc,c);c=nc;
+
+c.addEventListener(‘mousedown’,function(e){_C3.drag=true;_C3.lx=e.clientX;_C3.ly=e.clientY;c.style.cursor=‘grabbing’;});
+c.addEventListener(‘mousemove’,function(e){
+if(!_C3.drag)return;
+_C3.rotY+=(e.clientX-_C3.lx)*0.006;_C3.lx=e.clientX;
+_C3.rotX+=(e.clientY-_C3.ly)*0.004;_C3.ly=e.clientY;
+_C3.rotX=Math.max(0.15,Math.min(0.85,_C3.rotX));
+_drawC3(c,parcels);
+});
+c.addEventListener(‘mouseup’,function(e){
+if(!_C3.drag){var b=_c3Hit(e.offsetX*(800/c.clientWidth),e.offsetY*(520/c.clientHeight));if(b)_showC3Detail(b);}
+_C3.drag=false;c.style.cursor=‘grab’;
+});
+c.addEventListener(‘mouseleave’,function(){_C3.drag=false;c.style.cursor=‘grab’;});
+c.addEventListener(‘touchstart’,function(e){
+if(e.touches.length===2)_C3.pd=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+else{_C3.lx=e.touches[0].clientX;_C3.ly=e.touches[0].clientY;}
+},{passive:true});
+c.addEventListener(‘touchmove’,function(e){
+if(e.touches.length===2){
+var d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+_C3.zoom=Math.max(0.4,Math.min(2.5,_C3.zoom*(d/_C3.pd)));_C3.pd=d;
+} else {
+_C3.rotY+=(e.touches[0].clientX-_C3.lx)*0.007;_C3.lx=e.touches[0].clientX;
+_C3.rotX+=(e.touches[0].clientY-_C3.ly)*0.005;_C3.ly=e.touches[0].clientY;
+_C3.rotX=Math.max(0.15,Math.min(0.85,_C3.rotX));
+}
+_drawC3(c,parcels);
+},{passive:true});
+c.addEventListener(‘touchend’,function(e){
+var t=e.changedTouches[0];
+var rect=c.getBoundingClientRect();
+var cx=(t.clientX-rect.left)*(800/c.clientWidth);
+var cy=(t.clientY-rect.top)*(520/c.clientHeight);
+var b=_c3Hit(cx,cy);if(b)_showC3Detail(b);
+},{passive:true});
+
+_drawC3(c,parcels);
+// No auto-rotate — stays fixed until user drags
+_C3.autoInt=null;
+}
+
+function _c3Proj(x,y,z){
+var rY=_C3.rotY,rX=_C3.rotX,zoom=_C3.zoom;
+var cosY=Math.cos(rY),sinY=Math.sin(rY),cosX=Math.cos(rX),sinX=Math.sin(rX);
+var rx=x*cosY+z*sinY;
+var ry=(-x*sinY+z*cosY)*sinX+y*cosX;
+var rz=(-x*sinY+z*cosY)*cosX-y*sinX;
+var sc=155*zoom;
+return{sx:400+rx*sc,sy:270-ry*sc*0.68+rz*sc*0.08,d:rz};
+}
+
+var STATUS_C={
+pending:{t:’#e8c870’,f:’#c89840’,s:’#a07020’,glow:‘200,152,64’,label:‘ATTENTE’,  badge:’#F59E0B’},
+sold:   {t:’#e8c870’,f:’#c89840’,s:’#a07020’,glow:‘200,152,64’,label:‘VENDU’,    badge:’#3B82F6’},
+locker: {t:’#e8c870’,f:’#c89840’,s:’#a07020’,glow:‘200,152,64’,label:‘CASIER’,   badge:’#7C3AED’},
+shipped:{t:’#e8c870’,f:’#c89840’,s:’#a07020’,glow:‘200,152,64’,label:‘EXPÉDIÉ’,  badge:’#F97316’},
+done:   {t:’#e8c870’,f:’#c89840’,s:’#a07020’,glow:‘200,152,64’,label:‘REÇU ✓’,   badge:’#22C55E’},
+problem:{t:’#e4a0a0’,f:’#cc5050’,s:’#9a2020’,glow:‘220,80,80’, label:‘PROBLÈME’, badge:’#EF4444’},
+};
+
+function _drawC3(c,parcels){
+var W=c.width,H=c.height;
+var ctx=c.getContext(‘2d’);
+ctx.clearRect(0,0,W,H);
+_C3.boxes=[];
+
+// Background
+var bg=ctx.createLinearGradient(0,0,0,H);
+bg.addColorStop(0,’#08091a’);bg.addColorStop(1,’#0d1030’);
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+
+// Floor
+var fp=[_c3Proj(-7,-1,-6),_c3Proj(7,-1,-6),_c3Proj(7,-1,4),_c3Proj(-7,-1,4)];
+var fgrd=ctx.createLinearGradient(fp[0].sx,fp[0].sy,fp[2].sx,fp[2].sy);
+fgrd.addColorStop(0,’#12163a’);fgrd.addColorStop(1,’#1a1e48’);
+ctx.fillStyle=fgrd;ctx.beginPath();ctx.moveTo(fp[0].sx,fp[0].sy);fp.forEach(function(p){ctx.lineTo(p.sx,p.sy);});ctx.closePath();ctx.fill();
+ctx.strokeStyle=‘rgba(27,110,243,.08)’;ctx.lineWidth=0.6;
+for(var gi=-6;gi<=6;gi+=1.8){
+var g1=_c3Proj(gi,-1,-6),g2=_c3Proj(gi,-1,4);
+ctx.beginPath();ctx.moveTo(g1.sx,g1.sy);ctx.lineTo(g2.sx,g2.sy);ctx.stroke();
+}
+for(var gj=-6;gj<=4;gj+=1.8){
+var g3=_c3Proj(-7,-1,gj),g4=_c3Proj(7,-1,gj);
+ctx.beginPath();ctx.moveTo(g3.sx,g3.sy);ctx.lineTo(g4.sx,g4.sy);ctx.stroke();
+}
+
+if(!parcels.length){
+ctx.fillStyle=‘rgba(255,255,255,.15)’;ctx.font=‘bold 18px sans-serif’;ctx.textAlign=‘center’;
+ctx.fillText(‘Aucun colis’,W/2,H/2);return;
+}
+
+var n=parcels.length;
+var cols=Math.min(n,5);
+var bw=1.3,bh=0.95,bd=1.0,gap=0.25;
+var totalW=cols*(bw+gap)-gap;
+var sx=-totalW/2;
+var rows=Math.ceil(n/cols);
+
+// Sort back to front
+var items=parcels.map(function(p,i){
+var row=Math.floor(i/cols),col=i%cols;
+var bz=-((rows-1)*(bd+gap)/2)+row*(bd+gap);
+var ctr=_c3Proj(sx+col*(bw+gap)+bw/2,-1+bh/2,bz+bd/2);
+return{p:p,row:row,col:col,bz:bz,depth:ctr.d};
+}).sort(function(a,b){return b.depth-a.depth;});
+
+items.forEach(function(item){
+var par=item.p;
+var bx=sx+item.col*(bw+gap);
+var bz=item.bz;
+var by=-1;
+var col=STATUS_C[par.status]||STATUS_C.pending;
+
+```
+// Floor glow
+var gcp=_c3Proj(bx+bw/2,by,bz+bd/2);
+var gr=ctx.createRadialGradient(gcp.sx,gcp.sy+8,0,gcp.sx,gcp.sy+8,45);
+gr.addColorStop(0,'rgba('+col.glow+',.22)');gr.addColorStop(1,'rgba(0,0,0,0)');
+ctx.fillStyle=gr;ctx.fillRect(gcp.sx-45,gcp.sy-10,90,55);
+
+var p=[
+  _c3Proj(bx,by,bz),         _c3Proj(bx+bw,by,bz),
+  _c3Proj(bx+bw,by+bh,bz),   _c3Proj(bx,by+bh,bz),
+  _c3Proj(bx,by,bz+bd),      _c3Proj(bx+bw,by,bz+bd),
+  _c3Proj(bx+bw,by+bh,bz+bd),_c3Proj(bx,by+bh,bz+bd),
+];
+
+// Faces
+ctx.fillStyle=col.s+'99';ctx.beginPath();ctx.moveTo(p[0].sx,p[0].sy);[p[1],p[5],p[4]].forEach(function(pt){ctx.lineTo(pt.sx,pt.sy);});ctx.closePath();ctx.fill();
+ctx.fillStyle='rgba(0,0,0,.3)';ctx.beginPath();ctx.moveTo(p[0].sx,p[0].sy);[p[3],p[7],p[4]].forEach(function(pt){ctx.lineTo(pt.sx,pt.sy);});ctx.closePath();ctx.fill();
+ctx.fillStyle=col.s;ctx.beginPath();ctx.moveTo(p[1].sx,p[1].sy);[p[2],p[6],p[5]].forEach(function(pt){ctx.lineTo(pt.sx,pt.sy);});ctx.closePath();ctx.fill();
+
+// Front gradient
+var fg3=ctx.createLinearGradient(p[4].sx,p[4].sy,p[6].sx,p[6].sy);
+fg3.addColorStop(0,col.f);fg3.addColorStop(1,col.s);
+ctx.fillStyle=fg3;ctx.beginPath();ctx.moveTo(p[4].sx,p[4].sy);[p[5],p[6],p[7]].forEach(function(pt){ctx.lineTo(pt.sx,pt.sy);});ctx.closePath();ctx.fill();
+
+// Top
+var tg3=ctx.createLinearGradient(p[3].sx,p[3].sy,p[7].sx,p[7].sy);
+tg3.addColorStop(0,col.t);tg3.addColorStop(1,col.f);
+ctx.fillStyle=tg3;ctx.beginPath();ctx.moveTo(p[3].sx,p[3].sy);[p[2],p[6],p[7]].forEach(function(pt){ctx.lineTo(pt.sx,pt.sy);});ctx.closePath();ctx.fill();
+
+// Top shine
+ctx.globalAlpha=0.15;ctx.fillStyle='#fff';
+ctx.beginPath();ctx.moveTo(p[3].sx,p[3].sy);ctx.lineTo((p[3].sx+p[2].sx)/2,(p[3].sy+p[2].sy)/2);ctx.lineTo((p[6].sx+p[2].sx)/2,(p[6].sy+p[2].sy)/2);ctx.lineTo((p[7].sx+p[3].sx)/2,(p[7].sy+p[3].sy)/2);ctx.closePath();ctx.fill();
+ctx.globalAlpha=1;
+
+// Edge highlight
+ctx.strokeStyle='rgba(255,255,255,.08)';ctx.lineWidth=0.8;
+[[p[3],p[2]],[p[2],p[6]],[p[6],p[7]]].forEach(function(edge){
+  ctx.beginPath();ctx.moveTo(edge[0].sx,edge[0].sy);ctx.lineTo(edge[1].sx,edge[1].sy);ctx.stroke();
+});
+
+// Cardboard corrugation lines on front face
+ctx.save();
+ctx.strokeStyle='rgba(0,0,0,0.07)';ctx.lineWidth=0.6;
+for(var ci=1;ci<5;ci++){
+  var cpx1=p[4].sx+(p[5].sx-p[4].sx)*ci/5;
+  var cpy1=p[4].sy+(p[5].sy-p[4].sy)*ci/5;
+  var cpx2=p[7].sx+(p[6].sx-p[7].sx)*ci/5;
+  var cpy2=p[7].sy+(p[6].sy-p[7].sy)*ci/5;
+  ctx.beginPath();ctx.moveTo(cpx1,cpy1);ctx.lineTo(cpx2,cpy2);ctx.stroke();
+}
+ctx.restore();
+// Tape strip
+var tm=[(p[3].sx+p[2].sx)/2,(p[3].sy+p[2].sy)/2];
+var tb2=[(p[7].sx+p[6].sx)/2,(p[7].sy+p[6].sy)/2];
+ctx.strokeStyle='rgba(150,200,255,.35)';ctx.lineWidth=4;
+ctx.beginPath();ctx.moveTo(tm[0],tm[1]);ctx.lineTo(tb2[0],tb2[1]);ctx.stroke();
+
+// Title sticker on front
+var flx=(p[4].sx+p[5].sx+p[6].sx+p[7].sx)/4;
+var fly=(p[4].sy+p[5].sy+p[6].sy+p[7].sy)/4;
+var fw=Math.abs(p[5].sx-p[4].sx)*0.82;
+ctx.fillStyle='rgba(255,252,220,.92)';ctx.fillRect(flx-fw/2,fly-9,fw,17);
+ctx.fillStyle='#1a1208';ctx.font='bold '+Math.max(6,fw*0.12)+'px sans-serif';ctx.textAlign='center';
+var ttl=par.title.length>12?par.title.slice(0,11)+'…':par.title;
+ctx.fillText(ttl,flx,fly+3);
+
+// Status badge on top-front corner — colored by status
+var bdP=_c3Proj(bx+bw,by+bh,bz);
+ctx.fillStyle='rgba(0,0,0,.5)';ctx.beginPath();ctx.arc(bdP.sx,bdP.sy,9,0,Math.PI*2);ctx.fill();
+ctx.fillStyle=col.badge;
+ctx.beginPath();ctx.arc(bdP.sx,bdP.sy,8,0,Math.PI*2);ctx.fill();
+ctx.fillStyle='#fff';ctx.font='bold 5.5px sans-serif';ctx.textAlign='center';
+var slbl=col.label.slice(0,3);
+ctx.fillText(slbl,bdP.sx,bdP.sy+2);
+
+// Price tag on right side
+var prP=_c3Proj(bx+bw,by+bh*0.5,bz+bd*0.5);
+var price=parseFloat(par.price)||0;
+ctx.fillStyle='rgba(0,0,0,.6)';ctx.fillRect(prP.sx-16,prP.sy-7,32,13);
+ctx.fillStyle=col.t;ctx.font='bold 7px monospace';ctx.textAlign='center';
+ctx.fillText(price.toFixed(0)+'€',prP.sx,prP.sy+3);
+
+// Store hit area
+_C3.boxes.push({p:par,cx:flx,cy:fly,r:Math.max(18,fw*0.5)});
+```
+
+});
+
+// Status legend bottom
+var lx2=8,ly2=H-12;
+ctx.fillStyle=‘rgba(0,0,0,.5)’;ctx.fillRect(4,H-22,W-8,18);
+[[’#F59E0B’,‘ATTENTE’],[’#3B82F6’,‘VENDU’],[’#F97316’,‘EXPÉDIÉ’],[’#22C55E’,‘REÇU ✓’],[’#EF4444’,‘PROBLÈME’]].forEach(function(l){
+ctx.fillStyle=l[0];ctx.beginPath();ctx.arc(lx2+4,ly2,4,0,Math.PI*2);ctx.fill();
+ctx.fillStyle=‘rgba(255,255,255,.55)’;ctx.font=‘600 8px sans-serif’;ctx.textAlign=‘left’;
+ctx.fillText(l[1],lx2+11,ly2+3);
+lx2+=ctx.measureText(l[1]).width+22;
+});
+}
+
+function _c3Hit(x,y){
+for(var i=_C3.boxes.length-1;i>=0;i–){
+var b=_C3.boxes[i];
+if(Math.abs(x-b.cx)<b.r&&Math.abs(y-b.cy)<b.r*0.7) return b.p;
+}
+return null;
+}
+
+function _showC3Detail(par){
+var det=document.getElementById(‘c3d-detail’);
+if(!det) return;
+var net=(parseFloat(par.price)||0)-(parseFloat(par.fees)||0)-(parseFloat(par.packCost)||0);
+var col=STATUS_C[par.status]||STATUS_C.pending;
+det.innerHTML=`<div class="card" style="margin-top:10px;animation:cIn .3s both;border-left:3px solid ${col.f}"> <div style="display:flex;align-items:center;gap:10px"> <div style="width:38px;height:38px;border-radius:10px;background:${col.f};display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">📦</div> <div style="flex:1"><div class="f14 fw8">${esc(par.title)}</div><div class="f11 txt-tx3 mt4">${esc(par.dateAdded)}</div></div> ${sbadge(par.status)} </div> <div class="g4" style="margin-top:12px"> <div class="sc"><div class="sv txt-ac">${fmtE(par.price)}</div><div class="sl">Prix vente</div></div> <div class="sc"><div class="sv txt-gn">${fmtE(net)}</div><div class="sl">Net</div></div> <div class="sc"><div class="sv txt-rd">-${fmtE(par.fees)}</div><div class="sl">Frais Vinted</div></div> <div class="sc"><div class="sv txt-or">-${fmtE(par.packCost)}</div><div class="sl">Emballage</div></div> </div> ${par.trackNum?`<div class="row" style="margin-top:8px"><div class="row-l">N° suivi</div><div class="row-v txt-ac" onclick="copyText('${esc(par.trackNum)}')">${esc(par.trackNum)} 📋</div></div>`:’’}
+<div style="display:flex;gap:8px;margin-top:12px">
+<button class="btn btn-p" onclick="openParcelDetail('${par.id}');document.getElementById('c3d-detail').innerHTML=''">Ouvrir le colis</button>
+<button class="btn btn-g" onclick="document.getElementById('c3d-detail').innerHTML=''">✕</button>
+</div>
+
+  </div>`;
+}
+
+/* ================================================================
+INIT
+================================================================ */
+function dismissSplash(){
+const sp=gel(‘splash’);
+if(!sp||sp.style.display===‘none’)return;
+sp.style.opacity=‘0’;
+sp.style.transform=‘scale(1.05)’;
+sp.style.transition=‘all .4s ease’;
+setTimeout(function(){
+sp.style.display=‘none’;
+const app=gel(‘app’);
+if(app)app.classList.add(‘ready’);
+// Wait for layout to be ready before goPage
+requestAnimationFrame(function(){
+requestAnimationFrame(function(){
+setMode(0);
+});
+});
+},420);
+}
+
+function appInit(){
+loadState();
+initSwipe();
+setInterval(function(){checkAlerts();},60000);
+// Allow tapping splash to dismiss
+const sp=gel(‘splash’);
+if(sp)sp.addEventListener(‘click’,dismissSplash);
+// Auto-dismiss after 2.2s
+setTimeout(dismissSplash,2200);
+}
+
+if(document.readyState===‘loading’){
+document.addEventListener(‘DOMContentLoaded’,appInit);
+} else {
+appInit();
+}
+</script>
+
+</body>
+</html>
